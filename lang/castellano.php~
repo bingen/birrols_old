@@ -172,7 +172,7 @@ $idioma['err_mapa_google'] = 'Situacion de estas pistas no localizada en mapa';
 $idioma['mis_amigos'] = 'Mis amigos';
 
 // Ayuda
-$idioma['hlp_about'] = 'Acerca de '. $globals['app_name'];
+$idioma['hlp_about'] = 'Acerca de $globals['app_name']';
 $idioma['hlp_legal'] = 'Legal';
 $idioma['hlp_contact'] = 'Contacto';
 $idioma['hlp_what'] = 'Qué es '. $globals['app_name'];
