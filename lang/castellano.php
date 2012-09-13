@@ -181,7 +181,7 @@ $idioma['hlp_faq'] = 'FAQ';
 
 // Pop-Up Tutorial
 //$idioma['put_block'] = 'Ayuda - Activa y desactiva la ayuda sobre los campos (como ésta)';
-$idioma['put_about'] = 'Acerca de '. $globals['app_name']. ' - Qué es '. $globals['app_name']'. y FAQ';
+$idioma['put_about'] = 'Acerca de '. $globals['app_name']. ' - Qué es '. $globals['app_name'].' y FAQ';
 $idioma['put_legal'] = ' - Términos y condiciones';
 $idioma['put_contact'] = ' - Contacta con el equipo de '. $globals['app_name'];
 $idioma['put_invitar_meil'] = 'Invitar a '. $globals['app_name'] .' - Escribe direcciones de e-mail separadas por comas para invitar a tus amigos a '. $globals['app_name'];
