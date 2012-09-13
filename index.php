@@ -22,7 +22,7 @@ include('config.php');
 
 $error = false;
 
-connect();
+conecta();
 
 if(!$current_user->authenticated) {
 	if(! $current_user->Authenticate($_POST['usuario'], md5($_POST['password'])) ) {
