@@ -71,8 +71,6 @@ CREATE TABLE IF NOT EXISTS beer_categories (
   UNIQUE KEY category (category)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
 
-TRUNCATE TABLE beer_categories;
-
 LOCK TABLES beer_categories WRITE;
 INSERT INTO beer_categories VALUES (1,'Ale'),(2,'Lager'), (3,'Lambic');
 UNLOCK TABLES;
