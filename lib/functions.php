@@ -1,0 +1,872 @@
+<?php
+/*
+    Open craft beer
+    Web app for craft beer lovers
+    Copyright (C) 2005 Ricardo Galli <gallir at uib dot es>
+    Copyright (C) 2012 ßingen Eguzkitza <bingentxu@gmail.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+function conecta() {
+//	require('config.php');
+	global $db;
+ 	$con_mysql=mysql_connect($db['server'],$db['user'],$db['password']) or die('ERROR:'.mysql_error());
+	mysql_select_db($db['name'], $con_mysql) or die('ERROR:'.mysql_error());
+	mysql_query( "SET NAMES utf8");
+	mysql_query( "SET lc_time_names = 'es_ES'");
+
+	return $con_mysql;
+}
+
+function cabecera($title='',$script='', $no_cache=false) {
+	global $idioma, $current_user, $globals;
+
+	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
+	echo '<html xmlns="http://www.w3.org/1999/xhtml">'."\n";
+	echo '<head>'."\n";
+	echo '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'."\n";
+	if( $no_cache ) {
+		echo '  <meta http-equiv="Pragma" content="no-cache" />'."\n";
+		echo '  <meta http-equiv="Expires" content="-1" />'."\n";
+	}
+	if(empty($title)) { $title=$globals['app_name']; }
+	echo '  <title>'.$title.'</title>'."\n";
+	if(empty($script)) { 
+		$estilo='index';
+	} else {
+		$aux = pathinfo($script);
+		$aux = explode('.',$aux['basename']);
+		$estilo = $aux[0];
+//		echo '<p>'.$estilo.'</p>'."\n";
+	}
+	echo '  <link href="'.$globals['base_url'].'css/'.$estilo.'.css" rel="stylesheet" type="text/css" />'."\n";
+	echo '  <link rel="icon" href="'.$globals['base_url'].'img/favicon.ico" type="image/x-icon">'."\n";
+	echo '  <link rel="shortcut icon" href="'.$globals['base_url'].'img/favicon.ico" type="image/x-icon">'."\n";
+	echo '    <script src="js/jquery-1.8.1.min.js" type="text/javascript" charset="utf-8"></script>'."\n";
+//	echo '    <script src="js/funciones.js" type="text/javascript" charset="utf-8"></script>'."\n";
+//	echo '    <script src="js/ordenar.js" type="text/javascript" charset="utf-8"></script>'."\n";
+//	echo '    <script type="text/javascript" src="js/jquery.bgiframe.min.js"></script>' ."\n";
+//	echo '    <script type="text/javascript" src="js/jquery.dimensions.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="js/jquery.autocomplete.js"></script>'."\n";
+// !!!!!!!!!!!!!!!!!
+//	echo '    <script type="text/javascript" src="js/date.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="js/date_es.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="js/jquery.datePicker-2.1.2.js"></script>'."\n";
+// 	echo '    <script type="text/javascript" src="js/jquery.timePicker.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="js/jcarousellite_1.0.1.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="js/jquery.selectboxes.min.js"></script>' ."\n";
+//	echo '    <script type="text/javascript" src="js/jquery.tooltip.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="js/superfish.js"></script>'."\n";
+
+
+	echo '</head>'."\n"."\n";
+
+	echo '<body>'."\n"."\n";
+
+// 	print_r( $current_user );
+	print('
+	<script type="text/javascript">
+	$(function() {
+	$("*").tooltip({ 
+	    track: true, 
+	    delay: 0, 
+	    showURL: false, 
+	    opacity: 1, 
+	    fixPNG: true, 
+	    showBody: " - ", 
+	    extraClass: "pretty", 
+	    top: -15, 
+	    left: 5 
+	});
+	$.tooltip.blocked = 0;
+	
+	</script>
+	');
+
+	echo '<div id="container">'."\n";
+
+	echo '  <div id="cabecera">'."\n";
+	echo '  <div id="cabecera_in">'."\n";
+	echo '	<div id="aux_1">'."\n";
+	echo '	<div id="titulo">'."\n";
+	echo '	  <h1><a href="'.$globals['base_url'].'inicio.php" title=""><img src="'.$globals['base_static']. $globals['logo'] .'" alt="'. $globals['app_name'] .'"/></a></h1>'."\n";
+	echo '	</div>'."\n"; // titulo
+
+	echo '	<div id="aux_2">'."\n";
+	if($current_user->authenticated) {
+		echo '	<div id="login" class="login">'."\n";
+		echo '<ul id="headtools">' . "\n";
+ 		echo '<li class="noborder">'.$idioma['saludo'].'&nbsp; <a href="'.get_user_uri($current_user->user_login).'" title="'.$idioma['usr_info'].'">'.$current_user->user_login.'&nbsp;<img src="'.get_avatar_url($current_user->user_id, $current_user->user_avatar, 20).'" width="15" height="15" alt="'.$current_user->user_login.'"/></a></li>' . "\n";
+  		echo '<li><a href="'.$globals['base_url'].'index.php?op=logout&amp;return='.urlencode($_SERVER['REQUEST_URI']).'">'. $idioma['desconectar'].' <img src="'.$globals['base_static'].'img/common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
+		echo '</ul>' . "\n";
+		echo '	</div>'."\n"; // login
+		echo '<input type="hidden" id="current_user_id" value="'. $current_user->id .'">' . "\n";
+		echo '<input type="hidden" id="current_user_login" value="'. $current_user->username .'">' . "\n";
+		menu();
+	}
+	echo '	</div>'."\n"; // aux_2
+	echo '	<div id="fake-aux_1" style="clear: both;"></div>'. "\n";
+	echo '	</div>'."\n"; // aux_1
+
+	$url = get_server_name();
+	compartir( $url, $idioma['shr_general'] );
+
+
+	echo '	<div id="ayuda" class="login">'."\n";
+	echo '<ul>' . "\n";
+	echo '<li class="noborder"><a href="about.php" title="'.$idioma['put_about'].'">' . $idioma['hlp_about'] .'</a></li>' . "\n";
+	echo '<li><a href="legal.php" title="'.$idioma['put_legal'].'">'.$idioma['hlp_legal'].'</a></li>' . "\n";
+	echo '<li><a href="contact.php" title="'.$idioma['put_contact'].'">'.$idioma['hlp_contact'].'</a></li>' . "\n";
+	echo '</ul>' . "\n";
+	echo '</div>'."\n"; //ayuda
+
+	echo '	<div id="fake-cabecera" style="clear: both;"></div>'. "\n"; // para ajustar automáticamente el alto de la cabecera
+	echo '  </div>'."\n"; // cabecera_in
+	echo '  </div>'."\n"; // cabecera
+	echo '<div id="container_cuerpo">'."\n";
+}
+
+
+function login_no() {
+	global $idioma, $error_acceso, $url;
+
+		echo '<div id="login-no">'."\n";
+		if( !empty($url) )
+			echo '  <form action="'. urldecode($url) .'" method="post">'."\n";
+		else
+			echo '  <form action="inicio.php" method="post">'."\n";
+		echo $idioma['usuario'] .': <br /><input type="text" name="usuario" maxlength="24" size="10" />'."\n";
+		echo '<br />'. $idioma['password'] .': <br /><input type="password" name="password" maxlength="24" size="10" />'."\n";
+		echo '<input type="submit" value="'. $idioma['entrar'] .'" />'."\n";
+//		echo '<p style="margin:0"><a href="registro.php" title="registrar">'.$idioma['registrar'].'</a></p>'."\n";
+		echo '<p style="margin:0"><a href="proximamente.php" title="registrar">'.$idioma['registrar'].'</a></p>'."\n";
+		echo '<p style="margin:0"><a href="rec_pwd.php" title="registrar">'.$idioma['forgot_pwd'].'</a></p>';
+		echo '<p style="margin:0"><a href="contact.php" title="registrar">'.$idioma['hlp_contact'].'</a></p>'."\n";
+		echo '  </form>'."\n";
+		if($error_acceso){echo '<p class="error">'.$idioma['err_acceso'].'</p>'."\n";}
+		echo '</div>'."\n";
+}
+
+function compartir( $url, $texto='', $label=false ) {
+
+	global $globals, $idioma;
+
+	$url = clean_input_url( $url );
+	$texto = clean_input_url( $texto );
+
+// 	echo "	<p> url:  $url </p> \n";
+
+	echo '	<div class="social-env">' ."\n";
+	if( $label )
+		echo '		<label>'. $idioma['cp_publicar'] .'</label>' ."\n";
+	echo '		<ul>' ."\n";
+	//echo '		<li><a rel="external"  href="http://www.facebook.com/share.php?u=http%3A%2F%2F'. get_server_name() .'" title="Facebook"><img src="'. $globals['base_url'] .'img/facebook_16x16.png" title="Facebook" alt="Facebook" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a href="http://www.facebook.com/share.php?u=http%3A%2F%2F'. $url .'&amp;t='. $texto .'" title="Facebook" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/facebook_16x16.png" title="Facebook" alt="Facebook" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="http://identi.ca/notice/new?status_textarea=http%3A%2F%2F'. $url .'" title="Identi.ca" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/identi.ca.png" title="Identi.ca" alt="Identi.ca" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="http://twitter.com/home?status=Patesqu%20-%20http%3A%2F%2F'. $url .'%2F" title="Twitter" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/twitter-icon.png" title="Twitter" alt="Twitter" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="http://www.tuenti.com/share?url=http%3A%2F%2F'. $url .'" title="Twitter" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/tuenti.png" title="Tuenti" alt="Tuenti" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+// 	echo '		<li><a rel="nofollow"  href="http://www.meneame.net/" title="Menéame"><img src="http://neversfelde.de/wp-content/plugins/sociable/images/services-sprite.gif" title="Menéame" alt="Menéame" style="width: 16px; height: 16px; background: transparent class="social" /></a></li>' ."\n";
+ 	echo '		<li><a rel="nofollow"  href="http://www.google.com/buzz/post?url=http%3A%2F%2F'. $url .'&amp;imageurl=http%3A%2F%2F'. get_server_name() .'%2F'. $globals['base_url'] . $globals['logo'] .'" title="Buzz" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/buzz.png" title="Buzz" alt="Buzz" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="http://www.google.com/bookmarks/mark?op=edit&amp;bkmk=http%3A%2F%2F'. $url .'&amp;annotation=Patesqu" title="Google Bookmarks" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/google_bookmarks.png" title="Google Bookmarks" alt="Google Bookmarks" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="mailto:?subject='. $texto .'&amp;body=http%3A%2F%2F'. $url .'" title="email" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/common/email.png" title="email" alt="email" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+ 	//echo '		<li><a title="Publicar en Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="link" data-locale="es" data-url="http://'. get_server_name() .'"></a> <script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></li>' ."\n";
+
+	echo '		</ul>' ."\n";
+	echo '	</div>' ."\n"; // social
+
+}
+
+function menu() {
+	global $globals, $current_user, $idioma;
+//	print_r($current_user);
+  print('
+    <div id="menu">
+	<ul id="menu_ul" class="superfish">
+  ');
+	//echo substr($_SERVER['PHP_SELF'],1);
+	$array_selected = Array();
+	$array_selected[substr($_SERVER['PHP_SELF'],1)] = ' class="Selected" ';
+	echo '		<li><a '. $array_selected['beers.php'] .'href="'.$globals['base_url'].'beers.php" title="'. $idioma['beers'] .'">'. $idioma['beers']  .'</a></li>'."\n";
+	echo '		<li><a '. $array_selected['business.php?type=pub'] .'href="'.$globals['base_url'].'business.php?type=pub" title="'. $idioma['pubs'] .'">'. $idioma['pubs']  .'</a></li>'."\n";
+	echo '		<li><a '. $array_selected['business.php?type=store'] .'href="'.$globals['base_url'].'business.php?type=store" title="'. $idioma['stores'] .'">'. $idioma['stores']  .'</a></li>'."\n";
+	echo '		<li><a '. $array_selected['business.php?type=brewery'] .'href="'.$globals['base_url']. 'business.php?type=brewery" title="'. $idioma['breweries'] .'">'. $idioma['breweries']  .'</a></li>'."\n";
+	echo '<li><a '.$array_selected['user.php'].' href="'.get_user_uri($current_user->username).'" title="">'.$idioma['mnu_datos'].'</a></li>' . "\n";
+  print('
+	</ul>
+    </div>
+  ');
+}
+
+function laterales() {
+	global $idioma, $current_user;
+
+// 	echo '<div id="izquierda">' . "\n";
+//	print_r($current_user);
+/*  print('
+	<div id="banners_left">
+		<ul>
+		<li><a href=""><img src="'.$globals['base_static'].'img/banner_2.png" alt="prueba banner" title="banner" /></a></li>
+		<li>Aquí irían banners, por ejemplo</p>
+		<li>Y más banners</li>
+		<li>Y más banners</li>
+		<li>Y más banners</li>
+		<li>Y más banners</li>
+		</ul>
+	</div>
+  </div>
+  ');*/
+/*  <div id=\"derecha\">
+	<p>Aquí también irían banners</p>
+	<p>Y más banners</p>
+  </div>
+  ");*/
+	echo '<div id="derecha">' . "\n";
+	echo "<div id='banner'>Espacio reservado para publicidad.</div> \n";
+	echo '</div>' . "\n";
+}
+
+function pie($no_cache=false) {
+  echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";
+  echo '	  </div> <!-- container_cuerpo -->'. "\n";
+  echo '	<div id="fake-pie" style="clear: both;"></div>'. "\n"; // para que el pie no se monte a la derecha del cuerpo
+  echo '	<div id="pie">'. "\n";
+  echo '		<p>'. $globals['app_name'] . ' Todos los derechos reservados </p>'. "\n";
+  echo '		<p>'. $globals['app_name'] . ' es Software Libre bajo licencia <a id=\"gnu\" href=\"http://www.gnu.org/copyleft/gpl.html\" target=\"_blank\">GNU General Public License</a></p>'. "\n";
+  echo '		<p><a href=\"http://validator.w3.org/check?uri=referer\"><img src=\"http://www.w3.org/Icons/valid-xhtml10-blue\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" /></a></p>'. "\n";
+
+  echo '	  </div> <!-- pie -->'. "\n";
+  echo '	</div> <!-- container -->'. "\n";
+
+echo '</body>'."\n";
+	if( $no_cache ) {
+		echo '  <head>'."\n";
+		echo '  <meta http-equiv="Pragma" content="no-cache" />'."\n";
+		echo '  <meta http-equiv="Expires" content="-1" />'."\n";
+		echo '  </head>'."\n";
+	}
+echo '</html>'."\n";
+}
+
+function clean_input_string($string) {
+	return preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', stripslashes($string));
+}
+function clean_input_url($string) {
+	$string = preg_replace('/ /', '+', trim(stripslashes(mb_substr($string, 0, 512))));
+	return preg_replace('/[<>\r\n\t]/', '', $string);
+}
+// Used to get the text content for stories and comments
+function clean_text($string, $wrap=0, $replace_nl=true, $maxlength=0) {
+	$string = stripslashes(trim($string));
+	$string = clear_whitespace($string);
+	$string = html_entity_decode($string, ENT_COMPAT, 'UTF-8');
+	// Replace two "-" by a single longer one, to avoid problems with xhtml comments
+	//$string = preg_replace('/--/', '–', $string);
+	if ($wrap>0) $string = wordwrap($string, $wrap, " ", 1);
+	if ($replace_nl) $string = preg_replace('/[\n\t\r]+/s', ' ', $string);
+	if ($maxlength > 0) $string = mb_substr($string, 0, $maxlength);
+	return @htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
+}
+function clear_invisible_unicode($input){
+	$invisible = array(
+	"\0",
+	"\xc2\xad", // 'SOFT HYPHEN' (U+00AD)
+	"\xcc\xb7", // 'COMBINING SHORT SOLIDUS OVERLAY' (U+0337)
+	"\xcc\xb8", // 'COMBINING LONG SOLIDUS OVERLAY' (U+0338)
+	"\xcd\x8f", // 'COMBINING GRAPHEME JOINER' (U+034F)
+	"\xe1\x85\x9f", // 'HANGUL CHOSEONG FILLER' (U+115F)
+	"\xe1\x85\xa0", // 'HANGUL JUNGSEONG FILLER' (U+1160)
+	"\xe2\x80\x8b", // 'ZERO WIDTH SPACE' (U+200B)
+	"\xe2\x80\x8c", // 'ZERO WIDTH NON-JOINER' (U+200C)
+	"\xe2\x80\x8d", // 'ZERO WIDTH JOINER' (U+200D)
+	"\xe2\x80\x8e", // 'LEFT-TO-RIGHT MARK' (U+200E)
+	"\xe2\x80\x8f", // 'RIGHT-TO-LEFT MARK' (U+200F)
+	"\xe2\x80\xaa", // 'LEFT-TO-RIGHT EMBEDDING' (U+202A)
+	"\xe2\x80\xab", // 'RIGHT-TO-LEFT EMBEDDING' (U+202B)
+	"\xe2\x80\xac", // 'POP DIRECTIONAL FORMATTING' (U+202C)
+	"\xe2\x80\xad", // 'LEFT-TO-RIGHT OVERRIDE' (U+202D)
+	"\xe2\x80\xae", // 'RIGHT-TO-LEFT OVERRIDE' (U+202E)
+	"\xe3\x85\xa4", // 'HANGUL FILLER' (U+3164)
+	"\xef\xbb\xbf", // 'ZERO WIDTH NO-BREAK SPACE' (U+FEFF)
+	"\xef\xbe\xa0", // 'HALFWIDTH HANGUL FILLER' (U+FFA0)
+	"\xef\xbf\xb9", // 'INTERLINEAR ANNOTATION ANCHOR' (U+FFF9)
+	"\xef\xbf\xba", // 'INTERLINEAR ANNOTATION SEPARATOR' (U+FFFA)
+	"\xef\xbf\xbb", // 'INTERLINEAR ANNOTATION TERMINATOR' (U+FFFB)
+	);
+
+	return str_replace($invisible, '', $input);
+
+}
+
+function clear_unicode_spaces($input){
+	$spaces = array(
+	"\x9", // 'CHARACTER TABULATION' (U+0009)
+	//  "\xa", // 'LINE FEED (LF)' (U+000A)
+	"\xb", // 'LINE TABULATION' (U+000B)
+	"\xc", // 'FORM FEED (FF)' (U+000C)
+	//  "\xd", // 'CARRIAGE RETURN (CR)' (U+000D)
+	"\x20", // 'SPACE' (U+0020)
+	"\xc2\xa0", // 'NO-BREAK SPACE' (U+00A0)
+	"\xe1\x9a\x80", // 'OGHAM SPACE MARK' (U+1680)
+	"\xe1\xa0\x8e", // 'MONGOLIAN VOWEL SEPARATOR' (U+180E)
+	"\xe2\x80\x80", // 'EN QUAD' (U+2000)
+	"\xe2\x80\x81", // 'EM QUAD' (U+2001)
+	"\xe2\x80\x82", // 'EN SPACE' (U+2002)
+	"\xe2\x80\x83", // 'EM SPACE' (U+2003)
+	"\xe2\x80\x84", // 'THREE-PER-EM SPACE' (U+2004)
+	"\xe2\x80\x85", // 'FOUR-PER-EM SPACE' (U+2005)
+	"\xe2\x80\x86", // 'SIX-PER-EM SPACE' (U+2006)
+	"\xe2\x80\x87", // 'FIGURE SPACE' (U+2007)
+	"\xe2\x80\x88", // 'PUNCTUATION SPACE' (U+2008)
+	"\xe2\x80\x89", // 'THIN SPACE' (U+2009)
+	"\xe2\x80\x8a", // 'HAIR SPACE' (U+200A)
+	"\xe2\x80\xa8", // 'LINE SEPARATOR' (U+2028)
+	"\xe2\x80\xa9", // 'PARAGRAPH SEPARATOR' (U+2029)
+	"\xe2\x80\xaf", // 'NARROW NO-BREAK SPACE' (U+202F)
+	"\xe2\x81\x9f", // 'MEDIUM MATHEMATICAL SPACE' (U+205F)
+	"\xe3\x80\x80", // 'IDEOGRAPHIC SPACE' (U+3000)
+	);
+	
+	return str_replace($spaces, ' ', $input);
+}
+
+function clear_whitespace($input){
+	$input = clear_unicode_spaces(clear_invisible_unicode($input));
+	return ereg_replace('/  +/', ' ', $input);
+}
+
+function string2url($cadena) {
+	$cadena = trim($cadena);
+	$cadena = strtr($cadena,
+"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ",
+"aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+	$cadena = strtr($cadena,"ABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwxyz");
+	$cadena = preg_replace('#([^.a-z0-9]+)#i', '-', $cadena);
+        $cadena = preg_replace('#-{2,}#','-',$cadena);
+        $cadena = preg_replace('#-$#','',$cadena);
+        $cadena = preg_replace('#^-#','',$cadena);
+	return $cadena;
+}
+
+function user_exists($username) {
+	$username = mysql_real_escape_string($username);
+	$res = mysql_query("SELECT count(*) FROM users WHERE username='$username'") or die ('ERROR:'.mysql_error());
+	$num=mysql_result($res,0,0);
+	if ($num>0) return true;
+	return false;
+}
+function check_username($name) {
+//	echo '<p> name: '.$name.'</p>';
+	return (preg_match('/^[a-zçÇñÑ][a-z0-9_\-\.çÇñÑ·]+$/i', $name) && mb_strlen($name) <= 24 &&
+				! preg_match('/^admin/i', $name) ); // Does not allow nicks begining with "admin"
+}
+function email_exists($email, $check_previous_registered = true) {
+
+	$parts = explode('@', $email);
+	$domain = $parts[1];
+	$subparts = explode('+', $parts[0]); // Because we allow user+extension@gmail.com
+	$user = $subparts[0];
+	$user = mysql_real_escape_string($user);
+	$domain = mysql_real_escape_string($domain);
+	$res=mysql_query("SELECT count(*) FROM users WHERE email = '$user@$domain' or email LIKE '$user+%@$domain'") or die ('ERROR:'.mysql_error());
+	$num=mysql_result($res,0,0);
+	if ($num>0) return $num;
+	if ($check_previous_registered) {
+		// Check the same email wasn't used recently for another account
+		$res=mysql_query("SELECT count(*) FROM users WHERE (email_register = '$user@$domain' or email_register LIKE '$user+%@$domain') and date > date_sub(now(), interval 1 year)") or die ('ERROR:'.mysql_error());
+		$num=mysql_result($res,0,0);
+		if ($num>0) return $num;
+	}
+	return false;
+}
+
+function check_email($email) {
+/* por ahora pasamos de esto
+	require_once(mnminclude.'ban.php');*/
+
+	if (! preg_match('/^[a-z0-9_\-\.]+(\+[a-z0-9_\-\.]+)*@[a-z0-9_\-\.]+\.[a-z]{2,4}$/i', $email)) return false;
+
+	$username = preg_replace('/@.+$/', '', $email);
+	if ( substr_count($username, '.') > 2 || preg_match('/\.{2,}/', $username) ) return false; // Doesn't allow "..+" or more than 2 dots
+
+/* por ahora pasamos de esto
+	if(check_ban(preg_replace('/^.*@/', '', $email), 'email')) return false;*/
+	return true;
+}
+function check_password($password) {
+//	 echo '<p> Check Password: '. $password .': '. preg_match("/^(?=.{6,})(?=(.*[a-z].*))(?=(.*[A-Z0-9].*)).*$/", $password). '</p>';
+	 return preg_match("/^(?=.{6,})(?=(.*[a-z].*))(?=(.*[A-Z0-9].*)).*$/", $password);
+}
+
+function phone_exists($telefono) {
+	$telefono = mysql_real_escape_string(trim($telefono));
+	$res = mysql_query("SELECT count(*) FROM users WHERE telefono='$telefono'") or die ('ERROR:'.mysql_error());
+	$num=mysql_result($res,0,0);
+	if ($num>0) return true;
+	return false;
+}
+function check_phone($telefono) {
+//	echo '<p>'.$telefono.preg_match('/^6[0-9]{8}$/i', $telefono).'. long.: '.mb_strlen($telefono).'</p>';
+	return (preg_match('/^6[0-9]{8}$/i', $telefono) && mb_strlen($telefono) == 9);
+}
+
+function check_provincia($provincia) {
+
+	$provincia = mysql_real_escape_string($provincia);
+	$res=mysql_query("SELECT count(*) FROM provincias WHERE provincia = '$provincia'") or die ('ERROR:'.mysql_error());
+	$num=mysql_result($res,0,0);
+	if ($num>0) return true;
+	return false;
+}
+
+function get_server_name() {
+	global $server_name;
+	$server_port = '';
+
+	if( !array_key_exists( 'SERVER_NAME', $_SERVER ) )
+		return 'www.patesqu.com';
+
+	// Alert, if does not work with port 443, in order to avoid standard HTTP connections to SSL port
+	if($_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != 443) $server_port = ':' . $_SERVER['SERVER_PORT'];
+	if($_SERVER['SERVER_NAME']) {
+		return $_SERVER['SERVER_NAME'] . $server_port;
+	} /*else {
+		if ($server_name) return $server_name;*/
+		else return 'www.patesqu.com'; // Warn: did you put the right server name?
+//	}
+}
+function get_user_uri($user, $view='') {
+	global $globals;
+
+	if (!empty($globals['base_user_url'])) {
+		$uri= $globals['base_url'] . $globals['base_user_url'] . htmlspecialchars($user);
+		if (!empty($view)) $uri .= "/$view";
+	} else {
+		$uri = $globals['base_url'].'user.php?login='.htmlspecialchars($user);
+		if (!empty($view)) $uri .= "&amp;view=$view";
+	}
+	return $uri;
+}
+function get_user_uri_by_uid($user, $view='') {
+	global $globals;
+
+	$uid = guess_user_id($user);
+	if ($uid == 0) $uid = -1; // User does not exist, ensure it will give error later
+	$uri = get_user_uri($user, $view);
+	if (!empty($globals['base_user_url'])) {
+		$uri .= "/$uid";
+	} else {
+		$uri .= "&amp;uid=$uid";
+	}
+	return $uri;
+}
+function guess_user_id ($str) {
+	global $db;
+
+	if (preg_match('/^[0-9]+$/', $str)) {
+		// It's a number, return it as id
+		return (int) $str;
+	} else {
+		$str = mysql_real_escape_string(mb_substr($str,0,64));
+		$res = mysql_query("select auto_id from users where login = '$str'") or die ('ERROR:'.mysql_error());
+		$id = (int) mysql_result($res,0 , 0);
+		return $id;
+	}
+}
+
+function get_cache_dir_chain($key) {
+	// Very fast cache dir generator for two levels
+	// mask == 2^8 - 1 or 1 << 8 -1
+	return sprintf("%02x/%02x", ($key >> 8) & 255, $key & 255);
+}
+
+function create_cache_dir_chain($base, $chain) {
+	// Helper function for get_cache_dir_chain
+	$dirs = explode('/', $chain);
+	for ($i=0; $i < count($dirs); $i++) {
+		$base .= '/'.$dirs[$i];
+		@mkdir($base);
+	}
+}
+
+function get_avatar_url($user, $avatar, $size) {
+	global $globals;
+
+	// If it does not get avatar status, check the database
+	if ($user > 0 && $avatar < 0) {
+		mysql_query("select avatar from users where auto_id = $user") or die ('ERROR:'.mysql_error());
+		$avatar = (int) mysql_result($res,0,0);
+	}
+
+	if ($avatar > 0 && $globals['cache_dir']) {
+		$file = $globals['cache_dir'] . '/'.$globals['avatars_dir'].'/'.get_cache_dir_chain($user). "/$user-$avatar-$size.jpg";
+		//echo '<p> avatar: '.$avatar.'. file:'.$file.'</p>';
+		// Don't check every time, but 1/10, decrease VM pressure 
+		// Disabled for the moment, it fails just too much for size 40
+		//if (rand(0, 10) < 10) return $globals['base_url'] . $file;
+		$file_path = ptqpath.'/'.$file;
+		if (is_readable($file_path)) {
+			return $globals['base_static'] . $file;
+		} else {
+			return $globals['base_url'] . "backend/get_avatar.php?id=$user&amp;size=$size&amp;time=$avatar";
+		}
+	} 
+	return get_no_avatar_url($size);
+}
+
+function get_no_avatar_url($size) {
+	global $globals;
+	return $globals['base_url'].'img/ptq/no_gravatar_'.$size.'.png';
+}
+
+function get_date_time($epoch) {
+//		global $globals;
+	    //return date("Y-m-d H:i", $epoch);
+		if (abs(time() - $epoch) < 43200) // Difference is less than 12 hours
+	    	return date(" H:i e", $epoch);
+		else
+	    	return date(" d-m-Y", $epoch);
+}
+
+function not_found($mess = '') { // TODO !!!
+	header("HTTP/1.0 404 Not Found");
+	header("Status: 404 Not Found");
+    echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n";
+    echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$dblang.'" lang="'.$dblang.'">' . "\n";
+    echo '<head>' . "\n";
+    echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' . "\n";
+    echo "<title>". _('error') . "</title>\n";
+    echo '<meta name="generator" content="meneame" />' . "\n";
+    echo '<link rel="icon" href="'.$globals['base_static'].'img/favicons/favicon4.ico" type="image/x-icon" />' . "\n";
+    echo '</head>' . "\n";
+    echo "<body>\n";
+	if (empty($mess)) {
+		echo '<h1>' . _('error') . ' 3.1415926536</h1><p>' . _('no encontrado') . '</p>';
+	} else {
+		echo $mess;
+	}
+	echo "</body></html>\n";
+	exit;
+}
+function do_error($mess = false, $error = false, $send_status = true) {
+	global $idioma;
+
+	if (! $mess ) $mess = $idioma['err_unknown'];
+
+	if ($error && $send_status) {
+		header("HTTP/1.0 $error $mess");
+		header("Status: $error $mess");
+	}
+
+	cabecera('patesqu',$_SERVER['PHP_SELF']);
+
+	echo '<p class="errt">'.$mess.'<br />'."\n";
+	if ($error) echo _('(error').' '.$error.')</p>'."\n";
+	echo '<div class="errl"><img src="'.$globals['base_url']. $globals['logo_grande'] .'" alt="ooops logo" /></div>'."\n";	// imagen? TODO
+
+	pie();
+	die;
+}
+
+
+function register_error($message) {
+	global $idioma;
+
+	echo '<div class="form-error">';
+	echo "<p>$message</p>";
+	echo '<input type=button value="'.$idioma['cp_back'].'" onClick="history.go(-1)">'. "\n";
+	echo "</div>\n";
+}
+// END PARTIDOS ////////////////////
+
+function paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla='' ) {
+//function paginacion(  ) {
+	global $globals, $idioma;
+//	global 	$num_registros, $num_filas, $fila_0;
+
+	//$url_aux = $_SERVER['PHP_SELF'];
+	//echo '<p> server name: '. $_SERVER['SERVER_NAME'] . ' php self: ' . $_SERVER['PHP_SELF'] . ' SCRIPT name: '.$_SERVER['SCRIPT_NAME'].' base_url: '.$globals['base_url']. ' url_aux: '. $url_aux .'</p>';
+
+	echo '	  <div id="num_filas">'. "\n";
+	if( $num_filas != 10 )
+		echo '		<a href="#" onclick="OrdenarTabla(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 10 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'\')" title="'.$idioma['cc_10'].'"> 10 </a>'. "\n";
+	else 
+		echo '10'. "\n";
+	if( $num_filas != 25 )
+		echo '		<a href="#" onclick="OrdenarTabla(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 25 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'\')" title="'.$idioma['cc_25'].'"> 25 </a>'. "\n";
+	else 
+		echo '25'. "\n";
+	if( $num_filas != 50 )
+		echo '		<a href="#" onclick="OrdenarTabla(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 50 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'\')" title="'.$idioma['cc_50'].'"> 50 </a>'. "\n";
+	else 
+		echo '50'. "\n";
+	if( $num_filas != 100 )
+		echo '		<a href="#" onclick="OrdenarTabla(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 100 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'\')" title="'.$idioma['cc_100'].'"> 100 </a>'. "\n";
+	else 
+		echo '100'. "\n";
+	echo '	  </div>'. "\n"; //num_filas
+	echo '	<div id="fake-paginacion" style="clear: both;"></div>'. "\n"; 
+	echo '	  <div id="paginacion">'. "\n";
+	//echo '	  <p>'. "\n";
+ 	if( $fila_0 > 0 ) {
+		echo '		<a href="#" onclick="OrdenarTabla(\''.$url['base'].'fila_0=' . 0 . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'\')" title="'.$idioma['cc_p_primera'].'"> << </a>'. "\n";
+		$aux = max(0, $fila_0-$num_filas);
+		echo '		<a href="#" onclick="OrdenarTabla(\''.$url['base'].'fila_0=' .$aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'\')" title="'.$idioma['cc_p_anterior'].'"> < </a>'. "\n";
+	} else {
+		echo '<<'. "\n";
+		echo '<'. "\n";
+	}
+	if( $fila_0+$num_filas < $num_registros ) {
+		$aux = $fila_0+$num_filas;
+		echo '		<a href="#" onclick="OrdenarTabla(\''.$url['base'].'fila_0=' .$aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'\')" title="'.$idioma['cc_p_siguiente'].'"> > </a>'. "\n";
+		$aux = floor(($num_registros-1) / $num_filas) * $num_filas;
+		echo '		<a href="#" onclick="OrdenarTabla(\''.$url['base'].'fila_0=' .$aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'\')" title="'.$idioma['cc_p_ultima'].'"> >> </a>'. "\n";
+	} else {
+		echo '>'. "\n";
+		echo '>>'. "\n";
+	}
+	//echo '	  </p>'. "\n";
+	//echo '	  <p>'. "\n";
+	echo '	  <br />'. "\n";
+	$num_paginas = ceil($num_registros / $num_filas);
+	$pagina = ceil(($fila_0+1) / $num_filas);
+// 	echo "<p> pag: $pagina Np: $num_paginas NR: $num_registros NF: $num_filas </p> \n";
+	//echo '		<a href="'. $url_aux . '?fila_0=' . 0 . '&num_filas='. $num_filas .'" title="'. 1 .'"> 1 </a>'. "\n";
+	for( $i = max($pagina-2, 1); $i < min($pagina+2, $num_paginas)+1; $i++ ) {
+		$aux = ($i-1) * $num_filas;
+		if( $i == $pagina ) $class_pag = 'actual'; else $class_pag = '';
+		echo '		<a href="#" onclick="OrdenarTabla(\''.$url['base'].'fila_0=' . $aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'\')" title="'. $i .'" class="'. $class_pag .'"> ' . $i .' </a>'. "\n";
+	}
+	if( $num_paginas == 0 )
+		echo '		<a href="#" title="1" class="actual"> 1 </a>'. "\n";
+	//$aux = $num_paginas * $num_filas;
+	//echo '		<a href="'. $url_aux . '?fila_0=' . $aux . '&num_filas='. $num_filas .'" title="'. $num_paginas .'"> ' . $num_paginas .' </a>'. "\n";
+	//echo '	  </p>'. "\n";
+
+	echo '	  </div>'. "\n"; // paginacion
+// 	echo '	<div id="fake-paginacion-2" style="clear: both;"></div>'. "\n"; 
+}
+
+function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=null, $orden_ini=null, $titulo='' )
+{
+	global $campos, $cabecera, $filtros_array, $colspan_array, $orden_array, $idioma, $globals;
+
+	$num_filas = $_REQUEST['num_filas'];
+	if( empty($num_filas) || $num_filas == 0 ) $num_filas = 10;
+	$fila_0 = $_REQUEST['fila_0'];
+	if( empty($fila_0) ) $fila_0 = 0;
+
+	$campo = $_REQUEST['campo'];
+	if( empty($campo) ){
+		if( empty($campo_ini) )
+			$campo = '1';
+		else
+			$campo = $campo_ini;
+	}
+	$orden = $_REQUEST['orden'];
+	if( $_REQUEST['orden'] == NULL ){
+		if( empty($orden_ini) )
+			$orden = 0;
+		else
+			$orden = $orden_ini;
+	}
+
+	$cabecera = explode(",",$cabecera);
+	$campos = explode(",",$campos);
+	$filtros_array = explode(",",$filtros_array);
+	$orden_array = explode(",",$orden_array);
+	$num_campos = count($campos);
+	//print_r($campos);
+	//print_r($cabecera);
+	//print_r( $filtros_array );
+
+	$url['base'] = 'tabla_'. $tabla .'.php?';
+	$url['paginacion'] = 'num_filas='. $num_filas . '&fila_0=' . $fila_0;
+	$url['orden'] = '&campo=' . $campo . '&orden=' . $orden;
+	$url['extra'] = $url_extra;
+	$url['filtros'] = '';
+	for( $i = 0; $i < $num_campos; $i++ ) {
+		if( $_REQUEST["$campos[$i]"] != NULL && $filtros_array[$i] != -1 ) {
+			if( $filtros_array[$i] == 1 || (empty($filtros_array[$i]) && $filtros == 1) )
+				$where .= ' AND ' . $campos[$i] . ' like \'%' . mysql_real_escape_string($_REQUEST["$campos[$i]"]) . '%\'';
+// 			elseif( $filtros_array[$i] == 2 || (empty($filtros_array[$i]) && $filtros == 2) )
+			elseif( $filtros_array[$i] >= 2 || (empty($filtros_array[$i]) && $filtros != -1) )
+				$where .= ' AND ' . $campos[$i] . ' = \'' . mysql_real_escape_string($_REQUEST["$campos[$i]"]) . '\'';
+			$url['filtros'] .= '&'. $campos[$i] . '=' . $_REQUEST["$campos[$i]"];
+		}
+	}
+	$url['final'] = $url['base'] . $url['paginacion'] . $url['orden'] . $url['filtros']. $url['extra'];
+	//print_r( $url );
+	//echo '<p> url: '. $url. '</p>';
+	
+	$query = "SELECT count(*) FROM $tabla WHERE 1 $where";
+// 	echo '<p> Query: '. $query. '</p>';
+	$res = mysql_query( $query ) or die ('ERROR:'.mysql_error());
+	$num_registros = mysql_result( $res, 0 );
+
+	// cabecera
+	$colspan_array = explode(",",$colspan_array);
+	if( !empty($colspan_array) ){
+// 		print_r( $colspan_array );
+		$aux_cont = 0;	// comprobamos que los colspan cuadran
+		foreach( $colspan_array as $colspan_row )
+			$aux_cont += $colspan_row;
+		if( $aux_cont == $num_campos )
+			$colspan = true;
+	}
+	paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla );
+	if( !empty($titulo) ) {
+		echo "<div class='principal-table-titulo'>$titulo</div> \n";
+	}
+	echo '	<div id="fake-paginacion-2" style="clear: both;"></div>'. "\n"; 
+	echo '	<table class="principal-table" id="'. $tabla .'-table">'. "\n";
+	echo '	 <thead>'. "\n";
+	echo '	  <tr>'. "\n";
+	for( $i = 0; $i < $num_campos; $i++ ) {
+		if( $colspan && $colspan_array[$i] > 0 )
+				$colspan_class = " colspan=".$colspan_array[$i];
+		if( !$colspan || $colspan_array[$i] != 0 ) {
+			if( $cabecera[$i] == "chk" ) {
+				echo '    <th class="col-'.$campos[$i].'" '. $colspan_class .' ><input type="checkbox" id="chk-head" onClick="select_all(\''. $tabla.'-table\');" value="1" /></th>'. "\n";
+			} else if( $orden_array[$i] ) {
+				if( $campo == $campos[$i] ) {
+					$orden_aux = 1 - $orden;
+					if( $orden == 0 )
+						$flecha = '<img src="'. $globals['base_static']. 'img/common/bullet_arrow_up.png" alt=""/>';
+					else
+						$flecha = '<img src="'. $globals['base_static']. 'img/common/bullet_arrow_down.png" alt=""/>';
+				} else {
+					$orden_aux = 0;
+					$flecha = '';
+				}
+				if( !empty($idioma['put_th_'.$campos[$i]]) )
+					$texto_put = ' title="' .$idioma['put_th_'.$campos[$i]]. '"';
+				echo '    <th class="col-'.$campos[$i].'" '. $colspan_class .' ><a href="#" onclick="OrdenarTabla(\'' . $url['base'] . $url['paginacion'] . '&campo='.$campos[$i] . '&orden=' . $orden_aux . $url['filtros']. $url['extra'] . '\', \''. $tabla .'\')" '. $texto_put .'> '.$cabecera[$i]. $flecha .'</a></th>'. "\n";
+			} else {
+				echo '    <th class="col-'.$campos[$i].'" '. $colspan_class .' >'.$cabecera[$i] .'</th>'. "\n";
+			}
+		} /*else
+			echo '    <th class="col-'.$campos[$i].'" ></th>'. "\n";*/
+	}
+//	echo '    <th class="col-">'.$idioma['cc_'].'</th>'. "\n";*/
+	//echo '    <th class="col-relleno"></th>'. "\n";
+	echo '  </tr>'. "\n";
+	// filtros
+	if( $filtros > 0 ) {
+		echo '  <tr>'. "\n";
+		for( $i = 0; $i < $num_campos; $i++ ) {
+			switch ( $filtros_array[$i] ) {
+				case 3: // select amigos
+					echo '    <td class="col-'.$campos[$i].'" ><select class="filtros_select" name="filtro_'. $tabla .'_'. $campos[$i] .'" id="filtro_'. $tabla .'_'. $campos[$i] .'" onChange="OrdenarTabla(\''. $url['final'] . '&'. $campos[$i] .'=\'+document.getElementById(\'filtro_'. $tabla. '_'. $campos[$i] .'\').value, \''. $tabla .'\', \'filtro_'. $tabla. $campos[$i] .'\');">';
+					echo '		<option value=""></option>' . "\n";
+					echo '		<option value='. PENDIENTE_OUT .' '. ($_REQUEST[$campos[$i]]==PENDIENTE_OUT?' selected="selected"':''). '>'. $idioma['am_pendiente'] .'</option>' . "\n";
+					echo '		<option value='. AMIGO .' '. ($_REQUEST[$campos[$i]]==AMIGO?' selected="selected"':''). '>'.$idioma['am_amigo'].'</option>' . "\n";
+					echo '		<option value='. CONOCIDO .' '. ($_REQUEST[$campos[$i]]==CONOCIDO?' selected="selected"':''). '>'. $idioma['am_conocido'] .'</option>' . "\n";
+					echo '		<option value='. BLOQUEADO .' '. ($_REQUEST[$campos[$i]]==BLOQUEADO?' selected="selected"':''). '>'. $idioma['am_bloqueado'] .'</option>' . "\n";
+					echo '</select></td>' . "\n";
+					break;
+/*				case 4: // select deporte
+					echo '    <td><select class="filtros_select" name="filtro_'. $tabla .'_'. $campos[$i] .'" id="filtro_'. $tabla .'_'. $campos[$i] .'" onChange="sel_deporte(this.value);  OrdenarTabla(\''. $url['final'] . '&'. $campos[$i] .'=\'+document.getElementById(\'filtro_'. $tabla. $campos[$i] .'\').value, \''. $tabla .'\', \'filtro_'. $tabla. $campos[$i] .'\');">' . "\n";
+					echo '		<option value=""></option>' . "\n";
+					$res=mysql_query("SELECT auto_id, deporte from deportes") or die ('ERROR:'.mysql_error());
+					while($mnu_deporte=mysql_fetch_row($res)){
+						echo '<option value="'. $mnu_deporte[0] . ($_REQUEST[$campos[$i]]==$mnu_deporte[0]' selected="selected"':''). '">'.$mnu_deporte[1].'</option>' . "\n";
+					}
+					echo '</select></td>' . "\n";
+					print('<script>
+					function sel_deporte(valor) {
+						if( valor=="" ) {
+							document.getElementById(\'filtro_categoria\').disabled = true;
+						}
+						else {
+							document.getElementById(\'filtro_categoria\').disabled = false;
+							var url = "lib/get_categoria.php?deporte_id="+valor;
+							$.get(url,
+						 		function(html) {
+									$("#filtro_categoria").removeOption(/./);
+									var aux = html.split(",");
+									var opciones = new Array();
+									for( i in aux ) {
+										opciones[aux[i]] = aux[i];
+									}
+									$("#filtro_categoria").addOption(opciones);
+								}
+							);
+						} // if valor
+					} // function sel_deporte
+					</script>');
+					break;
+				case 5: // select categorias
+					echo '    <td><select class="filtros_select" name="filtro_'. $tabla .'_'. $campos[$i] .'" id="filtro_'. $tabla .'_'. $campos[$i] .'" onChange="OrdenarTabla(\''. $url['final'] . '&'. $campos[$i] .'=\'+document.getElementById(\'filtro_'. $tabla. $campos[$i] .'\').value, \''. $tabla .'\', \'filtro_'. $tabla. $campos[$i] .'\');">';
+					echo '</select></td>' . "\n";
+					break;
+				case 6: // select provincia
+					echo '    <td><select class="filtros_select" name="filtro_'. $tabla .'_'. $campos[$i] .'" id="filtro_'. $tabla .'_'. $campos[$i] .'" onChange="sel_deporte(this.value);  OrdenarTabla(\''. $url['final'] . '&'. $campos[$i] .'=\'+document.getElementById(\'filtro_'. $tabla. $campos[$i] .'\').value, \''. $tabla .'\', \'filtro_'. $tabla. $campos[$i] .'\');">' . "\n";
+					echo '		<option value=""></option>' . "\n";
+					$res=mysql_query("SELECT auto_id, deporte from deportes") or die ('ERROR:'.mysql_error());
+					while($mnu_deporte=mysql_fetch_row($res)){
+						echo '<option value="'. $mnu_deporte[0] . ($_REQUEST[$campos[$i]]==$mnu_deporte[0]' selected="selected"':''). '">'.$mnu_deporte[1].'</option>' . "\n";
+					}
+					echo '</select></td>' . "\n";
+					break;
+				case 7: // select sexo
+					break;*/
+				case -1:
+					echo '    <td class="col-'.$campos[$i].'" ></td>'. "\n";
+					break;
+				default:
+				case 1:	// texto "like"
+				case 2: // texto exacto
+					echo '    <td class="col-'.$campos[$i].'" ><input class="filtros" type="text" name="filtro_'. $tabla .'_'. $campos[$i] .'" id="filtro_'. $tabla .'_'. $campos[$i] .'" value="'. $_REQUEST[$campos[$i]] .'" autocomplete="off" onkeyup="OrdenarTabla(\''. $url['final'] . '&'.$campos[$i].'=\'+document.getElementById(\'filtro_'. $tabla. '_'. $campos[$i].'\').value, \''. $tabla .'\', \'filtro_'. $tabla. '_'. $campos[$i] .'\');" title="'. $idioma['put_filtros'] .'"/></td>'. "\n";
+					break;
+			} // switch filtro
+/*			if(  $filtros_array[$i] != -1 )
+				echo '    <td><input class="filtros" type="text" name="filtro_'. $tabla. $campos[$i] .'" id="filtro_'. $tabla. $campos[$i] .'" value="'.$_REQUEST[$campos[$i]] .'" autocomplete="off" onkeyup="OrdenarTabla(\''. $url['final'] . '&'.$campos[$i].'=\'+document.getElementById(\'filtro_'. $tabla.$campos[$i].'\').value, \''. $tabla .'\', \'filtro_'. $tabla. $campos[$i] .'\');"/></td>'. "\n";
+			else
+				echo '    <td></td>'. "\n";*/
+		}
+		//echo '    <td class="col-relleno"></td>'. "\n";
+		echo '  </tr>'. "\n";
+	}
+	echo ' </thead>'. "\n";
+
+	return "$where ORDER BY $campo ". $globals['ordenes'][$orden] ." LIMIT $fila_0, $num_filas";
+
+} // function tabla head
+
+function get_stars( $points ) {
+
+	global $globals;
+
+	if( $points < 25 )
+		$stars = 0;
+	elseif( $points < 40 )
+		$stars = 1;
+	elseif( $points < 60 )
+		$stars = 2;
+	elseif( $points < 80 )
+		$stars = 3;
+	elseif( $points < 100 )
+		$stars = 4;
+	else
+		$stars = 5;
+
+	$file = "img/star_$stars.png";
+	$file_path = birrolpath.'/'.$file;
+	if (is_readable($file_path))
+		return $globals['base_static'] . $file;
+
+} // get_stars
+
+?>

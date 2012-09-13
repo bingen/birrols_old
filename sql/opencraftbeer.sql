@@ -90,8 +90,8 @@ CREATE TABLE beers (
   category_id int(11),
   type_id int(11),
   score decimal(1,2) default 0,
-  alcohol decimal(2,2),
-  IBU int(10),
+  abv decimal(2,2),
+  ibu int(10),
   description text collate utf8_spanish_ci NOT NULL,
   PRIMARY KEY  (auto_id),
   UNIQUE KEY beer_type (beer_type)
@@ -102,7 +102,7 @@ CREATE TABLE beers (
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   auto_id int(11) NOT NULL auto_increment,
-  user char(32) collate utf8_spanish_ci NOT NULL,
+  username char(32) collate utf8_spanish_ci NOT NULL,
   password char(64) collate utf8_spanish_ci NOT NULL,
   email char(64) collate utf8_spanish_ci NOT NULL,
   type enum('disabled','lover','business','admin') character set utf8 NOT NULL default 'lover',
@@ -113,15 +113,15 @@ CREATE TABLE users (
   ip char(32) collate utf8_spanish_ci default NULL,
   name char(60) collate utf8_spanish_ci NOT NULL,
   last_name char(60) collate utf8_spanish_ci NOT NULL,
-  user_register char(32) collate utf8_spanish_ci default NULL,
-  email_register char(64) collate utf8_spanish_ci default NULL,
   language_id tinyint(2) unsigned NOT NULL default '1',
   url char(128) collate utf8_spanish_ci,
   sex enum('M','F') character set utf8,
   country char(50) collate utf8_spanish_ci default NULL,
   birthday date NOT NULL default '1900-00-00',
+  username_register char(32) collate utf8_spanish_ci default NULL,
+  email_register char(64) collate utf8_spanish_ci default NULL,
   PRIMARY KEY auto_id (auto_id),
-  UNIQUE KEY user (user)
+  UNIQUE KEY username (username)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
