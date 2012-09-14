@@ -26,6 +26,9 @@ class User {
 	var $sex = '';
 	var $country = '';
 	var $birthday = 0;
+	
+	var $authenticated = FALSE;
+	var $ocb_user = False;
 
 	function User($id=0) {
 		if ($id>0) {
@@ -193,14 +196,15 @@ class User {
 				}
 
 				$this->id = $user->auto_id;
-				$this->username  = $userInfo[0];
-				$this->md5_pass = $user->password;
-				$this->type = $user->type;
-				if ($this->type == 'admin') $this->admin = true;
-				$this->email = $user->email;
-				$this->avatar = $user->avatar;
-				$this->validated_date = $user->validated_date;
-				$this->language_id = $user->language_id;
+// 				$this->username  = $userInfo[0];
+// 				$this->password = $user->password;
+// 				$this->type = $user->type;
+// 				if ($this->type == 'admin') $this->admin = true;
+// 				$this->email = $user->email;
+// 				$this->avatar = $user->avatar;
+// 				$this->validated_date = $user->validated_date;
+// 				$this->language_id = $user->language_id;
+				$this->read();
 				$this->authenticated = TRUE;
 
 				if ($userInfo[2] != '3') { // Update the cookie to version 3
@@ -241,20 +245,24 @@ class User {
 	function Authenticate($username, $hash, $remember=false) {
 
 		$dbusername=mysql_real_escape_string($username);
-		$query = "SELECT auto_id, password, type, UNIX_TIMESTAMP(validated_date) as validated_date, email, avatar, language_id FROM users WHERE login = BINARY '$dbusername'";
-// 		echo '<p> query: ' . $query . '</p>';
+		if( empty($dbusername) ) return false;
+		$query = "SELECT auto_id, password, type, UNIX_TIMESTAMP(validated_date) as validated_date, email, avatar, language_id FROM users WHERE username = BINARY '$dbusername'";
+		echo '<p> query: ' . $query . '</p>';
 		$res=mysql_query( $query ) or die ('ERROR:'.mysql_error());
 		$user = mysql_fetch_object($res);
-		if ($user->tipo == 'disabled' || $user->tipo == 'autodisabled' || ! $user->validated_date) return false;
-		if ($user->auto_id > 0 && $user->password == $hash) {
+		print_r( $user);
+// 		if ($user->type == 'disabled' || $user->type == 'autodisabled' || ! $user->validated_date) return false;
+// 		if ($user->auto_id > 0 && $user->password == $hash) {
+		if( 1) {
 			$this->id = $user->auto_id;
-			$this->username = $username;
-			$this->md5_pass = $user->password;
-			$this->email = $user->email;
-			$this->type = $user->type;
-			$this->avatar = $user->avatar;
-			$this->validated_date = $user->validated_date;
-			$this->language_id = $user->language_id;
+// 			$this->username = $username;
+// 			$this->password = $user->password;
+// 			$this->email = $user->email;
+// 			$this->type = $user->type;
+// 			$this->avatar = $user->avatar;
+// 			$this->validated_date = $user->validated_date;
+// 			$this->language_id = $user->language_id;
+			$this->read();
 			$this->authenticated = TRUE;
 			$this->SetIDCookie(1, $remember);
 			return true;

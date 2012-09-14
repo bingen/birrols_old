@@ -101,7 +101,7 @@ function cabecera($title='',$script='', $no_cache=false) {
 	echo '  <div id="cabecera_in">'."\n";
 	echo '	<div id="aux_1">'."\n";
 	echo '	<div id="titulo">'."\n";
-	echo '	  <h1><a href="'.$globals['base_url'].'inicio.php" title=""><img src="'.$globals['base_static']. $globals['logo'] .'" alt="'. $globals['app_name'] .'"/></a></h1>'."\n";
+	echo '	  <h1><a href="'.$globals['base_url'].'index.php" title=""><img src="'.$globals['base_static']. $globals['logo'] .'" alt="'. $globals['app_name'] .'"/></a></h1>'."\n";
 	echo '	</div>'."\n"; // titulo
 
 	echo '	<div id="aux_2">'."\n";
@@ -238,6 +238,8 @@ function laterales() {
 }
 
 function pie($no_cache=false) {
+  global $globals;
+  
   echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";
   echo '	  </div> <!-- container_cuerpo -->'. "\n";
   echo '	<div id="fake-pie" style="clear: both;"></div>'. "\n"; // para que el pie no se monte a la derecha del cuerpo

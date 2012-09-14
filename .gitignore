@@ -1,0 +1,5 @@
+# Ignore all backup files
+*~
+# Ignore everyting in the cache directory
+cache
+

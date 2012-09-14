@@ -1,0 +1,88 @@
+/*
+Author: ßingen <bingen at gmail dot com>
+License: CC-by-sa
+http://creativecommons.org/licenses/by-sa/3.0/
+*/
+
+* { margin: 0px;
+padding: 0px;
+}
+html, body { height: 100%;
+}
+#container-index {
+min-height: 98%;
+height: auto !important;
+height: 98%;
+background-color: #d6c4ef;
+text-align: center;
+}
+
+#login-no {
+	/*height: 100px;
+	width: 130px;*/
+	float: right;
+	text-align: left;
+	vertical-align: top;
+	/*background-image: url("../img/caja_login.png");*/
+	background-color: #FFF;
+        border: 1px solid #32023F;
+	font-size: 10px;
+	margin: 5px;
+	padding: 10px;
+}
+.error, .error a:link, .error a:hover, .error a:visited, .error a:active {
+	color: #FF3333;
+	font-weight: bold;
+}
+
+body a:link {
+	color: #32023F;
+}
+/*body a:visited {
+	color: #32023F;
+}*/
+body a:hover {
+	color: #32023F;
+}
+body a:active {
+	color: #32023F;
+}
+input {
+	border: 1px solid #32023F;
+	margin-top: 2px;
+}
+
+
+#logo-index {
+clear: both;
+/*height: 400px;*/
+vertical-align: center;
+}
+
+#logo{
+height: 150px;
+width: 400px;
+position:absolute;
+top:40%;
+left: 50%;
+margin-top: -75px;
+margin-left: -200px;
+}
+
+#lema{
+position:absolute;
+top:60%;
+margin: 10px 29%;
+/*	left: 50%;
+margin-top: -75px;
+margin-left: -200px;*/
+}
+
+#pie { 
+background-color: #d6c4ef;
+height: 3em;
+color: white;
+text-align: center;
+}
+#pie p { line-height: 3em;
+}

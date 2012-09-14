@@ -24,7 +24,7 @@ $error = false;
 
 conecta();
 
-if(!$current_user->authenticated) {
+if(!$current_user->authenticated && !empty($_POST['usuario']) && !empty($_POST['password']) ) {
 	if(! $current_user->Authenticate($_POST['usuario'], md5($_POST['password'])) ) {
 		header("Location:index.php?error_acceso=");
 		//echo '<p> usuario: '. $_POST['usuario'] . ' pwd: ' . $_POST['password'] . ' md5: ' .md5($_POST['password']). "\n";
@@ -32,7 +32,7 @@ if(!$current_user->authenticated) {
 	}
 }
 
-cabecera($app_name, $_SERVER['PHP_SELF']);
+cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
 
 //print_r($_REQUEST);
 
@@ -49,10 +49,12 @@ if( !empty($mensaje_accion) ) {
 	echo '</div>'."\n"; // mensaje
 }
 
-$tabla = 'partidos_view';
-echo '    <div id="'. $tabla .'-env" class="tabla-env">' . "\n";
-include('tabla_'. $tabla .'.php');
-echo '    </div>' . "\n"; // partidos-env
+menu();
+
+// $tabla = 'partidos_view';
+// echo '    <div id="'. $tabla .'-env" class="tabla-env">' . "\n";
+// include('tabla_'. $tabla .'.php');
+// echo '    </div>' . "\n"; // partidos-env
 
 echo '       <div id="fake" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 
