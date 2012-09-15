@@ -114,8 +114,10 @@ function cabecera($title='',$script='', $no_cache=false) {
 		echo '	</div>'."\n"; // login
 		echo '<input type="hidden" id="current_user_id" value="'. $current_user->id .'">' . "\n";
 		echo '<input type="hidden" id="current_user_login" value="'. $current_user->username .'">' . "\n";
-		menu();
+	} else {
+	  login_no();
 	}
+	menu();
 	echo '	</div>'."\n"; // aux_2
 	echo '	<div id="fake-aux_1" style="clear: both;"></div>'. "\n";
 	echo '	</div>'."\n"; // aux_1
@@ -146,7 +148,7 @@ function login_no() {
 		if( !empty($url) )
 			echo '  <form action="'. urldecode($url) .'" method="post">'."\n";
 		else
-			echo '  <form action="inicio.php" method="post">'."\n";
+			echo '  <form action="index.php" method="post">'."\n";
 		echo $idioma['usuario'] .': <br /><input type="text" name="usuario" maxlength="24" size="10" />'."\n";
 		echo '<br />'. $idioma['password'] .': <br /><input type="password" name="password" maxlength="24" size="10" />'."\n";
 		echo '<input type="submit" value="'. $idioma['entrar'] .'" />'."\n";

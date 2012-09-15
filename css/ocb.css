@@ -300,7 +300,7 @@ a img {
 	height:42px; 
 	text-align:center;
 	border-bottom: 0;
-	background-image: url(../img/minimal/menu_1_relleno.png);
+	background-image: url(../img/menu_1_relleno.png);
 	line-height:48px; 
 	font-size:11px; 
 	overflow:hidden;
@@ -308,12 +308,12 @@ a img {
 }
 /* first and last tabs */
 /*#menu .one {
-	background-image: url(../img/minimal/menu_1_relleno.png);
+	background-image: url(../img/menu_1_relleno.png);
 	padding-left: 1px;
 	margin-right: -1px;
 }
 #menu .three {
-	background-image: url(../img/minimal/menu_1_relleno.png);
+	background-image: url(../img/menu_1_relleno.png);
 }*/
 
 #menu_ul {padding:0; margin:0; list-style: none;}
@@ -321,16 +321,16 @@ a img {
 /*#menu_ul li ul {display: none;}*/
 
 /* button hover properties */
-#menu_ul li:hover a {color:#32023F; background: url(../img/minimal/menu_1.png);}
+#menu_ul li:hover a {color:#32023F; background: url(../img/menu_1.png);}
 /*#menu_ul li:hover ul {display:block; position:absolute; top:42px; left:0; width:152px; margin: 0; padding: 0;}
 #menu_ul li:hover ul li a.two {background:#FFF; color:#32023F;}
 #menu_ul li:hover ul li:hover a.two {background:#FFF; color:#32023F;}
 #menu_ul li:hover ul li ul {display: none;}*/
 
-#menu_ul li:hover .one {color:#32023F; background: url(../img/minimal/menu_1.png);}
-#menu_ul li:hover .three {color:#32023F; background: url(../img/minimal/menu_1.png);}
+#menu_ul li:hover .one {color:#32023F; background: url(../img/menu_1.png);}
+#menu_ul li:hover .three {color:#32023F; background: url(../img/menu_1.png);}
 
-#menu a.Selected {color:#32023F; background: url(../img/minimal/menu_1.png);}
+#menu a.Selected {color:#32023F; background: url(../img/menu_1.png);}
 /*#menu a.oneSelected {color:#043454; background: url(../img/nav/1b.png);}
 #menu a.threeSelected {color:#043454; background: url(../img/nav/3b.png);}*/
 
@@ -389,7 +389,7 @@ a img {
 	height:42px; 
 	text-align:center;
 	border-bottom: 0;
-	background-image:url(../img/minimal/menu_1.png);
+	background-image:url(../img/menu_1.png);
 	line-height:48px; 
 	font-size:11px; 
 	overflow:hidden;
@@ -397,12 +397,12 @@ a img {
 }
 /* first and last tabs */
 .botones .one {
-	background-image:url(../img/minimal/menu_1.png);
+	background-image:url(../img/menu_1.png);
 	padding-left: 1px;
 	margin-right: -1px;
 }
 .botones .three {
-	background-image:url(../img/minimal/menu_1.png);
+	background-image:url(../img/menu_1.png);
 }
 
 .botones ul {padding:0; margin:0; list-style: none;}
@@ -410,20 +410,20 @@ a img {
 .botones ul li ul {display: none;}
 
 /* button hover properties */
-.botones ul li:hover a {color: #32023F; background: url(../img/minimal/menu_1.png);}
+.botones ul li:hover a {color: #32023F; background: url(../img/menu_1.png);}
 .botones ul li:hover ul {display:block; position:absolute; top:42px; left:0; width:152px; margin: 0; padding: 0;}
 .botones ul li:hover ul li a.two {background: #FFF; color: #32023F;}
 .botones ul li:hover ul li:hover a.two {background: #FF; color: #32023F;}
 .botones ul li:hover ul li ul {display: none;}
 
-.botones ul li:hover .one {color: #32023F; background: url(../img/minimal/menu_1.png);}
-.botones ul li:hover .three {color: #32023F; background: url(../img/minimal/menu_1.png);}
-.botones ul li:hover .oneSelected {color: #32023F; background: url(../img/minimal/menu_1.png);}
-.botones ul li:hover .threeSelected {color: #32023F; background: url(../img/minimal/menu_1.png);}
+.botones ul li:hover .one {color: #32023F; background: url(../img/menu_1.png);}
+.botones ul li:hover .three {color: #32023F; background: url(../img/menu_1.png);}
+.botones ul li:hover .oneSelected {color: #32023F; background: url(../img/menu_1.png);}
+.botones ul li:hover .threeSelected {color: #32023F; background: url(../img/menu_1.png);}
 
-.botones a.oneSelected {color: #32023F; background: url(../img/minimal/menu_1.png);}
-.botones a.Selected {color: #32023F; background: url(../img/minimal/menu_1.png);}
-.botones a.threeSelected {color: #32023F; background: url(../img/minimal/menu_1.png);}
+.botones a.oneSelected {color: #32023F; background: url(../img/menu_1.png);}
+.botones a.Selected {color: #32023F; background: url(../img/menu_1.png);}
+.botones a.threeSelected {color: #32023F; background: url(../img/menu_1.png);}
 
 /* este pie se modificara quitando el subirlo 50px en las paginas sin tablas,
 y se modificara su centrado cuando haya tablas a la izquierda como por ej disponibilidad */

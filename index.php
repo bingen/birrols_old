@@ -24,10 +24,21 @@ $error = false;
 
 conecta();
 
+if(isset($_GET['error_acceso'])){
+        $error_acceso = true;
+}
+
+if($_GET["op"] === 'logout') {
+//      $current_user->Logout($_REQUEST['return']);
+        $current_user->Logout();
+}
+
+$url = $_REQUEST['url'];
+
 if(!$current_user->authenticated && !empty($_POST['usuario']) && !empty($_POST['password']) ) {
 	if(! $current_user->Authenticate($_POST['usuario'], md5($_POST['password'])) ) {
-		header("Location:index.php?error_acceso=");
-		//echo '<p> usuario: '. $_POST['usuario'] . ' pwd: ' . $_POST['password'] . ' md5: ' .md5($_POST['password']). "\n";
+		//header("Location:index.php?error_acceso=");
+		echo '<p> usuario: '. $_POST['usuario'] . ' pwd: ' . $_POST['password'] . ' md5: ' .md5($_POST['password']). "\n";
 		exit();
 	}
 }

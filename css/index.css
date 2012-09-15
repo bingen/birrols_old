@@ -19,19 +19,6 @@ background-color: #d6c4ef;
 text-align: center;
 }
 
-#login-no {
-	/*height: 100px;
-	width: 130px;*/
-	float: right;
-	text-align: left;
-	vertical-align: top;
-	/*background-image: url("../img/caja_login.png");*/
-	background-color: #FFF;
-        border: 1px solid #32023F;
-	font-size: 10px;
-	margin: 5px;
-	padding: 10px;
-}
 .error, .error a:link, .error a:hover, .error a:visited, .error a:active {
 	color: #FF3333;
 	font-weight: bold;

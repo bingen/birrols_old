@@ -92,7 +92,7 @@ class User {
 			$this->id = mysql_insert_id();
 		} else {
 			if ($full_save) $modified = ', modified = now() ' ;
-			$query = "UPDATE usuarios set username='$username', password='$password', email='$email', type='$type', avatar=$avatar, date=FROM_UNIXTIME($date), ip='$ip', name='$name', last_name='$last_name', language_id=$language_id, url='$url', country='$country',  sex='$sex', birthday='$fecha_aux'   $modified WHERE auto_id=$this->id";
+			$query = "UPDATE users set username='$username', password='$password', email='$email', type='$type', avatar=$avatar, date=FROM_UNIXTIME($date), ip='$ip', name='$name', last_name='$last_name', language_id=$language_id, url='$url', country='$country',  sex='$sex', birthday='$fecha_aux'   $modified WHERE auto_id=$this->id";
 // 			echo "\n<p> sql: ". $query. " </p>\n";
 			mysql_query( $query ) or die ('ERROR:'.mysql_error());
 		} // if id === 0
@@ -106,7 +106,7 @@ class User {
 		//elseif(!empty($this->username)) $where = "auto_id=1";
 		elseif(!empty($this->email)) $where = "email='". mysql_real_escape_string( mb_substr($this->email,0,64) ). "' AND type != 'disabled' AND type != 'autodisabled'";
 
-		$query = "SELECT SQL_CACHE *, UNIX_TIMESTAMP(date) ut_date, UNIX_TIMESTAMP(modified) ut_modified FROM usuarios WHERE $where limit 1";
+		$query = "SELECT SQL_CACHE *, UNIX_TIMESTAMP(date) ut_date, UNIX_TIMESTAMP(modified) ut_modified FROM users WHERE $where limit 1";
 // 		echo "<p> sql: ". $query. " </p>";
 		$res = mysql_query( $query ) or die ('ERROR:'.mysql_error());
 		$user = mysql_fetch_object($res);
@@ -228,7 +228,6 @@ class User {
 				$this->AddClone();
 				$this->SetUserCookie(true);
 			case 2: // Only update the key
-				// Atencion, cambiar aquí cuando se cambie el password de base de datos a MD5
 				if($remember) $time = $this->now + 3600000; // Valid for 1000 hours
 				else $time = 0;
 				$strCookie=base64_encode(
@@ -247,14 +246,14 @@ class User {
 		$dbusername=mysql_real_escape_string($username);
 		if( empty($dbusername) ) return false;
 		$query = "SELECT auto_id, password, type, UNIX_TIMESTAMP(validated_date) as validated_date, email, avatar, language_id FROM users WHERE username = BINARY '$dbusername'";
-		echo '<p> query: ' . $query . '</p>';
-		$res=mysql_query( $query ) or die ('ERROR:'.mysql_error());
+// 		echo '<p> query: ' . $query . '</p>';
+ 		$res=mysql_query( $query ) or die ('ERROR:'.mysql_error());
 		$user = mysql_fetch_object($res);
-		print_r( $user);
-// 		if ($user->type == 'disabled' || $user->type == 'autodisabled' || ! $user->validated_date) return false;
-// 		if ($user->auto_id > 0 && $user->password == $hash) {
-		if( 1) {
+//  		print_r( $user );
+  		if ($user->type == 'disabled' || $user->type == 'autodisabled' || ! $user->validated_date) return false;
+ 		if ($user->auto_id > 0 && $user->password == $hash) {
 			$this->id = $user->auto_id;
+//  			echo "<p> id: $this->id </p>\n";
 // 			$this->username = $username;
 // 			$this->password = $user->password;
 // 			$this->email = $user->email;
@@ -266,7 +265,9 @@ class User {
 			$this->authenticated = TRUE;
 			$this->SetIDCookie(1, $remember);
 			return true;
-		}
+		} /*else {
+		  echo "2. <p> id: $user->auto_id pass: $user->password hash: $hash </p> \n";
+		}*/
 		return false;
 	} // Authenticate
 
