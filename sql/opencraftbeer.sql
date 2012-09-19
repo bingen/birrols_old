@@ -91,13 +91,18 @@ CREATE TABLE IF NOT EXISTS beers (
   brewery_id int(11),
   category_id int(11),
   type_id int(11),
-  score decimal(3,2) default 0,
   abv decimal(4,2),
   ibu int(10),
   description text collate utf8_spanish_ci NOT NULL,
+  score decimal(3,2) default 0,
   PRIMARY KEY  (auto_id),
   UNIQUE KEY name (name)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
+
+DROP VIEW IF EXISTS beers_view;
+CREATE VIEW beers_view AS (SELECT b.auto_id, b.name, w.name brewery, c.category, t.type, b.abv, b.ibu, b.description, b.score
+FROM beers b, business w, beer_categories c, beer_types t
+WHERE w.type = 'brewery' AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b.type_id = t.auto_id);
 
 # --------------------------------------------------------
 

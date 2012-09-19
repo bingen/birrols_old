@@ -20,29 +20,20 @@
 
 include('config.php');
 
-// conecta();
-
-if($_GET["op"] === 'logout') {
-//      $current_user->Logout($_REQUEST['return']);
-        $current_user->Logout();
-}
-
 cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
 
 laterales();
 
 echo '<div id="cuerpo">'. "\n";
 
-// $tabla = 'partidos_view';
-// echo '    <div id="'. $tabla .'-env" class="tabla-env">' . "\n";
-// include('tabla_'. $tabla .'.php');
-// echo '    </div>' . "\n"; // partidos-env
+$tabla = 'beers_view';
+echo '    <div id="'. $tabla .'-env" class="tabla-env">' . "\n";
+include('table_'. $tabla .'.php');
+echo '    </div>' . "\n"; // beers-env
 
 echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 echo '	  </div> <!-- container_cuerpo -->'. "\n";
 
 pie();
 
-
 ?>
-

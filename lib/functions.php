@@ -31,8 +31,21 @@ function conecta() {
 }
 
 function cabecera($title='',$script='', $no_cache=false) {
-	global $idioma, $current_user, $globals;
+	global $idioma, $current_user, $globals, $url;
 
+	$url = urlencode($_SERVER['REQUEST_URI']);
+	$url = $_SERVER['REQUEST_URI'];
+	if(isset($_GET['error_acceso'])){
+	        $error_acceso = true;
+	}
+	if(!$current_user->authenticated && !empty($_POST['usuario']) && !empty($_POST['password']) ) {
+		if(! $current_user->Authenticate($_POST['usuario'], md5($_POST['password'])) ) {
+			header("Location:". $url ."?error_acceso=");
+			//echo '<p> usuario: '. $_POST['usuario'] . ' pwd: ' . $_POST['password'] . ' md5: ' .md5($_POST['password']). "\n";
+			exit();
+		}
+	}
+	
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
 	echo '<html xmlns="http://www.w3.org/1999/xhtml">'."\n";
 	echo '<head>'."\n";
@@ -51,6 +64,7 @@ function cabecera($title='',$script='', $no_cache=false) {
 		$estilo = $aux[0];
 //		echo '<p>'.$estilo.'</p>'."\n";
 	}
+	echo '  <link href="'.$globals['base_url'].'css/ocb.css" rel="stylesheet" type="text/css" />'."\n";
 	echo '  <link href="'.$globals['base_url'].'css/'.$estilo.'.css" rel="stylesheet" type="text/css" />'."\n";
 	echo '  <link rel="icon" href="'.$globals['base_url'].'img/favicon.ico" type="image/x-icon">'."\n";
 	echo '  <link rel="shortcut icon" href="'.$globals['base_url'].'img/favicon.ico" type="image/x-icon">'."\n";
@@ -109,7 +123,8 @@ function cabecera($title='',$script='', $no_cache=false) {
 		echo '	<div id="login" class="login">'."\n";
 		echo '<ul id="headtools">' . "\n";
  		echo '<li class="noborder">'.$idioma['saludo'].'&nbsp; <a href="'.get_user_uri($current_user->user_login).'" title="'.$idioma['usr_info'].'">'.$current_user->user_login.'&nbsp;<img src="'.get_avatar_url($current_user->user_id, $current_user->user_avatar, 20).'" width="15" height="15" alt="'.$current_user->user_login.'"/></a></li>' . "\n";
-  		echo '<li><a href="'.$globals['base_url'].'index.php?op=logout&amp;return='.urlencode($_SERVER['REQUEST_URI']).'">'. $idioma['desconectar'].' <img src="'.$globals['base_static'].'img/common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
+//  		echo '<li><a href="'.$globals['base_url']. 'index.php?op=logout&amp;return='. urlencode($_SERVER['REQUEST_URI']). '">'. $idioma['desconectar'].' <img src="'.$globals['base_static'].'img/common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
+		echo '<li><a href="'.$globals['base_url']. 'index.php?op=logout">'. $idioma['desconectar'].' <img src="'.$globals['base_static'].'img/common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
 		echo '</ul>' . "\n";
 		echo '	</div>'."\n"; // login
 		echo '<input type="hidden" id="current_user_id" value="'. $current_user->id .'">' . "\n";
@@ -152,8 +167,8 @@ function login_no() {
 		echo $idioma['usuario'] .': <br /><input type="text" name="usuario" maxlength="24" size="10" />'."\n";
 		echo '<br />'. $idioma['password'] .': <br /><input type="password" name="password" maxlength="24" size="10" />'."\n";
 		echo '<input type="submit" value="'. $idioma['entrar'] .'" />'."\n";
-//		echo '<p style="margin:0"><a href="registro.php" title="registrar">'.$idioma['registrar'].'</a></p>'."\n";
-		echo '<p style="margin:0"><a href="proximamente.php" title="registrar">'.$idioma['registrar'].'</a></p>'."\n";
+		echo '<p style="margin:0"><a href="register.php" title="registrar">'.$idioma['registrar'].'</a></p>'."\n";
+//		echo '<p style="margin:0"><a href="proximamente.php" title="registrar">'.$idioma['registrar'].'</a></p>'."\n";
 		echo '<p style="margin:0"><a href="rec_pwd.php" title="registrar">'.$idioma['forgot_pwd'].'</a></p>';
 		echo '<p style="margin:0"><a href="contact.php" title="registrar">'.$idioma['hlp_contact'].'</a></p>'."\n";
 		echo '  </form>'."\n";
@@ -201,8 +216,7 @@ function menu() {
 	$array_selected = Array();
 	$array_selected[substr($_SERVER['PHP_SELF'],1)] = ' class="Selected" ';
 	echo '		<li><a '. $array_selected['beers.php'] .'href="'.$globals['base_url'].'beers.php" title="'. $idioma['beers'] .'">'. $idioma['beers']  .'</a></li>'."\n";
-	echo '		<li><a '. $array_selected['business.php?type=pub'] .'href="'.$globals['base_url'].'business.php?type=pub" title="'. $idioma['pubs'] .'">'. $idioma['pubs']  .'</a></li>'."\n";
-	echo '		<li><a '. $array_selected['business.php?type=store'] .'href="'.$globals['base_url'].'business.php?type=store" title="'. $idioma['stores'] .'">'. $idioma['stores']  .'</a></li>'."\n";
+	echo '		<li><a '. $array_selected['business.php?type=retail'] .'href="'.$globals['base_url'].'business.php?type=pub" title="'. $idioma['pubs'] .'">'. $idioma['pubs']  .'</a></li>'."\n";
 	echo '		<li><a '. $array_selected['business.php?type=brewery'] .'href="'.$globals['base_url']. 'business.php?type=brewery" title="'. $idioma['breweries'] .'">'. $idioma['breweries']  .'</a></li>'."\n";
 	echo '<li><a '.$array_selected['user.php'].' href="'.get_user_uri($current_user->username).'" title="">'.$idioma['mnu_datos'].'</a></li>' . "\n";
   print('
@@ -242,8 +256,6 @@ function laterales() {
 function pie($no_cache=false) {
   global $globals;
   
-  echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";
-  echo '	  </div> <!-- container_cuerpo -->'. "\n";
   echo '	<div id="fake-pie" style="clear: both;"></div>'. "\n"; // para que el pie no se monte a la derecha del cuerpo
   echo '	<div id="pie">'. "\n";
   echo '		<p>'. $globals['app_name'] . ' Todos los derechos reservados </p>'. "\n";
@@ -489,6 +501,19 @@ function guess_user_id ($str) {
 	}
 }
 
+function get_business_uri($business, $view='') {
+	global $globals;
+
+	if (!empty($globals['base_user_url'])) {
+		$uri= $globals['base_url'] . $globals['base_user_url'] . htmlspecialchars($business);
+		if (!empty($view)) $uri .= "/$view";
+	} else {
+		$uri = $globals['base_url'].'business.php?login='.htmlspecialchars($business);
+		if (!empty($view)) $uri .= "&amp;view=$view";
+	}
+	return $uri;
+}
+
 function get_cache_dir_chain($key) {
 	// Very fast cache dir generator for two levels
 	// mask == 2^8 - 1 or 1 << 8 -1
@@ -592,7 +617,6 @@ function register_error($message) {
 	echo '<input type=button value="'.$idioma['cp_back'].'" onClick="history.go(-1)">'. "\n";
 	echo "</div>\n";
 }
-// END PARTIDOS ////////////////////
 
 function paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla='' ) {
 //function paginacion(  ) {

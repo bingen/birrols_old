@@ -319,7 +319,6 @@ class User {
 
 }
 
-conecta();
 $current_user = new User();
 $current_user->UserAuth();
 

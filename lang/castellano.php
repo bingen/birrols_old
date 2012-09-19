@@ -38,7 +38,8 @@ $idioma['volver'] = 'Volver';
 $idioma['beers'] = 'Cervezas';
 $idioma['pubs'] = 'Bares y pubs';
 $idioma['stores'] = 'Tiendas';
-$idioma['breweries'] = 'Cervecerías';
+$idioma['breweries'] = 'Breweries';
+$idioma['brewery'] = 'Brewery';
 //$idioma[''] = '';
 
 $idioma['id_registro'] = 'Registro';
@@ -186,6 +187,15 @@ $idioma['put_legal'] = ' - Términos y condiciones';
 $idioma['put_contact'] = ' - Contacta con el equipo de '. $globals['app_name'];
 $idioma['put_invitar_meil'] = 'Invitar a '. $globals['app_name'] .' - Escribe direcciones de e-mail separadas por comas para invitar a tus amigos a '. $globals['app_name'];
 //$idioma['put_'] = '';
+
+$idioma['beer_name'] = 'Nombre';
+$idioma['beer_category'] = 'Categoría';
+$idioma['beer_type'] = 'Tipo';
+$idioma['beer_abv'] = 'Alcohol';
+$idioma['beer_ibu'] = 'Amargor';
+$idioma['beer_desc'] = 'Descripción';
+$idioma['beer_score'] = 'Puntuación';
+//$idioma['beer_'] = '';
 
 
 ?>
