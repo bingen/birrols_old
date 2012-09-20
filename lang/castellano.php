@@ -205,6 +205,8 @@ $idioma['bsns_type'] = 'Tipo de empresa';
 $idioma['bsns_city'] = 'Ciudad';
 $idioma['bsns_state'] = 'Provincia';
 $idioma['bsns_url'] = 'URL';
+$idioma['bsns_list'] = 'Lista';
+$idioma['bsns_map'] = 'Mapa';
 //$idioma['bsns_'] = '';
 
 ?>

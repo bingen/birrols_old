@@ -26,6 +26,10 @@ echo '<div id="cuerpo">'. "\n";
 
 echo "   <div id='business-container'> \n";
 echo "      <div id='search-bar'> \n";
+echo "         <div id='search-type-buttons'> \n";
+echo "            <button class='button-left' id='search-button-list'>". $idioma['bsns_list'] ."</button>\n";
+echo "            <button class='button-right' id='search-button-map'>". $idioma['bsns_map'] ."</button>\n";
+echo "         </div> \n"; // search-type-buttons
 echo "      </div> \n"; // search bar
 echo "      <div id='search-container'> \n";
 echo "         <div id='filters'> \n";
