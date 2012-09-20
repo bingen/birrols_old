@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// include_once('config.php');
+include_once('config.php');
 
 
 // 	$campos = "auto_id,name,brewery,pub,store,city,state,url,description,score";
@@ -26,16 +26,27 @@
 // 	$filtros_array = "1,1,1,1,1,1,1,1,1";
 // 	$colspan_array = "1,1,1,1,1,1,1,1,1";
 // 	$orden_array = "1,1,1,0,0,0,0,0,1,1";
+// 	print_r( $_REQUEST );
+	$tabla = 'business_view';
+	$query_cond = '';
+	
+	if( !empty($_REQUEST['brewery']) )
+	    $query_cond .= " AND brewery = ". $_REQUEST['brewery'];
+	if( !empty( $_REQUEST['pub']) )
+	    $query_cond .= " AND pub = ". $_REQUEST['pub'];
+	if( !empty($_REQUEST['store']) )
+	    $query_cond .= " AND store = ". $_REQUEST['store'];
 
-	businesses( 0, $query_cond );
+	if( !empty($_REQUEST['search_type']) && $_REQUEST['search_type'] == 'map' )
+	    businesses_map( 0, $query_cond );
+	else
+	    businesses_list( 0, $query_cond );
 
-function businesses($business_id=0, $query_cond='') {
+function businesses_list($business_id=0, $query_cond='') {
 	global $current_user, $globals, $idioma, $tabla;
 
 	if( $business_id != 0 ) 
 		$query_table = " WHERE auto_id = $business_id ";
-	//elseif( $estado != 0 )
-	//	$query_partido = " WHERE estado = $estado ";
 	else $query_table = " WHERE 1 ";
 
 	echo '	   <table class="principal-table" id="'. $tabla .'-table">' . "\n";
@@ -100,5 +111,7 @@ function businesses($business_id=0, $query_cond='') {
 
 
 }
-	
+
+function businesses_map($business_id=0, $query_cond='') {
+}
 ?>

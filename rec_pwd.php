@@ -25,7 +25,7 @@ include('config.php');
 include(includepath.'ts.php');
 include(includepath.'log.php');
 
-cabecera('patesqu',$_SERVER['PHP_SELF']);
+cabecera('',$_SERVER['PHP_SELF']);
 
 laterales();
 

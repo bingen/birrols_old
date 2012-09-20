@@ -43,7 +43,7 @@ include(includepath.'log.php');
 	} else {
 		if( $globals['invitaciones_alta'] ) {
 // TODO: volver a ponerlo bien!!!
-// 		if( $globals['invitaciones_alta'] && $_GET['k'] != 'ptq20091004' ) {
+// 		if( $globals['invitaciones_alta'] && $_GET['k'] != 'ocb20091004' ) {
 			// Alta por invitación
 			// echo "<p> !empty(". $_GET['id'] .") && !empty(". $_GET['t'] .") && !empty(". $_GET['k'] .")</p>";
 			if (!empty($_GET['id']) && !empty($_GET['t']) && !empty($_GET['k'])) {

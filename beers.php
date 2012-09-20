@@ -20,7 +20,7 @@
 
 include('config.php');
 
-cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
+cabecera('', $_SERVER['PHP_SELF']);
 
 echo '<div id="cuerpo">'. "\n";
 

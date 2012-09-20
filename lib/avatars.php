@@ -9,7 +9,7 @@
 
 function get_avatars_dir() {
 	global $globals;
-	return ptqpath.'/'.$globals['cache_dir'].'/'.$globals['avatars_dir'];
+	return birrolpath.'/'.$globals['cache_dir'].'/'.$globals['avatars_dir'];
 }
 
 function is_avatars_enabled() {

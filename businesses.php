@@ -20,15 +20,30 @@
 
 include('config.php');
 
-cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
+cabecera('', $_SERVER['PHP_SELF']);
+
+$url = 'table_business_view.php?';
+$div = 'results';
+
+	print("
+	<script type='text/javascript'>
+	function get_reload_url()
+        	    {
+			var url = '$url' + 'search_type=' + document.getElementById('search_type').value + '&brewery=' + document.getElementById('brewery-check').checked + '&pub=' + document.getElementById('pub-check').checked + '&store=' + document.getElementById('store-check').checked;
+			
+			return url;
+        	    };
+		</script>
+	");
 
 echo '<div id="cuerpo">'. "\n";
 
 echo "   <div id='business-container'> \n";
 echo "      <div id='search-bar'> \n";
 echo "         <div id='search-type-buttons'> \n";
-echo "            <button class='button-left' id='search-button-list'>". $idioma['bsns_list'] ."</button>\n";
-echo "            <button class='button-right' id='search-button-map'>". $idioma['bsns_map'] ."</button>\n";
+echo "            <input type='hidden' id='search_type' value=''/> \n";
+echo "            <button class='button-left' id='search-button-list' onClick='getElementById(\"search_type\").value=\"list\"; reload_div(get_reload_url(), \"$div\")'>". $idioma['bsns_list'] ."</button>\n";
+echo "            <button class='button-right' id='search-button-map' onClick='getElementById(\"search_type\").value=\"map\"; reload_div(get_reload_url(), \"$div\")'>". $idioma['bsns_map'] ."</button>\n";
 echo "         </div> \n"; // search-type-buttons
 echo "      </div> \n"; // search bar
 echo "      <div id='search-container'> \n";
@@ -41,19 +56,19 @@ echo "             <span class='filter-toggle'></span>\n";
 echo "             </h4>\n";
 echo "             <li id='brewery-filter' class='filter-li'> \n";
 echo "               <label class='filter-label'> \n";
-echo "               <input type='checkbox' id='brewery-check' value='brewery' /> \n";
+echo "               <input type='checkbox' id='brewery-check' value='brewery' onChange='reload_div(get_reload_url(), \"$div\")'/> \n";
 echo "               <span>". $idioma['breweries'] ."</span> \n";
 echo "               </label> \n";
 echo "             </li> \n"; // brewery-filter
 echo "             <li id='pub-filter' class='filter-li'> \n";
 echo "               <label class='filter-label'> \n";
-echo "               <input type='checkbox' id='pub-check' value='pub' /> \n";
+echo "               <input type='checkbox' id='pub-check' value='pub' onChange='reload_div(get_reload_url(), \"$div\")' /> \n";
 echo "               <span>". $idioma['pubs'] ."</span> \n";
 echo "               </label> \n";
 echo "             </li> \n"; // pub-filter
 echo "             <li id='store-filter' class='filter-li'> \n";
 echo "               <label class='filter-label'> \n";
-echo "               <input type='checkbox' id='store-check' value='store' /> \n";
+echo "               <input type='checkbox' id='store-check' value='store' onChange='reload_div(get_reload_url(), \"$div\")' /> \n";
 echo "               <span>". $idioma['stores'] ."</span> \n";
 echo "               </label> \n";
 echo "             </li> \n"; // store-filter
