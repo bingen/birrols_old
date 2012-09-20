@@ -277,7 +277,7 @@ a img {
 #cuerpo {
 	/*height: 415px;*/
   float:left;
-  width:850px;
+  /*width:850px;*/
   height:auto;
 }
 
@@ -434,7 +434,7 @@ y se modificara su centrado cuando haya tablas a la izquierda como por ej dispon
 	text-align: center;
 	padding-right: 150px;
 	position: relative;
-	top: -50px;
+	/*top: -50px;*/
 	width: 300px;
 	margin: 5px auto;
 }

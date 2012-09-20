@@ -216,8 +216,9 @@ function menu() {
 	$array_selected = Array();
 	$array_selected[substr($_SERVER['PHP_SELF'],1)] = ' class="Selected" ';
 	echo '		<li><a '. $array_selected['beers.php'] .'href="'.$globals['base_url'].'beers.php" title="'. $idioma['beers'] .'">'. $idioma['beers']  .'</a></li>'."\n";
-	echo '		<li><a '. $array_selected['business.php?type=retail'] .'href="'.$globals['base_url'].'business.php?type=pub" title="'. $idioma['pubs'] .'">'. $idioma['pubs']  .'</a></li>'."\n";
-	echo '		<li><a '. $array_selected['business.php?type=brewery'] .'href="'.$globals['base_url']. 'business.php?type=brewery" title="'. $idioma['breweries'] .'">'. $idioma['breweries']  .'</a></li>'."\n";
+	echo '		<li><a '. $array_selected['businesses.php?type=retail'] .'href="'.$globals['base_url'].'businesses.php" title="'. $idioma['businesses'] .'">'. $idioma['businesses']  .'</a></li>'."\n";
+// 	echo '		<li><a '. $array_selected['businesses.php?type=retail'] .'href="'.$globals['base_url'].'businesses.php?type=retailer" title="'. $idioma['retailers'] .'">'. $idioma['retailers']  .'</a></li>'."\n";
+// 	echo '		<li><a '. $array_selected['businesses.php?type=brewery'] .'href="'.$globals['base_url']. 'businesses.php?type=brewery" title="'. $idioma['breweries'] .'">'. $idioma['breweries']  .'</a></li>'."\n";
 	echo '<li><a '.$array_selected['user.php'].' href="'.get_user_uri($current_user->username).'" title="">'.$idioma['mnu_datos'].'</a></li>' . "\n";
   print('
 	</ul>
@@ -259,8 +260,8 @@ function pie($no_cache=false) {
   echo '	<div id="fake-pie" style="clear: both;"></div>'. "\n"; // para que el pie no se monte a la derecha del cuerpo
   echo '	<div id="pie">'. "\n";
   echo '		<p>'. $globals['app_name'] . ' Todos los derechos reservados </p>'. "\n";
-  echo '		<p>'. $globals['app_name'] . ' es Software Libre bajo licencia <a id=\"gnu\" href=\"http://www.gnu.org/copyleft/gpl.html\" target=\"_blank\">GNU General Public License</a></p>'. "\n";
-  echo '		<p><a href=\"http://validator.w3.org/check?uri=referer\"><img src=\"http://www.w3.org/Icons/valid-xhtml10-blue\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" /></a></p>'. "\n";
+  echo '		<p>'. $globals['app_name'] . ' es Software Libre bajo licencia <a id="gnu" href="http://www.gnu.org/copyleft/gpl.html" target="_blank">GNU General Public License</a></p>'. "\n";
+  echo '		<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a></p>'. "\n";
 
   echo '	  </div> <!-- pie -->'. "\n";
   echo '	</div> <!-- container -->'. "\n";
@@ -469,7 +470,7 @@ function get_user_uri($user, $view='') {
 		$uri= $globals['base_url'] . $globals['base_user_url'] . htmlspecialchars($user);
 		if (!empty($view)) $uri .= "/$view";
 	} else {
-		$uri = $globals['base_url'].'user.php?login='.htmlspecialchars($user);
+		$uri = $globals['base_url'].'user.php?username='.htmlspecialchars($user);
 		if (!empty($view)) $uri .= "&amp;view=$view";
 	}
 	return $uri;
@@ -488,7 +489,6 @@ function get_user_uri_by_uid($user, $view='') {
 	return $uri;
 }
 function guess_user_id ($str) {
-	global $db;
 
 	if (preg_match('/^[0-9]+$/', $str)) {
 		// It's a number, return it as id
@@ -877,15 +877,15 @@ function get_stars( $points ) {
 
 	global $globals;
 
-	if( $points < 25 )
+	if( $points < 1 )
 		$stars = 0;
-	elseif( $points < 40 )
+	elseif( $points < 2 )
 		$stars = 1;
-	elseif( $points < 60 )
+	elseif( $points < 3 )
 		$stars = 2;
-	elseif( $points < 80 )
+	elseif( $points < 4 )
 		$stars = 3;
-	elseif( $points < 100 )
+	elseif( $points < 5 )
 		$stars = 4;
 	else
 		$stars = 5;

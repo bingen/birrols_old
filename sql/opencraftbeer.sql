@@ -22,10 +22,13 @@ SET character_set_client = utf8;
 
 CREATE TABLE IF NOT EXISTS business (
   auto_id int(11) NOT NULL auto_increment,
-  type enum('disabled','brewery', 'retailer', 'pub','store') character set utf8 NOT NULL default 'disabled',
+  -- type enum('disabled','brewery', 'retailer', 'pub','store') character set utf8 NOT NULL default 'disabled',
+  brewery boolean NOT NULL default FALSE,
+  pub boolean NOT NULL default FALSE,
+  store boolean NOT NULL default FALSE,
   name char(60) collate utf8_spanish_ci NOT NULL,
   avatar int(10) unsigned NOT NULL default '0',
-  user_admin_id int(11), 
+  description text collate utf8_spanish_ci NOT NULL,
   score decimal(3,2) default 0,
   adress_1 char(128) collate utf8_spanish_ci default NULL,
   adress_2 char(128) collate utf8_spanish_ci default NULL,
@@ -37,8 +40,9 @@ CREATE TABLE IF NOT EXISTS business (
   phone char(16) collate utf8_spanish_ci default NULL,
   lat char(10) collate utf8_spanish_ci default NULL,
   lon char(10) collate utf8_spanish_ci default NULL,
+  user_admin_id int(11), 
   PRIMARY KEY  (auto_id)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
+) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Table structure for table business_avatars
@@ -51,6 +55,11 @@ CREATE TABLE IF NOT EXISTS `business_avatars` (
   avatar_image blob NOT NULL,
   PRIMARY KEY  (avatar_id)
 ) DEFAULT CHARSET=utf8;
+
+DROP VIEW IF EXISTS business_view;
+CREATE VIEW business_view AS (SELECT auto_id, name, brewery, pub, store, description, score, city, state, country, url
+FROM business
+);
 
 CREATE TABLE IF NOT EXISTS taps (
   auto_id int(11) NOT NULL auto_increment,
@@ -100,9 +109,9 @@ CREATE TABLE IF NOT EXISTS beers (
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
 
 DROP VIEW IF EXISTS beers_view;
-CREATE VIEW beers_view AS (SELECT b.auto_id, b.name, w.name brewery, c.category, t.type, b.abv, b.ibu, b.description, b.score
+CREATE VIEW beers_view AS (SELECT b.auto_id, b.name, b.brewery_id, w.name brewery, c.category, t.type, b.abv, b.ibu, b.description, b.score
 FROM beers b, business w, beer_categories c, beer_types t
-WHERE w.type = 'brewery' AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b.type_id = t.auto_id);
+WHERE w.brewery AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b.type_id = t.auto_id);
 
 # --------------------------------------------------------
 

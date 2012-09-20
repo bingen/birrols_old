@@ -36,8 +36,12 @@ $idioma['forgot_pwd'] = '¿Has olvidado la contraseña?';
 $idioma['volver'] = 'Volver';
 
 $idioma['beers'] = 'Cervezas';
+$idioma['businesses'] = 'Empresas';
 $idioma['pubs'] = 'Bares y pubs';
+$idioma['pub'] = 'Bar';
 $idioma['stores'] = 'Tiendas';
+$idioma['store'] = 'Tienda';
+$idioma['retailers'] = 'Bares y tiendas';
 $idioma['breweries'] = 'Breweries';
 $idioma['brewery'] = 'Brewery';
 //$idioma[''] = '';
@@ -197,5 +201,10 @@ $idioma['beer_desc'] = 'Descripción';
 $idioma['beer_score'] = 'Puntuación';
 //$idioma['beer_'] = '';
 
+$idioma['bsns_type'] = 'Tipo de empresa';
+$idioma['bsns_city'] = 'Ciudad';
+$idioma['bsns_state'] = 'Provincia';
+$idioma['bsns_url'] = 'URL';
+//$idioma['bsns_'] = '';
 
 ?>

@@ -22,8 +22,6 @@ include('config.php');
 
 cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
 
-laterales();
-
 echo '<div id="cuerpo">'. "\n";
 
 $tabla = 'beers_view';

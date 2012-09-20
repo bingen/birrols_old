@@ -1,38 +1,46 @@
 <?php
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Affero General Public License as
-// published by the Free Software Foundation, either version 3 of the
-// License, or (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Affero General Public License for more details.
+/*
+    Open craft beer
+    Web app for craft beer lovers
+    Copyright (C) 2012 ßingen Eguzkitza <bingentxu@gmail.com>
 
-// You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
 
-// It's licensed under the AFFERO GENERAL PUBLIC LICENSE unless stated otherwise.
-// You can get copies of the licenses here:
-//      http://www.affero.org/oagpl.html
-// AFFERO GENERAL PUBLIC LICENSE is also included in the file called "COPYING".
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 include_once('config.php');
 
 
-	$campos = "auto_id,name,brewery,category,type,abv,ibu,description,score";
-	$cabecera = $idioma['beer_id']. ',' .$idioma['beer_name']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
-	$filtros_array = "1,1,1,1,1,1,1,1,1";
-	$colspan_array = "1,1,1,1,1,1,1,1,1";
-	$orden_array = "1,1,1,0,0,0,0,0,1,1";
-
+	if($current_user->admin) {
+	  $campos = "auto_id,name,brewery,category,type,abv,ibu,description,score";
+	  $cabecera = $idioma['beer_id']. ',' .$idioma['beer_name']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
+	  $filtros_array = "1,1,1,1,1,1,1,1,1";
+	  $colspan_array = "1,1,1,1,1,1,1,1,1";
+	  $orden_array = "1,1,1,0,0,0,0,0,1,1";
+	} else {
+	  $campos = "name,brewery,category,type,abv,ibu,description,score";
+	  $cabecera = $idioma['beer_name']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
+	  $filtros_array = "1,1,1,1,1,1,1,1";
+	  $colspan_array = "1,1,1,1,1,1,1,1";
+	  $orden_array = "1,1,0,0,0,0,0,1,1";
+	}
 	$tabla = 'beers_view';
 //	if( empty($estado) )
 //		$estado = $_REQUEST['estado'];
 
 //	$where = " AND estado = $estado ";
 
-	$query_cond = tabla_head( $tabla, $where, "&estado=$estado" );
+	$query_cond = tabla_head( $tabla, $where );
 	beers( 0, $query_cond );
 
 function beers($beer_id=0, $query_cond='') {
@@ -53,7 +61,10 @@ function beers($beer_id=0, $query_cond='') {
 
 		print("
 	  <tr>
-	    <th class=\"col-auto_id\"><strong>".$idioma['beer_id']."</strong></th>
+		");
+		if($current_user->admin)
+		    echo "			<th class=\"col-auto_id\"><strong>".$idioma['beer_id']."</strong></th> \n";
+		print("
 	    <th class=\"col-name\"><strong>".$idioma['beer_name']."</strong></th>
 	    <th class=\"col-brewery\"><strong>".$idioma['brewery']."</strong></th>
 	    <th class=\"col-category\"><strong>".$idioma['beer_category']."</strong></th>
@@ -81,21 +92,22 @@ function beers($beer_id=0, $query_cond='') {
 	$beer_list = mysql_query( $query ) or die ('ERROR:'.mysql_error());
 	for( $i = 0; $i < mysql_num_rows($beer_list); $i++)
 	{
-		$reg_beer = mysql_fetch_object($beer_list);
-// 		print_r($reg_beer);
+		$row = mysql_fetch_object($beer_list);
+// 		print_r($row);
 
 //		if( $current_user->authenticated ) {
-			$url_partido = $globals['base_url'].'beer.php?id='.$reg_beer->auto_id;
+			$url_partido = $globals['base_url'].'beer.php?id='.$row->auto_id;
 			echo '<tr '.$zebra.' onclick="window.location=\''. $url_partido .'\'">' . "\n";
-			echo '<td class="col-auto_id"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$reg_beer->auto_id.'</a></td>' . "\n";
-			echo '<td class="col-name"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$reg_beer->name.'</a></td>' . "\n";
-			echo '<td class="col-brewery"><a href="'.get_business_uri($reg_beer->brewery).'" title="'. $idioma['put_url_jugador'] .'">'.$reg_beer->brewery.'</a></td>' . "\n";
-			echo '<td class="col-category"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$reg_beer->category.'</a></td>' . "\n";
-			echo '<td class="col-type"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$reg_beer->type.'</a></td>' . "\n";
-			echo '<td class="col-abv"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$reg_beer->abv.'</a></td>' . "\n";
-			echo '<td class="col-ibu"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$reg_beer->ibu.'</a></td>' . "\n";
-			echo '<td class="col-desc"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$reg_beer->description.'</a></td>' . "\n";
-			echo '<td class="col-score"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$reg_beer->score.'</a></td>' . "\n";
+			if($current_user->admin)
+			    echo '<td class="col-auto_id"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->auto_id.'</a></td>' . "\n";
+			echo '<td class="col-name"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->name.'</a></td>' . "\n";
+			echo '<td class="col-brewery"><a href="'.get_business_uri($row->brewery_id).'" title="'. $idioma['put_url_jugador'] .'">'.$row->brewery.'</a></td>' . "\n";
+			echo '<td class="col-category"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->category.'</a></td>' . "\n";
+			echo '<td class="col-type"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->type.'</a></td>' . "\n";
+			echo '<td class="col-abv"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->abv.'</a></td>' . "\n";
+			echo '<td class="col-ibu"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->ibu.'</a></td>' . "\n";
+			echo '<td class="col-desc"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->description.'</a></td>' . "\n";
+			echo '<td class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></td>' . "\n";
 			echo '</tr>';
 //		} // end if authenticated
 	} // end for matches

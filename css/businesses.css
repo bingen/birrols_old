@@ -1,0 +1,23 @@
+/*
+Author: ßingen <bingen at gmail dot com>
+License: CC-by-sa
+http://creativecommons.org/licenses/by-sa/3.0/
+*/
+
+html, body { height: 100%;
+}
+
+#filters {
+  float: left;
+}
+#results {
+  float: left;
+}
+
+.filter-ul {
+  text-align: left;
+}
+
+.filter-ul li {
+  list-style-type: none;
+}
