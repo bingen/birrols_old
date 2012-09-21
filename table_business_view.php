@@ -20,22 +20,17 @@
 
 include_once('config.php');
 
-
-// 	$campos = "auto_id,name,brewery,pub,store,city,state,url,description,score";
-// 	$cabecera = $idioma['beer_id']. ',' .$idioma['beer_name']. ',' .$idioma['brewery']. ',' .$idioma['pub']. ',' .$idioma['store']. ','  . $idioma['bsns_city']. ',' .$idioma['bsns_state']. ',' .$idioma['bsns_url'] ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
-// 	$filtros_array = "1,1,1,1,1,1,1,1,1";
-// 	$colspan_array = "1,1,1,1,1,1,1,1,1";
-// 	$orden_array = "1,1,1,0,0,0,0,0,1,1";
-// 	print_r( $_REQUEST );
 	$tabla = 'business_view';
 	$query_cond = '';
 	
-	if( !empty($_REQUEST['brewery']) )
-	    $query_cond .= " AND brewery = ". $_REQUEST['brewery'];
-	if( !empty( $_REQUEST['pub']) )
-	    $query_cond .= " AND pub = ". $_REQUEST['pub'];
-	if( !empty($_REQUEST['store']) )
-	    $query_cond .= " AND store = ". $_REQUEST['store'];
+	if( !empty($_REQUEST['brewery']) && $_REQUEST['brewery'] == 'true' )
+	    $query_cond .= " OR brewery ";
+	if( !empty( $_REQUEST['pub']) && $_REQUEST['pub'] == 'true' )
+	    $query_cond .= " OR pub ";
+	if( !empty($_REQUEST['store']) && $_REQUEST['store'] == 'true' )
+	    $query_cond .= " OR store ";
+	if( !empty($query_cond) )
+	    $query_cond = 'AND (0 ' . $query_cond . ')';
 
 	if( !empty($_REQUEST['search_type']) && $_REQUEST['search_type'] == 'map' )
 	    businesses_map( 0, $query_cond );

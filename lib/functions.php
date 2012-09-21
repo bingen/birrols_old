@@ -105,7 +105,7 @@ function cabecera($title='',$script='', $no_cache=false) {
 	    left: 5 
 	});
 	$.tooltip.blocked = 0;
-	
+	});
 	</script>
 	');
 
