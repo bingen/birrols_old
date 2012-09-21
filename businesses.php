@@ -47,9 +47,47 @@ echo "      <div id='search-bar'> \n";
 echo "         <div id='search-type-buttons'> \n";
 echo "            <input type='hidden' id='search_type' value=''/> \n";
 echo "            <button class='button-left' id='search-button-list' onClick='getElementById(\"search_type\").value=\"list\"; reload_div(get_reload_url(), \"$div\")'>". $idioma['bsns_list'] ."</button>\n";
-echo "            <button class='button-right' id='search-button-map' onClick='getElementById(\"search_type\").value=\"map\"; reload_div(get_reload_url(), \"$div\")'>". $idioma['bsns_map'] ."</button>\n";
+echo "            <button class='button-right' id='search-button-map'>". $idioma['bsns_map'] ."</button>\n";
 echo "         </div> \n"; // search-type-buttons
 echo "      </div> \n"; // search bar
+
+// jQuery call to load map on amp button click
+    echo '<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />'."\n";
+    echo ' <!--[if lte IE 8]>'."\n";
+    echo '     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />'."\n";
+    echo ' <![endif]-->'."\n";
+    echo ' <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>'."\n";
+    print("
+    <script type='text/javascript'>
+    $('#search-button-map').on({
+	click: function () {
+	    $('#$div').load(get_reload_url(), function() {
+		var map = L.map('map').setView([51.505, -0.09], 13);
+		L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"http://cloudmade.com\">CloudMade</a>'
+		}).addTo(map);
+
+
+		L.marker([51.5, -0.09]).addTo(map)
+			.bindPopup(\"<b>Flint!</b><br />Aquí hay bírrols!!.\").openPopup();
+
+		var popup = L.popup();
+
+		function onMapClick(e) {
+			popup
+				.setLatLng(e.latlng)
+				.setContent(\"You clicked the map at \" + e.latlng.toString())
+				.openOn(map);
+		}
+
+		map.on('click', onMapClick);
+	    });
+	}
+    });
+    </script>
+    ");
+
 echo "      <div id='search-container'> \n";
 echo "         <div id='filters'> \n";
 echo "         <ul id='filter-list'> \n";

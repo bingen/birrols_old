@@ -108,5 +108,10 @@ function businesses_list($business_id=0, $query_cond='') {
 }
 
 function businesses_map($business_id=0, $query_cond='') {
-}
+    echo ' <div id="map"></div>'."\n";
+    
+//     echo ''."\n";
+//     echo ''."\n";
+//     echo ''."\n";
+ }
 ?>

@@ -90,24 +90,24 @@ function cabecera($title='',$script='', $no_cache=false) {
 	echo '<body>'."\n"."\n";
 
 // 	print_r( $current_user );
-	print('
-	<script type="text/javascript">
-	$(function() {
-	$("*").tooltip({ 
-	    track: true, 
-	    delay: 0, 
-	    showURL: false, 
-	    opacity: 1, 
-	    fixPNG: true, 
-	    showBody: " - ", 
-	    extraClass: "pretty", 
-	    top: -15, 
-	    left: 5 
-	});
-	$.tooltip.blocked = 0;
-	});
-	</script>
-	');
+// 	print('
+// 	<script type="text/javascript">
+// 	$(function() {
+// 	$("*").tooltip({ 
+// 	    track: true, 
+// 	    delay: 0, 
+// 	    showURL: false, 
+// 	    opacity: 1, 
+// 	    fixPNG: true, 
+// 	    showBody: " - ", 
+// 	    extraClass: "pretty", 
+// 	    top: -15, 
+// 	    left: 5 
+// 	});
+// 	$.tooltip.blocked = 0;
+// 	});
+// 	</script>
+// 	');
 
 	echo '<div id="container">'."\n";
 

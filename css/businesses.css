@@ -21,3 +21,8 @@ html, body { height: 100%;
 .filter-ul li {
   list-style-type: none;
 }
+
+#map {
+  height: 360px; 
+  width: 480px;
+}

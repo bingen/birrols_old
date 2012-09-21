@@ -413,7 +413,7 @@ a img {
 .botones ul li:hover a {color: #32023F; background: url(../img/menu_1.png);}
 .botones ul li:hover ul {display:block; position:absolute; top:42px; left:0; width:152px; margin: 0; padding: 0;}
 .botones ul li:hover ul li a.two {background: #FFF; color: #32023F;}
-.botones ul li:hover ul li:hover a.two {background: #FF; color: #32023F;}
+.botones ul li:hover ul li:hover a.two {background: #FFF; color: #32023F;}
 .botones ul li:hover ul li ul {display: none;}
 
 .botones ul li:hover .one {color: #32023F; background: url(../img/menu_1.png);}

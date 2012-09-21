@@ -103,121 +103,121 @@ function get_stars( score ) {
 
 }
 
-$(document).ready(function()
-{
-	$(".usuario").autocomplete('lib/search_user.php',
-	{
-	matchContains: true,
- 	mustMatch: true,
-	max: 30,
-	cacheLength: 1,
-	extraParams: {
-		deporte_id: function() { return $("#deporte_id").val(); },
-		jugador_id: function() { return $("#current_user_id").val(); },
-		jugador_login: function() { return $("#current_user_login").val(); },
-		tipo: function() { return $("#tipo_search_user").val(); }
-		},
-	formatItem: function(row) {
-		if( document.getElementById("num_jugador") )
-			var num_jugador = document.getElementById("num_jugador").value;
-		if( num_jugador > 0 )
-			return row[0] + ", " + row[2] + ", " + row[1];
-		else
-			return row[0];
-		},
-	formatResult: function(row) {
-			return row[0];
-		}
-	}).result(function(event, data, formatted) {
-		if( document.getElementById("num_jugador") )
-			var num_jugador = document.getElementById("num_jugador").value;
-		if( num_jugador > 0 ) {
-			$("#categoria"+num_jugador).val(data[2]);
-			$("#categoria"+num_jugador+"_hdn").val(data[2]);
-			$("#categoria"+num_jugador).attr("disabled", "disabled");
-			document.getElementById("op_cat_"+num_jugador).style.display = "none";
-			document.getElementById("puntos"+num_jugador+"_d").value = data[1];
-			document.getElementById("puntos"+num_jugador+"_d").style.display = "inline";
-			$("#stars_"+num_jugador).attr("src", get_stars( data[1] ));
-			document.getElementById("stars_"+num_jugador).style.display = "inline";
-			// TODO: avatar
-			$("#avatar_link_"+num_jugador).attr("href", "http://todo");
-			//$("#avatar_img_"+num_jugador).attr("src", get_stars( data[1] ));
-			$("#avatar_img_"+num_jugador).attr("alt", get_stars( data[0] ));
-			document.getElementById("avatar_link_"+num_jugador).style.display = "inline";
-		}
-	}).blur(function() {
-		$(this).search(function (result){
-			// if no value found, ...
-			if( !result ) {
-				$(this).val("");
-			}
-		})
-	});
-
-	$(".club").autocomplete('lib/search_club.php',
-	{
-	matchContains: true, 
-	max: 30,
-	selectFirst: false,
-	extraParams: {
-		deporte_id: function() { return $("#deporte_id").val(); },
-//		pais: function() { return $("#pais_hdn").val(); },
-		provincia: function() { return $("#provincia").val(); }
-		},
-	formatItem: function(row) {
-			return row[0] + ", " + row[1];
-		},
-	formatResult: function(row) {
-			return row[0];
-		}
-	}).result(function(event, data, formatted) {
-		if( data ) {
-//			alert( 'data'+data+' event:'+event );
-			$("#poblacion").val(data[1]);
-			$("#poblacion_hdn").val(data[1]);
-			$("#poblacion").attr("disabled", "disabled");
-			$("#direccion").val(data[2]);
-			$("#direccion_hdn").val(data[2]);
-			$("#direccion").attr("disabled", "disabled");
-			$("#lat_hdn").val(data[3]);
-			$("#lon_hdn").val(data[4]);
-			$("#club_id_hdn").val(data[5]);
-			$("#stars_club").attr("src", get_stars( data[6] ));
-			document.getElementById("stars_club").style.display = "inline";
-			// TODO: avatar
-		} /*else { 
-			alert( 'No data'+data+' event:'+event );
-			$("#poblacion").removeAttr("disabled");
-			$("#poblacion").val("");
-			$("#poblacion_hdn").val("");
-			$("#direccion").removeAttr("disabled");
-			$("#direccion").val("");
-			$("#direccion_hdn").val("");
-			$("#lat_hdn").val("");
-			$("#lon_hdn").val("");
-			$("#club_id_hdn").val("");
-		}*/
-	}).blur(function() {
-		$(this).search(function (result){
-			// if no value found, ...
-			if( !result ) {
-				$("#poblacion").removeAttr("disabled");
-				$("#poblacion").val("");
-				$("#poblacion_hdn").val("");
-				$("#direccion").removeAttr("disabled");
-				$("#direccion").val("");
-				$("#direccion_hdn").val("");
-				$("#lat_hdn").val("");
-				$("#lon_hdn").val("");
-				$("#club_id_hdn").val("");
-				document.getElementById("stars_club").style.display = "none";
-				// TODO: avatar
-			}
-		})
-	});
-
-});
+// $(document).ready(function()
+// {
+// 	$(".usuario").autocomplete('lib/search_user.php',
+// 	{
+// 	matchContains: true,
+//  	mustMatch: true,
+// 	max: 30,
+// 	cacheLength: 1,
+// 	extraParams: {
+// 		deporte_id: function() { return $("#deporte_id").val(); },
+// 		jugador_id: function() { return $("#current_user_id").val(); },
+// 		jugador_login: function() { return $("#current_user_login").val(); },
+// 		tipo: function() { return $("#tipo_search_user").val(); }
+// 		},
+// 	formatItem: function(row) {
+// 		if( document.getElementById("num_jugador") )
+// 			var num_jugador = document.getElementById("num_jugador").value;
+// 		if( num_jugador > 0 )
+// 			return row[0] + ", " + row[2] + ", " + row[1];
+// 		else
+// 			return row[0];
+// 		},
+// 	formatResult: function(row) {
+// 			return row[0];
+// 		}
+// 	}).result(function(event, data, formatted) {
+// 		if( document.getElementById("num_jugador") )
+// 			var num_jugador = document.getElementById("num_jugador").value;
+// 		if( num_jugador > 0 ) {
+// 			$("#categoria"+num_jugador).val(data[2]);
+// 			$("#categoria"+num_jugador+"_hdn").val(data[2]);
+// 			$("#categoria"+num_jugador).attr("disabled", "disabled");
+// 			document.getElementById("op_cat_"+num_jugador).style.display = "none";
+// 			document.getElementById("puntos"+num_jugador+"_d").value = data[1];
+// 			document.getElementById("puntos"+num_jugador+"_d").style.display = "inline";
+// 			$("#stars_"+num_jugador).attr("src", get_stars( data[1] ));
+// 			document.getElementById("stars_"+num_jugador).style.display = "inline";
+// 			// TODO: avatar
+// 			$("#avatar_link_"+num_jugador).attr("href", "http://todo");
+// 			//$("#avatar_img_"+num_jugador).attr("src", get_stars( data[1] ));
+// 			$("#avatar_img_"+num_jugador).attr("alt", get_stars( data[0] ));
+// 			document.getElementById("avatar_link_"+num_jugador).style.display = "inline";
+// 		}
+// 	}).blur(function() {
+// 		$(this).search(function (result){
+// 			// if no value found, ...
+// 			if( !result ) {
+// 				$(this).val("");
+// 			}
+// 		})
+// 	});
+// 
+// 	$(".club").autocomplete('lib/search_club.php',
+// 	{
+// 	matchContains: true, 
+// 	max: 30,
+// 	selectFirst: false,
+// 	extraParams: {
+// 		deporte_id: function() { return $("#deporte_id").val(); },
+// //		pais: function() { return $("#pais_hdn").val(); },
+// 		provincia: function() { return $("#provincia").val(); }
+// 		},
+// 	formatItem: function(row) {
+// 			return row[0] + ", " + row[1];
+// 		},
+// 	formatResult: function(row) {
+// 			return row[0];
+// 		}
+// 	}).result(function(event, data, formatted) {
+// 		if( data ) {
+// //			alert( 'data'+data+' event:'+event );
+// 			$("#poblacion").val(data[1]);
+// 			$("#poblacion_hdn").val(data[1]);
+// 			$("#poblacion").attr("disabled", "disabled");
+// 			$("#direccion").val(data[2]);
+// 			$("#direccion_hdn").val(data[2]);
+// 			$("#direccion").attr("disabled", "disabled");
+// 			$("#lat_hdn").val(data[3]);
+// 			$("#lon_hdn").val(data[4]);
+// 			$("#club_id_hdn").val(data[5]);
+// 			$("#stars_club").attr("src", get_stars( data[6] ));
+// 			document.getElementById("stars_club").style.display = "inline";
+// 			// TODO: avatar
+// 		} /*else { 
+// 			alert( 'No data'+data+' event:'+event );
+// 			$("#poblacion").removeAttr("disabled");
+// 			$("#poblacion").val("");
+// 			$("#poblacion_hdn").val("");
+// 			$("#direccion").removeAttr("disabled");
+// 			$("#direccion").val("");
+// 			$("#direccion_hdn").val("");
+// 			$("#lat_hdn").val("");
+// 			$("#lon_hdn").val("");
+// 			$("#club_id_hdn").val("");
+// 		}*/
+// 	}).blur(function() {
+// 		$(this).search(function (result){
+// 			// if no value found, ...
+// 			if( !result ) {
+// 				$("#poblacion").removeAttr("disabled");
+// 				$("#poblacion").val("");
+// 				$("#poblacion_hdn").val("");
+// 				$("#direccion").removeAttr("disabled");
+// 				$("#direccion").val("");
+// 				$("#direccion_hdn").val("");
+// 				$("#lat_hdn").val("");
+// 				$("#lon_hdn").val("");
+// 				$("#club_id_hdn").val("");
+// 				document.getElementById("stars_club").style.display = "none";
+// 				// TODO: avatar
+// 			}
+// 		})
+// 	});
+// 
+// });
 
 ////// MAPAS ////////////
 function cargarMapa( club, direccion, poblacion, provincia, pais, not_found ) {
