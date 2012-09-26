@@ -52,8 +52,8 @@ include(includepath.'log.php');
 				$key = $_GET['k'];
 
 				$query = "SELECT de, a, UNIX_TIMESTAMP(fecha), clave FROM invitaciones_alta WHERE auto_id = $inv_id";
-				if($res = mysql_query( $query )) {
-					$invitacion = mysql_fetch_object( $res );
+				if($res = mysqli_query( $query )) {
+					$invitacion = mysqli_fetch_object( $res );
 					$now = time();
  					//echo "$invitacion->de . $invitacion->a . $time.$site_key.".get_server_name()."\n";
 					//$key2 = md5( $invitacion->de . $invitacion->a . $time . $site_key . get_server_name() );
@@ -151,8 +151,8 @@ include(includepath.'log.php');
 
 	echo '<dt><label id="llengua" for="lengua">'.$idioma['id_lengua'].':</label></dt>' . "\n";
 	echo '<dd><select name="lengua" id="lengua"  tabindex="9">';
-	$res=mysql_query("SELECT auto_id, idioma from idiomas") or die ('ERROR:'.mysql_error());
-	while($mnu_idioma=mysql_fetch_row($res)){
+	$res=mysqli_query("SELECT auto_id, idioma from idiomas") or die ('ERROR:'.mysqli_error());
+	while($mnu_idioma=mysqli_fetch_row($res)){
 		echo '<option value="'.$mnu_idioma[0].'">'.$mnu_idioma[1].'</option>';
 	}
 	echo '</select></dd>' . "\n";
@@ -161,7 +161,7 @@ include(includepath.'log.php');
 	echo '<dt></dt><dd><label><span class="note">'.$idioma['id_legal_1'].'<a href="legal.php">'.$idioma['id_legal_2'].'</a>';
 	echo ' <input type="checkbox" id="acceptlegal" name="acceptlegal" value="accept"/></span></label></dd>' . "\n";
 
-	echo '<dt></dt><dd><input type="submit" class="button" disabled="disabled" name="submit" value="'.$idioma['id_enviar'].'" class="log2" /></dd>' . "\n";
+	echo '<dt></dt><dd><input type="submit" class="button" disabled="disabled" name="submit" value="'.$idioma['id_enviar'].'" /></dd>' . "\n";
 	echo '<input type="hidden" name="process" value="1"/>' . "\n";
 	echo '<input type="hidden" name="inv_email" value="'. $invitacion->a .'"/>' . "\n";
 
@@ -177,7 +177,6 @@ include(includepath.'log.php');
 		register_error($idioma['err_legal']);
 		return;
 	}
-//	conecta();
 	if (!check_user_fields()) return;
 	echo '<br style="clear:both" />';
 
@@ -204,8 +203,8 @@ include(includepath.'log.php');
 	echo '<input type="hidden" name="lengua" value="'.clean_input_string($_POST["lengua"]).'" />';
 	echo '<input type="hidden" name="fecha" value="'.clean_input_string($_POST["fecha"]).'" />';
 
-	$res = mysql_query("SELECT auto_id, deporte FROM deportes") or die ('ERROR:'.mysql_error());
-	while( $deportes=mysql_fetch_row($res) ) {
+	$res = mysqli_query("SELECT auto_id, deporte FROM deportes") or die ('ERROR:'.mysqli_error());
+	while( $deportes=mysqli_fetch_row($res) ) {
 		echo '<input type="hidden" name="'.$deportes[1].'" value="'.$_POST[str_replace(' ', '_',"$deportes[1]")].'" />';
 	}
 	echo '<input type="hidden" name="prv_email" value="'. $_POST["prv_email"] .'" />';
@@ -231,20 +230,17 @@ include(includepath.'log.php');
 		return;
 	}
 
-//	$con_mysql=conecta();
-//	echo '<p> Con mysql:'.$con_mysql.'</p>';
-
 	if (!check_user_fields())  return;
 
 	$username=clean_input_string(trim($_POST['username'])); // sanity check
-	$dbusername=mysql_real_escape_string($username); // sanity check
+	$dbusername=mysqli_real_escape_string( $mysql_link, $username); // sanity check
 	$password=md5(trim($_POST['password']));
 //	$password=trim($_POST['password']);
 	$email=clean_input_string(trim($_POST['email'])); // sanity check
-	$dbemail=mysql_real_escape_string($email); // sanity check
+	$dbemail=mysqli_real_escape_string( $mysql_link, $email); // sanity check
 	$telefono=trim($_POST['telefono']);
-	$nombre=mysql_real_escape_string($_POST['nombre']);
-	$apellidos=mysql_real_escape_string($_POST['apellidos']);
+	$nombre=mysqli_real_escape_string( $mysql_link, $_POST['nombre']);
+	$apellidos=mysqli_real_escape_string( $mysql_link, $_POST['apellidos']);
 //	$user_ip = $globals['user_ip'];
 	$provincia=$_POST['provincia'];
 	$sexo=$_POST['sexo'];
@@ -263,7 +259,7 @@ include(includepath.'log.php');
 	if (!user_exists($username)) {
 		$query = "INSERT INTO usuarios (login, login_register, email, email_register, password, date, ip, nombre, apellidos, telefono, provincia, sexo, lang, birthday) VALUES ('$dbusername', '$dbusername', '$dbemail', '$dbemail', '$password', now(), '','$nombre', '$apellidos', '$telefono', '$provincia', '$sexo', '$lengua', '$birthday')";
 		//echo '<p> Query: ' . $query . '</p>';
-		if (mysql_query( $query )) {
+		if (mysqli_query( $query )) {
 			echo '<fieldset>'."\n";
 			echo '<legend><span class="sign">'.$idioma['id_registro_2'].'</span></legend>'."\n";
 			require_once(includepath.'user.php');
@@ -280,11 +276,11 @@ include(includepath.'log.php');
 		} else {
 			register_error( $query . $idioma['err_insert_user'] );
 		}
-		$res = mysql_query("SELECT auto_id, deporte FROM deportes") or die ('ERROR:'.mysql_error());
-		while( $deportes=mysql_fetch_row($res) ) {
+		$res = mysqli_query("SELECT auto_id, deporte FROM deportes") or die ('ERROR:'.mysqli_error());
+		while( $deportes=mysqli_fetch_row($res) ) {
 			$puntos=$_POST[str_replace(' ', '_',"$deportes[1]")];
 			if( empty($puntos) ) $puntos=-1;
-			if (mysql_query("INSERT INTO puntuaciones (usuario_id, deporte_id, puntos) VALUES ($user->id, $deportes[0],$puntos)")) {
+			if (mysqli_query("INSERT INTO puntuaciones (usuario_id, deporte_id, puntos) VALUES ($user->id, $deportes[0],$puntos)")) {
 			} else {
 				register_error("INSERT INTO puntuaciones (usuario_id, deporte_id, puntos) VALUES ($user->id, $deportes[0],$puntos)".$idioma['err_insert_user']);
 			}
@@ -305,7 +301,7 @@ include(includepath.'log.php');
 	global $idioma;
 
 	$query = "INSERT INTO privacidad (usuario_id, campo, valor) VALUES ($userid, '$campo', $valor)";
-	if (mysql_query( $query )) {
+	if (mysqli_query( $query )) {
 	} else {
 		register_error( $idioma['err_insert_user'] );
 	}

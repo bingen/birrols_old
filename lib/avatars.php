@@ -73,8 +73,8 @@ function avatars_db_store($user, $file, $now) {
 	$bytes = file_get_contents($file);
 	if (strlen($bytes)>0 && strlen($bytes) < 30000) {
 		$bytes = addslashes($bytes);
-		mysql_query("replace into avatars set avatar_id = $user, avatar_image='$bytes'");
-		mysql_query("update usuarios set avatar = $now  where auto_id=$user");
+		mysqli_query("replace into avatars set avatar_id = $user, avatar_image='$bytes'");
+		mysqli_query("update usuarios set avatar = $now  where auto_id=$user");
 		return $now;
 	}
 	return false;
@@ -82,15 +82,15 @@ function avatars_db_store($user, $file, $now) {
 
 function avatars_db_remove($user) {
 //	global $db;
-	mysql_query("delete from avatars where avatar_id=$user");
-	mysql_query("update usuarios set avatar = 0  where auto_id=$user");
+	mysqli_query("delete from avatars where avatar_id=$user");
+	mysqli_query("update usuarios set avatar = 0  where auto_id=$user");
 }
 
 function avatar_get_from_file($user, $size) {
 //	global $globals, $db;
 
-	$res = mysql_query("select avatar from usuarios where auto_id=$user");
-	$time = mysql_result($res,0,0);
+	$res = mysqli_query("select avatar from usuarios where auto_id=$user");
+	$time = mysqli_result($res,0,0);
 	if(! $time > 0) return false;
 	$file = get_avatars_dir() . '/'. get_cache_dir_chain($user) . "/$user-$time-$size.jpg";
 	if (is_readable($file)) {
@@ -103,13 +103,13 @@ function avatar_get_from_file($user, $size) {
 
 function avatar_get_from_db($user, $size=0) {
 	global $globals;
-	$res = mysql_query("select avatar_image from avatars where avatar_id=$user");
-	$img = mysql_result($res,0,0);
+	$res = mysqli_query("select avatar_image from avatars where avatar_id=$user");
+	$img = mysqli_result($res,0,0);
 	if (!strlen($img) > 0) {
 		return false;
 	}
-	$res = mysql_query("select avatar from usuarios where auto_id=$user");
-	$time = mysql_result($res,0,0);
+	$res = mysqli_query("select avatar from usuarios where auto_id=$user");
+	$time = mysqli_result($res,0,0);
 
 	$chain = get_cache_dir_chain($user);
 	@mkdir(get_avatars_dir());

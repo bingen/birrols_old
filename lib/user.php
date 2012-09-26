@@ -64,6 +64,7 @@ class User {
 	}
 
 	function store($full_save = true) {
+		global $mysql_link;
 
 //		if(!$this->date) $this->date=$globals['now'];
 		if(!$this->date) $this->date=time();
@@ -72,44 +73,46 @@ class User {
 			$this->ip=$globals['user_ip'];
 		}
 		*/
-		$username = mysql_real_escape_string($this->username);
+		$username = mysqli_real_escape_string( $mysql_link, $this->username);
 		$type = $this->type;
 		$avatar = $this->avatar;
 		$date = $this->date;
 		$ip = $this->ip;
-		$password = mysql_real_escape_string($this->password);
+		$password = mysqli_real_escape_string( $mysql_link, $this->password);
 		$language_id = $this->language_id;
-		$email = mysql_real_escape_string($this->email);
-		$name = mysql_real_escape_string($this->name);
-		$last_name = mysql_real_escape_string($this->last_name);
-		$url = mysql_real_escape_string(htmlspecialchars($this->url));
+		$email = mysqli_real_escape_string( $mysql_link, $this->email);
+		$name = mysqli_real_escape_string( $mysql_link, $this->name);
+		$last_name = mysqli_real_escape_string( $mysql_link, $this->last_name);
+		$url = mysqli_real_escape_string( $mysql_link, htmlspecialchars($this->url));
 		$country = $this->country;
 		$sex = $this->sex;
 		$birthday = $this->birthday;
 		$fecha_aux = date('Y-m-d', $birthday);
 		if($this->id===0) { 
-			mysql_query("INSERT INTO users (username, password, email, type, date, ip, name, last_name, language_id, url, country, sex, birthday) VALUES ('$username', '$password', '$email', $type, FROM_UNIXTIME($date), '$ip', '$name', '$last_name', $language_id, '$url', '$country', '$sex', '$fecha_aux'") or die ('ERROR:'.mysql_error());
-			$this->id = mysql_insert_id();
+			mysqli_query($mysql_link, "INSERT INTO users (username, password, email, type, date, ip, name, last_name, language_id, url, country, sex, birthday) VALUES ('$username', '$password', '$email', $type, FROM_UNIXTIME($date), '$ip', '$name', '$last_name', $language_id, '$url', '$country', '$sex', '$fecha_aux'") or die ('ERROR:'.mysqli_error($mysql_link));
+			$this->id = mysqli_insert_id($mysql_link);
 		} else {
 			if ($full_save) $modified = ', modified = now() ' ;
 			$query = "UPDATE users set username='$username', password='$password', email='$email', type='$type', avatar=$avatar, date=FROM_UNIXTIME($date), ip='$ip', name='$name', last_name='$last_name', language_id=$language_id, url='$url', country='$country',  sex='$sex', birthday='$fecha_aux'   $modified WHERE auto_id=$this->id";
 // 			echo "\n<p> sql: ". $query. " </p>\n";
-			mysql_query( $query ) or die ('ERROR:'.mysql_error());
+			mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
 		} // if id === 0
 		return true;
 	}
 	
 	function read() {
+		global $mysql_link;
+
 		$id = $this->id;
 		if($this->id>0) $where = "auto_id = $id";
-		elseif(!empty($this->username)) $where = "username='". mysql_real_escape_string( mb_substr($this->username,0,64) ). "'";
+		elseif(!empty($this->username)) $where = "username='". mysqli_real_escape_string( $mysql_link,  mb_substr($this->username,0,64) ). "'";
 		//elseif(!empty($this->username)) $where = "auto_id=1";
-		elseif(!empty($this->email)) $where = "email='". mysql_real_escape_string( mb_substr($this->email,0,64) ). "' AND type != 'disabled' AND type != 'autodisabled'";
+		elseif(!empty($this->email)) $where = "email='". mysqli_real_escape_string( $mysql_link,  mb_substr($this->email,0,64) ). "' AND type != 'disabled' AND type != 'autodisabled'";
 
 		$query = "SELECT SQL_CACHE *, UNIX_TIMESTAMP(date) ut_date, UNIX_TIMESTAMP(modified) ut_modified FROM users WHERE $where limit 1";
 // 		echo "<p> sql: ". $query. " </p>";
-		$res = mysql_query( $query ) or die ('ERROR:'.mysql_error());
-		$user = mysql_fetch_object($res);
+		$res = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
+		$user = mysqli_fetch_object($res);
 		if(!empty($where) && $user) {
 			$this->id =$user->auto_id;
 			$this->username = $user->username;
@@ -157,7 +160,7 @@ class User {
 
 // old login.php
 	function UserAuth() {
-		global $site_key;
+		global $site_key, $mysql_link;
 
 		$this->now = time();
 		if(!empty($_COOKIE['ocb_user'])) {
@@ -168,9 +171,9 @@ class User {
 			$userInfo=explode(":", base64_decode($_COOKIE['ocb_key']));
 			if($this->ocb_user[0] === $userInfo[0]) {
 				$cookietime = (int) $userInfo[3];
-				$dbusername = mysql_real_escape_string($this->ocb_user[0]);
-				$res=mysql_query("SELECT SQL_CACHE auto_id, password, type, UNIX_TIMESTAMP(validated_date) as validated_date, email, avatar, language_id FROM users WHERE username = '$dbusername'") or die ('ERROR:'.mysql_error());
-				$user = mysql_fetch_object($res);
+				$dbusername = mysqli_real_escape_string( $mysql_link, $this->ocb_user[0]);
+				$res=mysqli_query($mysql_link, "SELECT SQL_CACHE auto_id, password, type, UNIX_TIMESTAMP(validated_date) as validated_date, email, avatar, language_id FROM users WHERE username = '$dbusername'") or die ('ERROR:'.mysqli_error($mysql_link));
+				$user = mysqli_fetch_object($res);
 
 				// We have two versions from now
 				// The second is more strong agains brute force md5 attacks
@@ -243,12 +246,14 @@ class User {
 
 	function Authenticate($username, $hash, $remember=false) {
 
-		$dbusername=mysql_real_escape_string($username);
+		global $mysql_link;
+		
+		$dbusername=mysqli_real_escape_string( $mysql_link, $username);
 		if( empty($dbusername) ) return false;
 		$query = "SELECT auto_id, password, type, UNIX_TIMESTAMP(validated_date) as validated_date, email, avatar, language_id FROM users WHERE username = BINARY '$dbusername'";
 // 		echo '<p> query: ' . $query . '</p>';
- 		$res=mysql_query( $query ) or die ('ERROR:'.mysql_error());
-		$user = mysql_fetch_object($res);
+ 		$res=mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
+		$user = mysqli_fetch_object($res);
 //  		print_r( $user );
   		if ($user->type == 'disabled' || $user->type == 'autodisabled' || ! $user->validated_date) return false;
  		if ($user->auto_id > 0 && $user->password == $hash) {

@@ -138,7 +138,7 @@ a img {
 	text-align: center;
 	background-color: #FFF;
 }
-#cabecera {
+header {
 	/*height: 170px;*/
 	/*background-color: #FFF;*/
 	/*background-color: #FAEEFF;*/
@@ -425,16 +425,12 @@ a img {
 .botones a.Selected {color: #32023F; background: url(../img/menu_1.png);}
 .botones a.threeSelected {color: #32023F; background: url(../img/menu_1.png);}
 
-/* este pie se modificara quitando el subirlo 50px en las paginas sin tablas,
-y se modificara su centrado cuando haya tablas a la izquierda como por ej disponibilidad */
-
-#pie {
+footer {
 	clear: both;
 	font-size: 6pt;
 	text-align: center;
 	padding-right: 150px;
 	position: relative;
-	/*top: -50px;*/
 	width: 300px;
 	margin: 5px auto;
 }

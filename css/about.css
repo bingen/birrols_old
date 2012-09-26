@@ -1,0 +1,47 @@
+/*
+Author: ßingen <bingen at gmail dot com>
+License: CC-by-sa
+http://creativecommons.org/licenses/by-sa/3.0/
+*/
+
+* { margin: 0px;
+padding: 0px;
+}
+html, body { height: 100%;
+}
+
+
+body{
+  background: SteelBlue;
+}
+#wrap{
+  margin: 0 auto;
+  width: 500px;
+}
+details{
+  border: 1px solid #CC0;
+  padding: 5px;
+  font-family: Arial;
+  margin-bottom:5px;
+  width:500px;
+  background-color: #EEE;
+}
+summary{
+  font-weight: bold;
+  color: SteelBlue;
+  font-size: 12px;
+  cursor: pointer;
+}
+p, a, span{
+  font-size: 12px;
+  color: #666;
+}
+details summary::-webkit-details-marker {
+  color: #CC0;
+}
+h2{
+  color: #FFF;
+  font-size: 40px;
+  font-family: Helvetica;
+  text-align: center;
+}

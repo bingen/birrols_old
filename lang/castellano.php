@@ -28,8 +28,8 @@ $idioma['nombre'] = 'Nombre';
 $idioma['usuario'] = 'Usuario';
 $idioma['password'] = 'Clave';
 $idioma['entrar'] = 'Entrar';
-
 $idioma['cancelar'] = 'Cancelar';
+$idioma['back'] = 'Atrás';
 
 $idioma['forgot_pwd'] = '¿Has olvidado la contraseña?';
 
@@ -74,7 +74,7 @@ $idioma['err_register_key'] = 'Datos de la invitación inconsistentes';
 $idioma['err_register_db'] = 'Error accediendo a la base de datos';
 $idioma['err_register_url'] = 'Error en la invitación';
 $idioma['err_insert_user'] = 'Error insertando usuario en la base de datos';
-$idioma['err_insert_match'] = 'Error insertando partido en la base de datos';
+$idioma['err_insert_beer'] = 'Error insertando cerveza en la base de datos';
 $idioma['err_insert_business'] = 'Error insertando establecimento en la base de datos';
 $idioma['err_update'] = 'Error actualizando en la base de datos';
 $idioma['err_user_exists'] = 'El usuario ya existe';
@@ -95,14 +95,17 @@ $idioma['err_legal'] = 'No has aceptado las condiciones de legales de uso';
 $idioma['err_hash'] = 'Falta la clave de control';
 $idioma['err_avatar_1'] = 'Error guardando la imagen';
 $idioma['err_avatar_2'] = 'El tamaño de la imagen excede el límite';
+$idioma['err_register_auth'] = "Debes abandonar la sesión para dar de alta otro usuario";
+$idioma['err_mail'] = 'Error enviando notifiación.';
+$idioma['err_login'] = 'Debes estar logueado';
+// TODO: existen?
 $idioma['err_inv_friend_1'] = 'Error: invitado vacío';
 $idioma['err_inv_friend_2'] = 'Error: invitado no existe';
 $idioma['err_inv_friend_3'] = 'Error: invitado ya está en tu lista';
 $idioma['err_inv_friend_4'] = 'Error: no es posible invitarse a uno mismo';
 $idioma['err_invitar'] = 'Error enviando invitación';
-$idioma['err_register_auth'] = "Debes abandonar la sesión para dar de alta otro usuario";
-$idioma['err_mail'] = 'Error enviando notifiación.';
 //$idioma['err_'] = ;
+
 
 $idioma['shr_general'] = $globals['app_name']. ', el portal para amantes de la cerveza artesana';
 
@@ -140,7 +143,6 @@ $idioma['pro_disable_3'] = 'Se eliminarán automáticamente los datos personales
 $idioma['pro_disable_4'] = 'TODO: Se eliminará ... No se borrarán los datos de los partidos.';
 $idioma['pro_disable_5'] = 'Sí, quiero deshabilitarla';
 $idioma['pro_provincia'] = 'Provincia';
-$idioma['pro_direccion'] = 'Dirección postal';
 $idioma['pro_volver'] = 'Volver sin realizar cambios';
 //$idioma['pro_'] = 
 
@@ -199,14 +201,35 @@ $idioma['beer_abv'] = 'Alcohol';
 $idioma['beer_ibu'] = 'Amargor';
 $idioma['beer_desc'] = 'Descripción';
 $idioma['beer_score'] = 'Puntuación';
+$idioma['beer_new'] = 'Nueva cerveza';
 //$idioma['beer_'] = '';
 
 $idioma['bsns_type'] = 'Tipo de empresa';
-$idioma['bsns_city'] = 'Ciudad';
+$idioma['bsns_country'] = 'País';
 $idioma['bsns_state'] = 'Provincia';
+$idioma['bsns_city'] = 'Ciudad';
+$idioma['bsns_address'] = 'Dirección';
 $idioma['bsns_url'] = 'URL';
 $idioma['bsns_list'] = 'Lista';
 $idioma['bsns_map'] = 'Mapa';
+$idioma['bsns_new'] = 'Nueva empresa';
+$idioma['bsns_sel_country'] = 'Selecciona el país';
+$idioma['bsns_phone'] = 'Teléfono';
+$idioma['bsns_lat'] = 'Latitud';
+$idioma['bsns_lon'] = 'Longitud';
 //$idioma['bsns_'] = '';
+
+$idioma['about_what_1'] = 'Bírrols, el portal de birra de buen';
+$idioma['about_what_2'] = 'Es lo suyo y lo propio';
+
+// Contacto
+$idioma['cnt_asunto'] = 'Asunto';
+$idioma['cnt_mensaje'] = 'Mensaje';
+$idioma['err_cnt_nombre'] = 'Debes informar el nombre';
+$idioma['err_cnt_asunto'] = 'Debes informar el asunto';
+$idioma['err_cnt_mensaje'] = 'Debes escribir un mensaje';
+$idioma['err_cnt_db'] = 'Error insertando en la base de datos';
+$idioma['cnt_sent'] = 'Mensaje enviado correctamente. Muchas gracias por tu participación.';
+//$idioma['cnt_'] = '';
 
 ?>

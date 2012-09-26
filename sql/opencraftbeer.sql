@@ -30,17 +30,18 @@ CREATE TABLE IF NOT EXISTS business (
   avatar int(10) unsigned NOT NULL default '0',
   description text collate utf8_spanish_ci NOT NULL,
   score decimal(3,2) default 0,
-  adress_1 char(128) collate utf8_spanish_ci default NULL,
-  adress_2 char(128) collate utf8_spanish_ci default NULL,
-  city char(50) collate utf8_spanish_ci default NULL,
+  address_1 char(128) collate utf8_spanish_ci default NULL,
+  address_2 char(128) collate utf8_spanish_ci default NULL,
+  country_id int(11) default NULL,
   state char(50) collate utf8_spanish_ci default NULL,
-  country char(50) collate utf8_spanish_ci default NULL,
+  city char(50) collate utf8_spanish_ci default NULL,
   url char(128) collate utf8_spanish_ci NOT NULL,
   email char(64) collate utf8_spanish_ci NOT NULL,
   phone char(16) collate utf8_spanish_ci default NULL,
   lat char(10) collate utf8_spanish_ci default NULL,
   lon char(10) collate utf8_spanish_ci default NULL,
   user_admin_id int(11), 
+  register_id int(11), 
   PRIMARY KEY  (auto_id)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -57,8 +58,9 @@ CREATE TABLE IF NOT EXISTS `business_avatars` (
 ) DEFAULT CHARSET=utf8;
 
 DROP VIEW IF EXISTS business_view;
-CREATE VIEW business_view AS (SELECT auto_id, name, brewery, pub, store, description, score, city, state, country, url
-FROM business
+CREATE VIEW business_view AS (SELECT b.auto_id, b.name, b.brewery, b.pub, b.store, b.description, b.score, b.city, b.state, c.name country, url
+FROM business b, countries c
+WHERE b.country_id = c.auto_id
 );
 
 CREATE TABLE IF NOT EXISTS taps (
@@ -104,6 +106,7 @@ CREATE TABLE IF NOT EXISTS beers (
   ibu int(10),
   description text collate utf8_spanish_ci NOT NULL,
   score decimal(3,2) default 0,
+  register_id int(11), 
   PRIMARY KEY  (auto_id),
   UNIQUE KEY name (name)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
@@ -209,6 +212,17 @@ CREATE TABLE IF NOT EXISTS logs (
   KEY log_type_2 (log_type,log_date)
 ) DEFAULT CHARSET=utf8;
 
+# --------------------------------------------------------
+DROP TABLE IF EXISTS countries;
+CREATE TABLE IF NOT EXISTS countries (
+  auto_id int(11) NOT NULL auto_increment,
+  language_id tinyint(2) unsigned NOT NULL default '1',
+  name char(60) collate utf8_spanish_ci NOT NULL,
+  alternative_spellings char(128) collate utf8_spanish_ci,
+  relevancy decimal(2,1) default 1,
+  PRIMARY KEY  (auto_id),
+  UNIQUE KEY name (language_id,name)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 # --------------------------------------------------------
 
@@ -217,4 +231,4 @@ CREATE TABLE IF NOT EXISTS logs (
 --   x char(32) collate utf8_spanish_ci NOT NULL,
 --   PRIMARY KEY  (auto_id),
 --   UNIQUE KEY x (x)
--- ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
+-- ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;

@@ -22,22 +22,38 @@
 function conecta() {
 //	require('config.php');
 	global $db;
- 	$con_mysql=mysql_connect($db['server'],$db['user'],$db['password']) or die('ERROR:'.mysql_error());
-	mysql_select_db($db['name'], $con_mysql) or die('ERROR:'.mysql_error());
-	mysql_query( "SET NAMES utf8");
-	mysql_query( "SET lc_time_names = 'es_ES'");
+ 	$mysql_link = mysqli_connect($db['server'],$db['user'],$db['password']) or die('ERROR:'.mysqli_error($mysql_link));
+	mysqli_select_db($mysql_link, $db['name']) or die('ERROR:'.mysqli_error($mysql_link));
+	// TODO:
+	mysqli_set_charset($mysql_link, "utf8");
+	mysqli_query( $mysql_link, "SET NAMES utf8");
+	mysqli_query( $mysql_link, "SET lc_time_names = 'es_ES'");
 
-	return $con_mysql;
+	return $mysql_link;
 }
+// http://php.net/manual/en/class.mysqli-result.php
+// Converting an old project from using the mysql extension to the mysqli extension, I found the most annoying change to be the lack of a corresponding mysql_result function in mysqli. 
+function mysqli_result($res, $row, $field=0) { 
+    $res->data_seek($row); 
+    $datarow = $res->fetch_array(); 
+    return $datarow[$field]; 
+} 
 
 function cabecera($title='',$script='', $no_cache=false) {
-	global $idioma, $current_user, $globals, $url;
-
-	$url = urlencode($_SERVER['REQUEST_URI']);
-	$url = $_SERVER['REQUEST_URI'];
+	global $idioma, $current_user, $globals, $url, $error_acceso;
+	
+// 	$url = urlencode($_SERVER['REQUEST_URI']);
+// 	$url = $_SERVER['REQUEST_URI'];
 	if(isset($_GET['error_acceso'])){
 	        $error_acceso = true;
 	}
+	unset( $_REQUEST['error_acceso'] );
+	unset( $_REQUEST['error'] );
+	unset( $_REQUEST['usuario'] );
+	unset( $_REQUEST['password'] );
+	$query_string = http_build_query( $_REQUEST );
+	$url = $_SERVER['PHP_SELF'] . (empty($query_string) ? '' : '?'. http_build_query( $_REQUEST ));
+	
 	if(!$current_user->authenticated && !empty($_POST['usuario']) && !empty($_POST['password']) ) {
 		if(! $current_user->Authenticate($_POST['usuario'], md5($_POST['password'])) ) {
 			header("Location:". $url ."?error_acceso=");
@@ -46,14 +62,17 @@ function cabecera($title='',$script='', $no_cache=false) {
 		}
 	}
 	
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
-	echo '<html xmlns="http://www.w3.org/1999/xhtml">'."\n";
+// 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
+	echo '<!DOCTYPE html>'."\n";
+// 	echo '<html xmlns="http://www.w3.org/1999/xhtml">'."\n";
+	echo '<html>'."\n";
 	echo '<head>'."\n";
-	echo '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'."\n";
-	if( $no_cache ) {
-		echo '  <meta http-equiv="Pragma" content="no-cache" />'."\n";
-		echo '  <meta http-equiv="Expires" content="-1" />'."\n";
-	}
+// 	echo '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'."\n";
+	echo '  <meta charset="utf-8" />'."\n";
+// 	if( $no_cache ) {
+// 		echo '  <meta http-equiv="Pragma" content="no-cache" />'."\n";
+// 		echo '  <meta http-equiv="Expires" content="-1" />'."\n";
+// 	}
 	if(empty($title)) { $title=$globals['app_name']; }
 	echo '  <title>'.$title.'</title>'."\n";
 	if(empty($script)) { 
@@ -68,50 +87,30 @@ function cabecera($title='',$script='', $no_cache=false) {
 	echo '  <link href="'.$globals['base_url'].'css/'.$estilo.'.css" rel="stylesheet" type="text/css" />'."\n";
 	echo '  <link rel="icon" href="'.$globals['base_url'].'img/favicon.ico" type="image/x-icon">'."\n";
 	echo '  <link rel="shortcut icon" href="'.$globals['base_url'].'img/favicon.ico" type="image/x-icon">'."\n";
-	echo '    <script src="js/jquery-1.8.1.min.js" type="text/javascript" charset="utf-8"></script>'."\n";
-	echo '    <script src="js/funciones.js" type="text/javascript" charset="utf-8"></script>'."\n";
-	echo '    <script src="js/reload.js" type="text/javascript" charset="utf-8"></script>'."\n";
-//	echo '    <script type="text/javascript" src="js/jquery.bgiframe.min.js"></script>' ."\n";
-//	echo '    <script type="text/javascript" src="js/jquery.dimensions.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="js/jquery.autocomplete.js"></script>'."\n";
+	echo '    <script src="'.$globals['base_url'].'js/jquery.min.js" type="text/javascript" charset="utf-8"></script>'."\n";
+	echo '    <script src="'.$globals['base_url'].'js/funciones.js" type="text/javascript" charset="utf-8"></script>'."\n";
+	echo '    <script src="'.$globals['base_url'].'js/reload.js" type="text/javascript" charset="utf-8"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.bgiframe.min.js"></script>' ."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.dimensions.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.autocomplete.js"></script>'."\n";
 // !!!!!!!!!!!!!!!!!
-//	echo '    <script type="text/javascript" src="js/date.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="js/date_es.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="js/jquery.datePicker-2.1.2.js"></script>'."\n";
-// 	echo '    <script type="text/javascript" src="js/jquery.timePicker.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="js/jcarousellite_1.0.1.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="js/jquery.selectboxes.min.js"></script>' ."\n";
-//	echo '    <script type="text/javascript" src="js/jquery.tooltip.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="js/superfish.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/date.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/date_es.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.datePicker-2.1.2.js"></script>'."\n";
+// 	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.timePicker.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jcarousellite_1.0.1.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.selectboxes.min.js"></script>' ."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.tooltip.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/superfish.js"></script>'."\n";
 
 
 	echo '</head>'."\n"."\n";
 
 	echo '<body>'."\n"."\n";
 
-// 	print_r( $current_user );
-// 	print('
-// 	<script type="text/javascript">
-// 	$(function() {
-// 	$("*").tooltip({ 
-// 	    track: true, 
-// 	    delay: 0, 
-// 	    showURL: false, 
-// 	    opacity: 1, 
-// 	    fixPNG: true, 
-// 	    showBody: " - ", 
-// 	    extraClass: "pretty", 
-// 	    top: -15, 
-// 	    left: 5 
-// 	});
-// 	$.tooltip.blocked = 0;
-// 	});
-// 	</script>
-// 	');
-
-	echo '<div id="container">'."\n";
-
-	echo '  <div id="cabecera">'."\n";
+// 	echo '<div id="container">'."\n";
+// 	echo '  <div id="cabecera">'."\n";
+	echo "  <header>\n";
 	echo '  <div id="cabecera_in">'."\n";
 	echo '	<div id="aux_1">'."\n";
 	echo '	<div id="titulo">'."\n";
@@ -123,7 +122,6 @@ function cabecera($title='',$script='', $no_cache=false) {
 		echo '	<div id="login" class="login">'."\n";
 		echo '<ul id="headtools">' . "\n";
  		echo '<li class="noborder">'.$idioma['saludo'].'&nbsp; <a href="'.get_user_uri($current_user->user_login).'" title="'.$idioma['usr_info'].'">'.$current_user->user_login.'&nbsp;<img src="'.get_avatar_url($current_user->user_id, $current_user->user_avatar, 20).'" width="15" height="15" alt="'.$current_user->user_login.'"/></a></li>' . "\n";
-//  		echo '<li><a href="'.$globals['base_url']. 'index.php?op=logout&amp;return='. urlencode($_SERVER['REQUEST_URI']). '">'. $idioma['desconectar'].' <img src="'.$globals['base_static'].'img/common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
 		echo '<li><a href="'.$globals['base_url']. 'index.php?op=logout">'. $idioma['desconectar'].' <img src="'.$globals['base_static'].'img/common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
 		echo '</ul>' . "\n";
 		echo '	</div>'."\n"; // login
@@ -140,7 +138,6 @@ function cabecera($title='',$script='', $no_cache=false) {
 	$url = get_server_name();
 	compartir( $url, $idioma['shr_general'] );
 
-
 	echo '	<div id="ayuda" class="login">'."\n";
 	echo '<ul>' . "\n";
 	echo '<li class="noborder"><a href="about.php" title="'.$idioma['put_about'].'">' . $idioma['hlp_about'] .'</a></li>' . "\n";
@@ -151,7 +148,8 @@ function cabecera($title='',$script='', $no_cache=false) {
 
 	echo '	<div id="fake-cabecera" style="clear: both;"></div>'. "\n"; // para ajustar automáticamente el alto de la cabecera
 	echo '  </div>'."\n"; // cabecera_in
-	echo '  </div>'."\n"; // cabecera
+	echo "  </header>\n";
+// 	echo '  </div>'."\n"; // cabecera
 	echo '<div id="container_cuerpo">'."\n";
 }
 
@@ -169,7 +167,7 @@ function login_no() {
 		echo '<input type="submit" value="'. $idioma['entrar'] .'" />'."\n";
 		echo '<p style="margin:0"><a href="register.php" title="registrar">'.$idioma['registrar'].'</a></p>'."\n";
 //		echo '<p style="margin:0"><a href="proximamente.php" title="registrar">'.$idioma['registrar'].'</a></p>'."\n";
-		echo '<p style="margin:0"><a href="rec_pwd.php" title="registrar">'.$idioma['forgot_pwd'].'</a></p>';
+		echo '<p style="margin:0"><a href="rec_pwd.php" title="registrar">'.$idioma['forgot_pwd'].'</a></p>'."\n";
 		echo '<p style="margin:0"><a href="contact.php" title="registrar">'.$idioma['hlp_contact'].'</a></p>'."\n";
 		echo '  </form>'."\n";
 		if($error_acceso){echo '<p class="error">'.$idioma['err_acceso'].'</p>'."\n";}
@@ -259,21 +257,23 @@ function pie($no_cache=false) {
   global $globals;
   
   echo '	<div id="fake-pie" style="clear: both;"></div>'. "\n"; // para que el pie no se monte a la derecha del cuerpo
-  echo '	<div id="pie">'. "\n";
+//   echo '	<div id="pie">'. "\n";
+  echo "	<footer>\n";
   echo '		<p>'. $globals['app_name'] . ' Todos los derechos reservados </p>'. "\n";
   echo '		<p>'. $globals['app_name'] . ' es Software Libre bajo licencia <a id="gnu" href="http://www.gnu.org/copyleft/gpl.html" target="_blank">GNU General Public License</a></p>'. "\n";
   echo '		<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a></p>'. "\n";
 
-  echo '	  </div> <!-- pie -->'. "\n";
-  echo '	</div> <!-- container -->'. "\n";
+//   echo '	  </div> <!-- pie -->'. "\n";
+  echo "	</footer>\n";
+//   echo '	</div> <!-- container -->'. "\n";
 
 echo '</body>'."\n";
-	if( $no_cache ) {
-		echo '  <head>'."\n";
-		echo '  <meta http-equiv="Pragma" content="no-cache" />'."\n";
-		echo '  <meta http-equiv="Expires" content="-1" />'."\n";
-		echo '  </head>'."\n";
-	}
+// 	if( $no_cache ) {
+// 		echo '  <head>'."\n";
+// 		echo '  <meta http-equiv="Pragma" content="no-cache" />'."\n";
+// 		echo '  <meta http-equiv="Expires" content="-1" />'."\n";
+// 		echo '  </head>'."\n";
+// 	}
 echo '</html>'."\n";
 }
 
@@ -378,9 +378,10 @@ function string2url($cadena) {
 }
 
 function user_exists($username) {
-	$username = mysql_real_escape_string($username);
-	$res = mysql_query("SELECT count(*) FROM users WHERE username='$username'") or die ('ERROR:'.mysql_error());
-	$num=mysql_result($res,0,0);
+	global $mysql_link;
+	$username = mysqli_real_escape_string( $mysql_link, $username);
+	$res = mysqli_query($mysql_link, "SELECT count(*) FROM users WHERE username='$username'") or die ('ERROR:'.mysqli_error($mysql_link));
+	$num=mysqli_result($res,0,0);
 	if ($num>0) return true;
 	return false;
 }
@@ -390,20 +391,21 @@ function check_username($name) {
 				! preg_match('/^admin/i', $name) ); // Does not allow nicks begining with "admin"
 }
 function email_exists($email, $check_previous_registered = true) {
+	global $mysql_link;
 
 	$parts = explode('@', $email);
 	$domain = $parts[1];
 	$subparts = explode('+', $parts[0]); // Because we allow user+extension@gmail.com
 	$user = $subparts[0];
-	$user = mysql_real_escape_string($user);
-	$domain = mysql_real_escape_string($domain);
-	$res=mysql_query("SELECT count(*) FROM users WHERE email = '$user@$domain' or email LIKE '$user+%@$domain'") or die ('ERROR:'.mysql_error());
-	$num=mysql_result($res,0,0);
+	$user = mysqli_real_escape_string( $mysql_link, $user);
+	$domain = mysqli_real_escape_string( $mysql_link, $domain);
+	$res=mysqli_query($mysql_link, "SELECT count(*) FROM users WHERE email = '$user@$domain' or email LIKE '$user+%@$domain'") or die ('ERROR:'.mysqli_error($mysql_link));
+	$num=mysqli_result($res,0,0);
 	if ($num>0) return $num;
 	if ($check_previous_registered) {
 		// Check the same email wasn't used recently for another account
-		$res=mysql_query("SELECT count(*) FROM users WHERE (email_register = '$user@$domain' or email_register LIKE '$user+%@$domain') and date > date_sub(now(), interval 1 year)") or die ('ERROR:'.mysql_error());
-		$num=mysql_result($res,0,0);
+		$res=mysqli_query($mysql_link, "SELECT count(*) FROM users WHERE (email_register = '$user@$domain' or email_register LIKE '$user+%@$domain') and date > date_sub(now(), interval 1 year)") or die ('ERROR:'.mysqli_error($mysql_link));
+		$num=mysqli_result($res,0,0);
 		if ($num>0) return $num;
 	}
 	return false;
@@ -428,9 +430,11 @@ function check_password($password) {
 }
 
 function phone_exists($telefono) {
-	$telefono = mysql_real_escape_string(trim($telefono));
-	$res = mysql_query("SELECT count(*) FROM users WHERE telefono='$telefono'") or die ('ERROR:'.mysql_error());
-	$num=mysql_result($res,0,0);
+	global $mysql_link;
+	
+	$telefono = mysqli_real_escape_string( $mysql_link, trim($telefono));
+	$res = mysqli_query($mysql_link, "SELECT count(*) FROM users WHERE telefono='$telefono'") or die ('ERROR:'.mysqli_error($mysql_link));
+	$num=mysqli_result($res,0,0);
 	if ($num>0) return true;
 	return false;
 }
@@ -481,14 +485,15 @@ function get_user_uri_by_uid($user, $view='') {
 	return $uri;
 }
 function guess_user_id ($str) {
+	global $mysql_link;
 
 	if (preg_match('/^[0-9]+$/', $str)) {
 		// It's a number, return it as id
 		return (int) $str;
 	} else {
-		$str = mysql_real_escape_string(mb_substr($str,0,64));
-		$res = mysql_query("select auto_id from users where login = '$str'") or die ('ERROR:'.mysql_error());
-		$id = (int) mysql_result($res,0 , 0);
+		$str = mysqli_real_escape_string( $mysql_link, mb_substr($str,0,64));
+		$res = mysqli_query($mysql_link, "select auto_id from users where login = '$str'") or die ('ERROR:'.mysqli_error($mysql_link));
+		$id = (int) mysqli_result($res,0 , 0);
 		return $id;
 	}
 }
@@ -522,12 +527,12 @@ function create_cache_dir_chain($base, $chain) {
 }
 
 function get_avatar_url($user, $avatar, $size) {
-	global $globals;
+	global $mysql_link, $globals;
 
 	// If it does not get avatar status, check the database
 	if ($user > 0 && $avatar < 0) {
-		mysql_query("select avatar from users where auto_id = $user") or die ('ERROR:'.mysql_error());
-		$avatar = (int) mysql_result($res,0,0);
+		mysqli_query($mysql_link, "select avatar from users where auto_id = $user") or die ('ERROR:'.mysqli_error($mysql_link));
+		$avatar = (int) mysqli_result($res,0,0);
 	}
 
 	if ($avatar > 0 && $globals['cache_dir']) {
@@ -606,7 +611,7 @@ function register_error($message) {
 
 	echo '<div class="form-error">';
 	echo "<p>$message</p>";
-	echo '<input type=button value="'.$idioma['cp_back'].'" onClick="history.go(-1)">'. "\n";
+	echo '<input type=button value="'.$idioma['back'].'" onClick="history.go(-1)">'. "\n";
 	echo "</div>\n";
 }
 
@@ -680,7 +685,7 @@ function paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla='' ) {
 
 function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=null, $orden_ini=null, $titulo='' )
 {
-	global $campos, $cabecera, $filtros_array, $colspan_array, $orden_array, $idioma, $globals;
+	global $mysql_link, $campos, $cabecera, $filtros_array, $colspan_array, $orden_array, $idioma, $globals;
 
 	$num_filas = $_REQUEST['num_filas'];
 	if( empty($num_filas) || $num_filas == 0 ) $num_filas = 10;
@@ -719,10 +724,10 @@ function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nu
 	for( $i = 0; $i < $num_campos; $i++ ) {
 		if( $_REQUEST["$campos[$i]"] != NULL && $filtros_array[$i] != -1 ) {
 			if( $filtros_array[$i] == 1 || (empty($filtros_array[$i]) && $filtros == 1) )
-				$where .= ' AND ' . $campos[$i] . ' like \'%' . mysql_real_escape_string($_REQUEST["$campos[$i]"]) . '%\'';
+				$where .= ' AND ' . $campos[$i] . ' like \'%' . mysqli_real_escape_string( $mysql_link, $_REQUEST["$campos[$i]"]) . '%\'';
 // 			elseif( $filtros_array[$i] == 2 || (empty($filtros_array[$i]) && $filtros == 2) )
 			elseif( $filtros_array[$i] >= 2 || (empty($filtros_array[$i]) && $filtros != -1) )
-				$where .= ' AND ' . $campos[$i] . ' = \'' . mysql_real_escape_string($_REQUEST["$campos[$i]"]) . '\'';
+				$where .= ' AND ' . $campos[$i] . ' = \'' . mysqli_real_escape_string( $mysql_link, $_REQUEST["$campos[$i]"]) . '\'';
 			$url['filtros'] .= '&'. $campos[$i] . '=' . $_REQUEST["$campos[$i]"];
 		}
 	}
@@ -732,8 +737,8 @@ function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nu
 	
 	$query = "SELECT count(*) FROM $tabla WHERE 1 $where";
 // 	echo '<p> Query: '. $query. '</p>';
-	$res = mysql_query( $query ) or die ('ERROR:'.mysql_error());
-	$num_registros = mysql_result( $res, 0 );
+	$res = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
+	$num_registros = mysqli_result( $res, 0 );
 
 	// cabecera
 	$colspan_array = explode(",",$colspan_array);
@@ -799,8 +804,8 @@ function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nu
 /*				case 4: // select deporte
 					echo '    <td><select class="filtros_select" name="filtro_'. $tabla .'_'. $campos[$i] .'" id="filtro_'. $tabla .'_'. $campos[$i] .'" onChange="sel_deporte(this.value);  reload_div(\''. $url['final'] . '&'. $campos[$i] .'=\'+document.getElementById(\'filtro_'. $tabla. $campos[$i] .'\').value, \''. $tabla .'-env\', \'filtro_'. $tabla. $campos[$i] .'\');">' . "\n";
 					echo '		<option value=""></option>' . "\n";
-					$res=mysql_query("SELECT auto_id, deporte from deportes") or die ('ERROR:'.mysql_error());
-					while($mnu_deporte=mysql_fetch_row($res)){
+					$res=mysqli_query($mysql_link, "SELECT auto_id, deporte from deportes") or die ('ERROR:'.mysqli_error($mysql_link));
+					while($mnu_deporte=mysqli_fetch_row($res)){
 						echo '<option value="'. $mnu_deporte[0] . ($_REQUEST[$campos[$i]]==$mnu_deporte[0]' selected="selected"':''). '">'.$mnu_deporte[1].'</option>' . "\n";
 					}
 					echo '</select></td>' . "\n";
@@ -834,8 +839,8 @@ function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nu
 				case 6: // select provincia
 					echo '    <td><select class="filtros_select" name="filtro_'. $tabla .'_'. $campos[$i] .'" id="filtro_'. $tabla .'_'. $campos[$i] .'" onChange="sel_deporte(this.value);  reload_div(\''. $url['final'] . '&'. $campos[$i] .'=\'+document.getElementById(\'filtro_'. $tabla. $campos[$i] .'\').value, \''. $tabla .'-env\', \'filtro_'. $tabla. $campos[$i] .'\');">' . "\n";
 					echo '		<option value=""></option>' . "\n";
-					$res=mysql_query("SELECT auto_id, deporte from deportes") or die ('ERROR:'.mysql_error());
-					while($mnu_deporte=mysql_fetch_row($res)){
+					$res=mysqli_query($mysql_link, "SELECT auto_id, deporte from deportes") or die ('ERROR:'.mysqli_error($mysql_link));
+					while($mnu_deporte=mysqli_fetch_row($res)){
 						echo '<option value="'. $mnu_deporte[0] . ($_REQUEST[$campos[$i]]==$mnu_deporte[0]' selected="selected"':''). '">'.$mnu_deporte[1].'</option>' . "\n";
 					}
 					echo '</select></td>' . "\n";

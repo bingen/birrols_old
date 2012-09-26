@@ -22,6 +22,10 @@ include('config.php');
 
 cabecera('', $_SERVER['PHP_SELF']);
 
+if( $current_user->authenticated )
+  echo "<a class='button' href='business_new.php' title='". $idioma['bsns_new'] ."'>". $idioma['bsns_new'] ." </a> \n";
+
+
 $tabla = 'business_view';
 $url = $globals['base_url'].'table_'. $tabla .'.php?';
 $div = 'results';

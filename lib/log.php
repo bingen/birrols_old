@@ -11,7 +11,7 @@ function log_insert($type, $ref_id, $user_id=0) {
 //	global $db, $globals;
 
 	$ip = $globals['user_ip'];
-	return mysql_query("insert into logs (log_date, log_type, log_ref_id, log_user_id, log_ip) values (now(), '$type', $ref_id, $user_id, '$ip')");
+	return mysqli_query("insert into logs (log_date, log_type, log_ref_id, log_user_id, log_ip) values (now(), '$type', $ref_id, $user_id, '$ip')");
 }
 
 function log_conditional_insert($type, $ref_id, $user_id=0, $seconds=0) {
@@ -29,7 +29,7 @@ function log_get_date($type, $ref_id, $user_id=0, $seconds=0) {
 	if ($seconds > 0) {
 		$interval = "and log_date > date_sub(now(), interval $seconds second)";
 	}
-	$res = mysql_query("select count(*) from logs where log_type='$type' and log_ref_id = $ref_id $interval and log_user_id = $user_id order by log_date desc limit 1") or die ('ERROR:'.mysql_error());
-	return (int) mysql_result($res,0);
+	$res = mysqli_query("select count(*) from logs where log_type='$type' and log_ref_id = $ref_id $interval and log_user_id = $user_id order by log_date desc limit 1") or die ('ERROR:'.mysqli_error());
+	return (int) mysqli_result($res,0);
 }
 ?>

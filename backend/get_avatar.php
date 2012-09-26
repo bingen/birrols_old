@@ -3,8 +3,8 @@ include_once('../config.php');
 include_once(birrolpath.'/lib/avatars.php');
 
 if (!$_GET['id'] && !empty($_GET['user'])) {
-	$res = mysql_query("select auto_id from usuarios where login = '".mysql_real_escape_string($_GET['user'])."'") or die ('ERROR:'.mysql_error());
-	$id = (int) mysql_result($res);
+	$res = mysqli_query("select auto_id from usuarios where login = '".mysqli_real_escape_string( $mysql_link, $_GET['user'])."'") or die ('ERROR:'.mysqli_error());
+	$id = (int) mysqli_result($res);
 } else {
 	$id = intval($_GET['id']);
 }
@@ -17,8 +17,8 @@ if (!($img=avatar_get_from_file($id, $size))) {
 	$img=avatar_get_from_db($id, $size);
 	if (!$img) {
 		if (is_writable($globals['avatars_dir'])) {
-			$res=mysql_query("select avatar, email from usuarios where auto_id=$id") or die ('ERROR:'.mysql_error());
-			$user=mysql_fetch_object($res);
+			$res=mysqli_query("select avatar, email from usuarios where auto_id=$id") or die ('ERROR:'.mysqli_error());
+			$user=mysqli_fetch_object($res);
 			if ($user) {
 				header('Location: ' . get_avatar_url($id, $user->user_avatar, $size));
 			}

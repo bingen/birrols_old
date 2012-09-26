@@ -44,7 +44,7 @@ include_once('config.php');
 	beers( 0, $query_cond );
 
 function beers($beer_id=0, $query_cond='') {
-	global $current_user, $globals, $idioma, $tabla;
+	global $mysql_link, $current_user, $globals, $idioma, $tabla;
 
 	if( $beer_id != 0 ) 
 		$query_beer = " WHERE auto_id = $beer_id ";
@@ -89,10 +89,10 @@ function beers($beer_id=0, $query_cond='') {
 	echo '    <tbody>' . "\n";
 	$query = "SELECT * FROM $tabla $query_beer $query_cond";
 // 	echo '<p> Query: '. $query. '</p>';
-	$beer_list = mysql_query( $query ) or die ('ERROR:'.mysql_error());
-	for( $i = 0; $i < mysql_num_rows($beer_list); $i++)
+	$beer_list = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
+	for( $i = 0; $i < mysqli_num_rows($beer_list); $i++)
 	{
-		$row = mysql_fetch_object($beer_list);
+		$row = mysqli_fetch_object($beer_list);
 // 		print_r($row);
 
 //		if( $current_user->authenticated ) {

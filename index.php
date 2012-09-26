@@ -20,8 +20,6 @@
 
 include('config.php');
 
-// conecta();
-
 if($_GET["op"] === 'logout') {
 //      $current_user->Logout($_REQUEST['return']);
         $current_user->Logout();

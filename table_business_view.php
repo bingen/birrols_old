@@ -38,7 +38,7 @@ include_once('config.php');
 	    businesses_list( 0, $query_cond );
 
 function businesses_list($business_id=0, $query_cond='') {
-	global $current_user, $globals, $idioma, $tabla;
+	global $mysql_link, $current_user, $globals, $idioma, $tabla;
 
 	if( $business_id != 0 ) 
 		$query_table = " WHERE auto_id = $business_id ";
@@ -76,26 +76,26 @@ function businesses_list($business_id=0, $query_cond='') {
 	echo '    <tbody>' . "\n";
 	$query = "SELECT * FROM $tabla $query_table $query_cond";
 // 	echo '<p> Query: '. $query. '</p>';
-	$table_list = mysql_query( $query ) or die ('ERROR:'.mysql_error());
-	for( $i = 0; $i < mysql_num_rows($table_list); $i++)
+	$table_list = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
+	for( $i = 0; $i < mysqli_num_rows($table_list); $i++)
 	{
-		$row = mysql_fetch_object($table_list);
+		$row = mysqli_fetch_object($table_list);
 // 		print_r($row);
 
 //		if( $current_user->authenticated ) {
-			$url_partido = $globals['base_url'].'business.php?id='.$row->auto_id;
-			echo '<tr '.$zebra.' onclick="window.location=\''. $url_partido .'\'">' . "\n";
+			$url_row = $globals['base_url'].'business.php?id='.$row->auto_id;
+			echo '<tr '.$zebra.' onclick="window.location=\''. $url_row .'\'">' . "\n";
 			
 			if($current_user->admin)
-			    echo '<td class="col-auto_id"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->auto_id.'</a></td>' . "\n";
-			echo '<td class="col-name"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->name.'</a></td>' . "\n";
-			echo '<td class="col-brewery"><a href="'. $url_partido .'" title="'. $idioma['put_url_jugador'] .'"><img src="'.$truefalse_img_array[$row->brewery].'" /></a></td>' . "\n";
-			echo '<td class="col-pub"><a href="'. $url_partido .'" title="'. $idioma['put_url_jugador'] .'"><img src="'.$truefalse_img_array[$row->pub].'" /></a></td>' . "\n";
-			echo '<td class="col-store"><a href="'. $url_partido .'" title="'. $idioma['put_url_jugador'] .'"><img src="'.$truefalse_img_array[$row->store].'" /></a></td>' . "\n";
-			echo '<td class="col-abv"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->city.'</a></td>' . "\n";
-			echo '<td class="col-ibu"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->state.'</a></td>' . "\n";
-			echo '<td class="col-ibu"><a href="'. $row->url .'" title="'. $row->name .'">'.$row->url.'</a></td>' . "\n";
-			echo '<td class="col-desc"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->description.'</a></td>' . "\n";
+			    echo '<td class="col-auto_id"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->auto_id.'</a></td>' . "\n";
+			echo '<td class="col-name"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->name.'</a></td>' . "\n";
+			echo '<td class="col-brewery"><a href="'. $url_row .'" title="'. $idioma['put_url_jugador'] .'"><img src="'.$truefalse_img_array[$row->brewery].'" /></a></td>' . "\n";
+			echo '<td class="col-pub"><a href="'. $url_row .'" title="'. $idioma['put_url_jugador'] .'"><img src="'.$truefalse_img_array[$row->pub].'" /></a></td>' . "\n";
+			echo '<td class="col-store"><a href="'. $url_row .'" title="'. $idioma['put_url_jugador'] .'"><img src="'.$truefalse_img_array[$row->store].'" /></a></td>' . "\n";
+			echo '<td class="col-city"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->city.'</a></td>' . "\n";
+			echo '<td class="col-state"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->state.'</a></td>' . "\n";
+			echo '<td class="col-url"><a href="'. $row->url .'" title="'. $row->name .'">'.$row->url.'</a></td>' . "\n";
+			echo '<td class="col-desc">'.substr($row->description, 0, 50).'</td>' . "\n";
 			echo '<td class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></td>' . "\n";
 			echo '</tr>';
 //		} // end if authenticated
