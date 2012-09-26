@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS business (
   score decimal(3,2) default 0,
   address_1 char(128) collate utf8_spanish_ci default NULL,
   address_2 char(128) collate utf8_spanish_ci default NULL,
+  zip_code char(10) collate utf8_spanish_ci default NULL,
   country_id int(11) default NULL,
   state char(50) collate utf8_spanish_ci default NULL,
   city char(50) collate utf8_spanish_ci default NULL,

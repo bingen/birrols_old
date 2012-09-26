@@ -58,17 +58,17 @@ function bsns_new_form(){
   echo '<dl>' . "\n";
   
   echo "<dt><label for='name'>" . $idioma['beer_name'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='name' id='name' value='' tabindex='1'/></dd>\n";
+  echo "<dd><input type='text' name='name' id='name' value='' /></dd>\n";
 
   // type
   echo "<dt><label for='brewery'>" . $idioma['brewery'] . ":</label></dt>\n";
-  echo "<dd><input type='checkbox' name='brewery' id='brewery' value='1' tabindex='2' />\n";
+  echo "<dd><input type='checkbox' name='brewery' id='brewery' value='1'  />\n";
   echo "</dd>\n";
   echo "<dt><label for='pub'>" . $idioma['pub'] . ":</label></dt>\n";
-  echo "<dd><input type='checkbox' name='pub' id='pub' value='1' tabindex='3' />\n";
+  echo "<dd><input type='checkbox' name='pub' id='pub' value='1' />\n";
   echo "</dd>\n";
   echo "<dt><label for='store'>" . $idioma['store'] . ":</label></dt>\n";
-  echo "<dd><input type='checkbox' name='store' id='store' value='1' tabindex='4' />\n";
+  echo "<dd><input type='checkbox' name='store' id='store' value='1' />\n";
   echo "</dd>\n";
 
   print("
@@ -79,7 +79,7 @@ function bsns_new_form(){
     </script>
   ");
   echo "<dt><label for='country_id'>" . $idioma['bsns_country'] . ":</label></dt>\n";
-  echo "<dd><select name='country_id' id='country_id' class='turn-to-ac' tabindex='5'>\n";
+  echo "<dd><select name='country_id' id='country_id' class='turn-to-ac' >\n";
   echo "<option value='' selected='selected'>". $idioma['bsns_sel_country'] ."</option> \n";
   // TODO: language_id
   $query = "SELECT auto_id, name, alternative_spellings, relevancy FROM countries WHERE language_id = 3";
@@ -89,31 +89,33 @@ function bsns_new_form(){
   echo "</select>\n";
   echo "</dd>\n";
   echo "<dt><label for='state'>" . $idioma['bsns_state'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='state' id='state' tabindex='6' />\n";
+  echo "<dd><input type='text' name='state' id='state' />\n";
   echo "</dd>\n";
   echo "<dt><label for='city'>" . $idioma['bsns_city'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='city' id='city' tabindex='7' />\n";
+  echo "<dd><input type='text' name='city' id='city' />\n";
   echo "</dd>\n";
   
   echo "<dt><label for='address_1'>" . $idioma['bsns_address'] . " 1:</label></dt>\n";
-  echo "<dd><input type='text' name='address_1' id='address_1' value='' tabindex='8'/></dd>\n";
+  echo "<dd><input type='text' name='address_1' id='address_1' value='' /></dd>\n";
   echo "<dt><label for='address_2'>" . $idioma['bsns_address'] . " 2:</label></dt>\n";
-  echo "<dd><input type='text' name='address_2' id='address_2' value='' tabindex='9'/></dd>\n";
+  echo "<dd><input type='text' name='address_2' id='address_2' value='' /></dd>\n";
+  echo "<dt><label for='zip_code'>" . $idioma['bsns_address'] . " 1:</label></dt>\n";
+  echo "<dd><input type='text' name='zip_code' id='zip_code' value='' /></dd>\n";
   
   echo "<dt><label for='url'>" . $idioma['bsns_url'] . ":</label></dt>\n";
-  echo "<dd><input type='url' name='url' id='url' value='' tabindex='10' /></dd>\n";
+  echo "<dd><input type='url' name='url' id='url' value='' /></dd>\n";
   echo "<dt><label for='email'>" . $idioma['id_email'] . ":</label></dt>\n";
-  echo "<dd><input type='email' name='email' id='email' value='' tabindex='11'/></dd>\n";
+  echo "<dd><input type='email' name='email' id='email' value='' /></dd>\n";
   echo "<dt><label for='phone'>" . $idioma['bsns_phone'] . ":</label></dt>\n";
-  echo "<dd><input type='phone' name='phone' id='phone' value='' tabindex='12' /></dd>\n";
+  echo "<dd><input type='phone' name='phone' id='phone' value='' /></dd>\n";
   
   echo "<dt><label for='lat'>" . $idioma['bsns_lat'] . ":</label></dt>\n";
-  echo "<dd><input type='number' name='lat' id='lat' value='' tabindex='13' min=-90, max=90/></dd>\n";
+  echo "<dd><input type='number' name='lat' id='lat' value='' min=-90, max=90/></dd>\n";
   echo "<dt><label for='lon'>" . $idioma['bsns_lat'] . ":</label></dt>\n";
-  echo "<dd><input type='number' name='lon' id='lon' value='' tabindex='14' min=-180, max=180/></dd>\n";
+  echo "<dd><input type='number' name='lon' id='lon' value='' min=-180, max=180/></dd>\n";
   
   echo "<dt><label for='description'>" . $idioma['beer_desc'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='description' id='description' value='' tabindex='7'/></dd>\n";
+  echo "<dd><input type='text' name='description' id='description' value='' /></dd>\n";
   
 //   echo "<dt><label for=''>" . $idioma[''] . ":</label></dt>\n";
 //   echo "<dd></dd>\n";
@@ -130,7 +132,7 @@ function bsns_new_form(){
 function bsns_new_insert(){
   global $mysql_link, $idioma, $current_user;
   
-  print_r($_POST);
+//   print_r($_POST);
   
   $name = mysqli_real_escape_string( $mysql_link, $_POST['name'] );
   $brewery = ( empty($_POST['brewery']) ? 0 : $_POST['brewery'] );
@@ -141,6 +143,7 @@ function bsns_new_insert(){
   $city = mysqli_real_escape_string( $mysql_link, $_POST['city'] );
   $address_1 = mysqli_real_escape_string( $mysql_link, $_POST['address_1'] );
   $address_2 = mysqli_real_escape_string( $mysql_link, $_POST['address_2'] );
+  $zip_code = mysqli_real_escape_string( $mysql_link, $_POST['zip_code'] );
   $url = mysqli_real_escape_string( $mysql_link, $_POST['url'] );
   $email = mysqli_real_escape_string( $mysql_link, $_POST['email'] );
   $phone = mysqli_real_escape_string( $mysql_link, $_POST['phone'] );
@@ -149,7 +152,7 @@ function bsns_new_insert(){
   $description = mysqli_real_escape_string( $mysql_link, $_POST['description'] );
 //   $ = $_POST[''];
 
-  $query = "INSERT INTO business SET name='$name', brewery=$brewery, pub=$pub, store=$store, country_id=$country_id, state='$state', city='$city', address_1='$address_1', address_2='$address_2', url='$url', email='$email', phone='$phone', lat=$lat, lon =$lon, description='$description', register_id=$current_user->id";
+  $query = "INSERT INTO business SET name='$name', brewery=$brewery, pub=$pub, store=$store, country_id=$country_id, state='$state', city='$city', address_1='$address_1', address_2='$address_2', zip_code='$zip_code', url='$url', email='$email', phone='$phone', lat=$lat, lon =$lon, description='$description', register_id=$current_user->id";
 //   echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
     log_insert('beer_new', mysqli_insert_id($mysql_link), $current_user->id);

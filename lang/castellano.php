@@ -209,6 +209,7 @@ $idioma['bsns_country'] = 'País';
 $idioma['bsns_state'] = 'Provincia';
 $idioma['bsns_city'] = 'Ciudad';
 $idioma['bsns_address'] = 'Dirección';
+$idioma['bsns_zip'] = 'Código postal';
 $idioma['bsns_url'] = 'URL';
 $idioma['bsns_list'] = 'Lista';
 $idioma['bsns_map'] = 'Mapa';
