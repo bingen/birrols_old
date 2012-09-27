@@ -59,9 +59,12 @@ function businesses_list($business_id=0, $query_cond='') {
 	    <th class=\"col-brewery\"><strong>".$idioma['brewery']."</strong></th>
 	    <th class=\"col-category\"><strong>".$idioma['pub']."</strong></th>
 	    <th class=\"col-type\"><strong>".$idioma['store']."</strong></th>
-	    <th class=\"col-abv\"><strong>".$idioma['bsns_city']."</strong></th>
-	    <th class=\"col-ibu\"><strong>".$idioma['bsns_state']."</strong></th>
-	    <th class=\"col-ibu\"><strong>".$idioma['bsns_url']."</strong></th>
+		");
+// 	    <th class=\"col-city\"><strong>".$idioma['bsns_city']."</strong></th>
+// 	    <th class=\"col-state\"><strong>".$idioma['bsns_state']."</strong></th>
+		print("
+	    <th class=\"col-country\"><strong>".$idioma['bsns_country']."</strong></th>
+	    <th class=\"col-url\"><strong>".$idioma['bsns_url']."</strong></th>
 	    <th class=\"col-desc\"><strong>".$idioma['beer_desc']."</strong></th>
 	    <th class=\"col-score\"><strong>".$idioma['beer_score']."</strong></th>
 	  </tr>
@@ -92,8 +95,9 @@ function businesses_list($business_id=0, $query_cond='') {
 			echo '<td class="col-brewery"><a href="'. $url_row .'" title="'. $idioma['put_url_jugador'] .'"><img src="'.$truefalse_img_array[$row->brewery].'" /></a></td>' . "\n";
 			echo '<td class="col-pub"><a href="'. $url_row .'" title="'. $idioma['put_url_jugador'] .'"><img src="'.$truefalse_img_array[$row->pub].'" /></a></td>' . "\n";
 			echo '<td class="col-store"><a href="'. $url_row .'" title="'. $idioma['put_url_jugador'] .'"><img src="'.$truefalse_img_array[$row->store].'" /></a></td>' . "\n";
-			echo '<td class="col-city"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->city.'</a></td>' . "\n";
-			echo '<td class="col-state"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->state.'</a></td>' . "\n";
+// 			echo '<td class="col-city"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->city.'</a></td>' . "\n";
+// 			echo '<td class="col-state"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->state.'</a></td>' . "\n";
+			echo '<td class="col-country"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->country.'</a></td>' . "\n";
 			echo '<td class="col-url"><a href="'. $row->url .'" title="'. $row->name .'">'.$row->url.'</a></td>' . "\n";
 			echo '<td class="col-desc">'.substr($row->description, 0, 50).'</td>' . "\n";
 			echo '<td class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></td>' . "\n";

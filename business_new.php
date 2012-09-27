@@ -58,7 +58,7 @@ function bsns_new_form(){
   echo '<dl>' . "\n";
   
   echo "<dt><label for='name'>" . $idioma['beer_name'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='name' id='name' value='' /></dd>\n";
+  echo "<dd><input type='text' name='name' id='name' value='' autofocus='autofocus'/></dd>\n";
 
   // type
   echo "<dt><label for='brewery'>" . $idioma['brewery'] . ":</label></dt>\n";

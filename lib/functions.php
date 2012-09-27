@@ -212,13 +212,14 @@ function menu() {
   ');
 	//echo substr($_SERVER['PHP_SELF'],1);
 	$array_selected = Array();
-	$array_selected[substr($_SERVER['PHP_SELF'],1)] = ' class="Selected" ';
-	echo '		<li><a '. $array_selected['beers.php'] .'href="'.$globals['base_url'].'beers.php" title="'. $idioma['beers'] .'">'. $idioma['beers']  .'</a></li>'."\n";
-	echo '		<li><a '. $array_selected['businesses.php?type=retail'] .'href="'.$globals['base_url'].'businesses.php" title="'. $idioma['businesses'] .'">'. $idioma['businesses']  .'</a></li>'."\n";
-// 	echo '		<li><a '. $array_selected['businesses.php?type=retail'] .'href="'.$globals['base_url'].'businesses.php?type=retailer" title="'. $idioma['retailers'] .'">'. $idioma['retailers']  .'</a></li>'."\n";
-// 	echo '		<li><a '. $array_selected['businesses.php?type=brewery'] .'href="'.$globals['base_url']. 'businesses.php?type=brewery" title="'. $idioma['breweries'] .'">'. $idioma['breweries']  .'</a></li>'."\n";
+	$array_selected[$globals['base_url'] .'beers.php'] = '';
+	$array_selected[$globals['base_url']. 'business.php'] = '';
+	$array_selected[$globals['base_url']. 'user.php'] = '';
+	$array_selected[$_SERVER['PHP_SELF']] = ' class="Selected" ';
+	echo '		<li><a '. $array_selected[$globals['base_url'] .'beers.php'] .'href="'.$globals['base_url'].'beers.php" title="'. $idioma['beers'] .'">'. $idioma['beers']  .'</a></li>'."\n";
+	echo '		<li><a '. $array_selected[$globals['base_url'] .'businesses.php'] .'href="'.$globals['base_url'].'businesses.php" title="'. $idioma['businesses'] .'">'. $idioma['businesses']  .'</a></li>'."\n";
 	if( $current_user->authenticated )
-	    echo '<li><a '.$array_selected['user.php'].' href="'.get_user_uri($current_user->username).'" title="">'.$idioma['mnu_datos'].'</a></li>' . "\n";
+	    echo '<li><a '.$array_selected[$globals['base_url']. 'user.php'].' href="'. get_user_uri($current_user->username) .'" title="">'.$idioma['mnu_datos'].'</a></li>' . "\n";
   print('
 	</ul>
     </div>

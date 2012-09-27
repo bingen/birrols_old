@@ -55,10 +55,10 @@ function beer_new_form(){
   echo '<dl>' . "\n";
   
   echo "<dt><label for='name'>" . $idioma['beer_name'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='name' id='name' value='' tabindex='1'/></dd>\n";
+  echo "<dd><input type='text' name='name' id='name' value='' autofocus='autofocus'/></dd>\n";
   
   echo "<dt><label for='brewery_id'>" . $idioma['brewery'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='brewery_id' id='brewery_id' value='' tabindex='2' list='breweries' />\n";
+  echo "<dd><input type='text' name='brewery_id' id='brewery_id' value='' list='breweries' />\n";
   echo "<datalist id='breweries'>\n";
   $res=mysqli_query($mysql_link, "SELECT auto_id, name FROM business WHERE brewery") or die ('ERROR:'.mysqli_error($mysql_link));
   while( $brewery=mysqli_fetch_row($res) )
@@ -69,7 +69,7 @@ function beer_new_form(){
   echo "</dd>\n";
   
   echo "<dt><label for='category_id'>" . $idioma['beer_category'] . ":</label></dt>\n";
-  echo "<dd><select name='category_id' id='category_id' tabindex='4'>\n";
+  echo "<dd><select name='category_id' id='category_id' >\n";
   $res=mysqli_query($mysql_link, "SELECT auto_id, category FROM beer_categories") or die ('ERROR:'.mysqli_error($mysql_link));
   while( $category=mysqli_fetch_row($res) ) {
     echo "	<option value='". $category[0]."'>". $category[1] ."</option>\n";
@@ -77,16 +77,26 @@ function beer_new_form(){
   echo "</select></dd>\n";
   
   echo "<dt><label for='type'>" . $idioma['beer_type'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='type_id' id='type_id' value='' tabindex='4'/></dd>\n";
+  echo "<dd><input type='text' name='type_id' id='type_id' value='' /></dd>\n";
   
   echo "<dt><label for='abv'>" . $idioma['beer_abv'] . ":</label></dt>\n";
-  echo "<dd><input type='number' name='abv' id='abv' value='' tabindex='5' min=0, max=100/></dd>\n";
+  echo "<dd><input type='number' name='abv' id='abv' value='' min=0, max=100/></dd>\n";
   
   echo "<dt><label for='ibu'>" . $idioma['beer_ibu'] . ":</label></dt>\n";
-  echo "<dd><input type='number' name='ibu' id='ibu' value='' tabindex='6' min=0, max=9999/></dd>\n";
+  echo "<dd><input type='number' name='ibu' id='ibu' value='' min=0, max=9999/></dd>\n";
+  
+  echo "<dt><label for='og'>" . $idioma['beer_og'] . ":</label></dt>\n";
+  echo "<dd><input type='number' name='og' id='og' value='' min=0, max=2000/></dd>\n";
+  
+  echo "<dt><label for='srm'>" . $idioma['beer_srm'] . ":</label></dt>\n";
+  echo "<dd><input type='number' name='srm' id='srm' value='' min=0, max=100/></dd>\n";
+  // http://en.wikipedia.org/wiki/Standard_Reference_Method#EBC
+  // EBC = SRM * 1.97
+  echo "<dt><label for='ebc'>" . $idioma['beer_ebc'] . ":</label></dt>\n";
+  echo "<dd><input type='number' name='ebc' id='ebc' value='' min=0, max=200/></dd>\n";
   
   echo "<dt><label for='description'>" . $idioma['beer_desc'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='description' id='description' value='' tabindex='7'/></dd>\n";
+  echo "<dd><input type='text' name='description' id='description' value='' /></dd>\n";
   
 //   echo "<dt><label for=''>" . $idioma[''] . ":</label></dt>\n";
 //   echo "<dd></dd>\n";
@@ -113,11 +123,11 @@ function beer_new_insert(){
 //   $ = $_POST[''];
 
   $query = "INSERT INTO beers (name, brewery_id, category_id, type_id, abv, ibu, description, register_id) VALUES ('$name', $brewery_id, $category_id, $type_id, $abv, $ibu, '$description', $current_user->id)";
-//   echo "<p> query: $query </p>\n";
+  echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
     log_insert('beer_new', mysqli_insert_id($mysql_link), $current_user->id);
   } else {
-//     echo "<p> error: ". mysqli_error( $mysql_link ) ."</p>";
+    echo "<p> error: ". mysqli_error( $mysql_link ) ."</p>";
     register_error($idioma['err_insert_beer']);
   }
 }
