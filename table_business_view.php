@@ -74,7 +74,7 @@ function businesses_list($business_id=0, $query_cond='') {
 // 	} else {
 // 	}
 
-	$truefalse_img_array = array($globals['base_url']. '/img/common/cross.png', $globals['base_url']. '/img/common/tick.png');
+	$truefalse_img_array = array($globals['img_url']. 'common/cross.png', $globals['img_url']. 'common/tick.png');
 	
 	echo '    <tbody>' . "\n";
 	$query = "SELECT * FROM $tabla $query_table $query_cond";

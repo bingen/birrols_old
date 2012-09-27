@@ -83,38 +83,47 @@ function cabecera($title='',$script='', $no_cache=false) {
 		$estilo = $aux[0];
 //		echo '<p>'.$estilo.'</p>'."\n";
 	}
-	echo '  <link href="'.$globals['base_url'].'css/ocb.css" rel="stylesheet" type="text/css" />'."\n";
-	echo '  <link href="'.$globals['base_url'].'css/'.$estilo.'.css" rel="stylesheet" type="text/css" />'."\n";
-	echo '  <link rel="icon" href="'.$globals['base_url'].'img/favicon.ico" type="image/x-icon">'."\n";
-	echo '  <link rel="shortcut icon" href="'.$globals['base_url'].'img/favicon.ico" type="image/x-icon">'."\n";
-	echo '    <script src="'.$globals['base_url'].'js/jquery.min.js" type="text/javascript" charset="utf-8"></script>'."\n";
-	echo '    <script src="'.$globals['base_url'].'js/funciones.js" type="text/javascript" charset="utf-8"></script>'."\n";
-	echo '    <script src="'.$globals['base_url'].'js/reload.js" type="text/javascript" charset="utf-8"></script>'."\n";
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.bgiframe.min.js"></script>' ."\n";
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.dimensions.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.autocomplete.js"></script>'."\n";
+	echo '  <link href="'.$globals['css_url']. 'ocb.css" rel="stylesheet" type="text/css" />'."\n";
+	echo '  <link href="'.$globals['css_url']. $estilo.'.css" rel="stylesheet" type="text/css" />'."\n";
+	echo '  <link rel="icon" href="'.$globals['img_url'] .'favicon.ico" type="image/x-icon">'."\n";
+	echo '  <link rel="shortcut icon" href="'.$globals['img_url'] .'favicon.ico" type="image/x-icon">'."\n";
+	print("
+	  <script type='text/javascript'> 
+	    var base_url = '".$globals['base_url']."';
+	    var lib_url = '".$globals['lib_url']."';
+	  </script>
+	");
+	echo '    <script src="'.$globals['js_url']. 'jquery.min.js" type="text/javascript" charset="utf-8"></script>'."\n";
+	echo '    <script src="'.$globals['js_url']. 'funciones.js" type="text/javascript" charset="utf-8"></script>'."\n";
+	echo '    <script src="'.$globals['js_url']. 'reload.js" type="text/javascript" charset="utf-8"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.bgiframe.min.js"></script>' ."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.dimensions.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.autocomplete.js"></script>'."\n";
 // !!!!!!!!!!!!!!!!!
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/date.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/date_es.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.datePicker-2.1.2.js"></script>'."\n";
-// 	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.timePicker.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jcarousellite_1.0.1.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.selectboxes.min.js"></script>' ."\n";
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/jquery.tooltip.js"></script>'."\n";
-//	echo '    <script type="text/javascript" src="'.$globals['base_url'].'js/superfish.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'date.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'date_es.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.datePicker-2.1.2.js"></script>'."\n";
+// 	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.timePicker.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jcarousellite_1.0.1.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.selectboxes.min.js"></script>' ."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.tooltip.js"></script>'."\n";
+//	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'superfish.js"></script>'."\n";
 
 
 	echo '</head>'."\n"."\n";
 
 	echo '<body>'."\n"."\n";
 
+// 	echo "<p>".birrolpath."</p>\n";
+// 	echo "<p>".$globals['base_url']."</p>\n";
+	
 // 	echo '<div id="container">'."\n";
 // 	echo '  <div id="cabecera">'."\n";
 	echo "  <header>\n";
 	echo '  <div id="cabecera_in">'."\n";
 	echo '	<div id="aux_1">'."\n";
 	echo '	<div id="titulo">'."\n";
-	echo '	  <h1><a href="'.$globals['base_url'].'index.php" title=""><img src="'.$globals['base_static']. $globals['logo'] .'" alt="'. $globals['app_name'] .'"/></a></h1>'."\n";
+	echo '	  <h1><a href="'.$globals['base_url'].'index.php" title=""><img src="'. $globals['logo'] .'" alt="'. $globals['app_name'] .'"/></a></h1>'."\n";
 	echo '	</div>'."\n"; // titulo
 
 	echo '	<div id="aux_2">'."\n";
@@ -122,7 +131,7 @@ function cabecera($title='',$script='', $no_cache=false) {
 		echo '	<div id="login" class="login">'."\n";
 		echo '<ul id="headtools">' . "\n";
  		echo '<li class="noborder">'.$idioma['saludo'].'&nbsp; <a href="'.get_user_uri($current_user->user_login).'" title="'.$idioma['usr_info'].'">'.$current_user->user_login.'&nbsp;<img src="'.get_avatar_url($current_user->user_id, $current_user->user_avatar, 20).'" width="15" height="15" alt="'.$current_user->user_login.'"/></a></li>' . "\n";
-		echo '<li><a href="'.$globals['base_url']. 'index.php?op=logout">'. $idioma['desconectar'].' <img src="'.$globals['base_static'].'img/common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
+		echo '<li><a href="'.$globals['base_url']. 'index.php?op=logout">'. $idioma['desconectar'].' <img src="'.$globals['img_url'].'common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
 		echo '</ul>' . "\n";
 		echo '	</div>'."\n"; // login
 		echo '<input type="hidden" id="current_user_id" value="'. $current_user->id .'">' . "\n";
@@ -187,15 +196,15 @@ function compartir( $url, $texto='', $label=false ) {
 	if( $label )
 		echo '		<label>'. $idioma['cp_publicar'] .'</label>' ."\n";
 	echo '		<ul>' ."\n";
-	//echo '		<li><a rel="external"  href="http://www.facebook.com/share.php?u=http%3A%2F%2F'. get_server_name() .'" title="Facebook"><img src="'. $globals['base_url'] .'img/facebook_16x16.png" title="Facebook" alt="Facebook" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
-	echo '		<li><a href="http://www.facebook.com/share.php?u=http%3A%2F%2F'. $url .'&amp;t='. $texto .'" title="Facebook" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/facebook_16x16.png" title="Facebook" alt="Facebook" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
-	echo '		<li><a rel="nofollow"  href="http://identi.ca/notice/new?status_textarea=http%3A%2F%2F'. $url .'" title="Identi.ca" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/identi.ca.png" title="Identi.ca" alt="Identi.ca" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
-	echo '		<li><a rel="nofollow"  href="http://twitter.com/home?status='. $globals['app_name'] .'%20-%20http%3A%2F%2F'. $url .'%2F" title="Twitter" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/twitter-icon.png" title="Twitter" alt="Twitter" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
-	echo '		<li><a rel="nofollow"  href="http://www.tuenti.com/share?url=http%3A%2F%2F'. $url .'" title="Twitter" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/tuenti.png" title="Tuenti" alt="Tuenti" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	//echo '		<li><a rel="external"  href="http://www.facebook.com/share.php?u=http%3A%2F%2F'. get_server_name() .'" title="Facebook"><img src="'. $globals['img_url'] .'facebook_16x16.png" title="Facebook" alt="Facebook" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a href="http://www.facebook.com/share.php?u=http%3A%2F%2F'. $url .'&amp;t='. $texto .'" title="Facebook" onClick="window.open(this.href); return false;"><img src="'. $globals['img_url'] .'facebook_16x16.png" title="Facebook" alt="Facebook" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="http://identi.ca/notice/new?status_textarea=http%3A%2F%2F'. $url .'" title="Identi.ca" onClick="window.open(this.href); return false;"><img src="'. $globals['img_url'] .'identi.ca.png" title="Identi.ca" alt="Identi.ca" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="http://twitter.com/home?status='. $globals['app_name'] .'%20-%20http%3A%2F%2F'. $url .'%2F" title="Twitter" onClick="window.open(this.href); return false;"><img src="'. $globals['img_url'] .'twitter-icon.png" title="Twitter" alt="Twitter" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="http://www.tuenti.com/share?url=http%3A%2F%2F'. $url .'" title="Twitter" onClick="window.open(this.href); return false;"><img src="'. $globals['img_url'] .'tuenti.png" title="Tuenti" alt="Tuenti" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
 // 	echo '		<li><a rel="nofollow"  href="http://www.meneame.net/" title="Menéame"><img src="http://neversfelde.de/wp-content/plugins/sociable/images/services-sprite.gif" title="Menéame" alt="Menéame" style="width: 16px; height: 16px; background: transparent class="social" /></a></li>' ."\n";
- 	echo '		<li><a rel="nofollow"  href="http://www.google.com/buzz/post?url=http%3A%2F%2F'. $url .'&amp;imageurl=http%3A%2F%2F'. get_server_name() .'%2F'. $globals['base_url'] . $globals['logo'] .'" title="Buzz" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/buzz.png" title="Buzz" alt="Buzz" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
-	echo '		<li><a rel="nofollow"  href="http://www.google.com/bookmarks/mark?op=edit&amp;bkmk=http%3A%2F%2F'. $url .'&amp;annotation='. $globals['app_name'] .'" title="Google Bookmarks" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/google_bookmarks.png" title="Google Bookmarks" alt="Google Bookmarks" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
-	echo '		<li><a rel="nofollow"  href="mailto:?subject='. $texto .'&amp;body=http%3A%2F%2F'. $url .'" title="email" onClick="window.open(this.href); return false;"><img src="'. $globals['base_url'] .'img/common/email.png" title="email" alt="email" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+ 	echo '		<li><a rel="nofollow"  href="http://www.google.com/buzz/post?url=http%3A%2F%2F'. $url .'&amp;imageurl=http%3A%2F%2F'. get_server_name() .'%2F'. $globals['base_url'] . $globals['logo'] .'" title="Buzz" onClick="window.open(this.href); return false;"><img src="'. $globals['img_url'] .'buzz.png" title="Buzz" alt="Buzz" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="http://www.google.com/bookmarks/mark?op=edit&amp;bkmk=http%3A%2F%2F'. $url .'&amp;annotation='. $globals['app_name'] .'" title="Google Bookmarks" onClick="window.open(this.href); return false;"><img src="'. $globals['img_url'] .'google_bookmarks.png" title="Google Bookmarks" alt="Google Bookmarks" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
+	echo '		<li><a rel="nofollow"  href="mailto:?subject='. $texto .'&amp;body=http%3A%2F%2F'. $url .'" title="email" onClick="window.open(this.href); return false;"><img src="'. $globals['img_url'] .'common/email.png" title="email" alt="email" style="width: 16px; height: 16px; background: transparent" class="social" /></a></li>' ."\n";
  	//echo '		<li><a title="Publicar en Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="link" data-locale="es" data-url="http://'. get_server_name() .'"></a> <script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></li>' ."\n";
 
 	echo '		</ul>' ."\n";
@@ -213,7 +222,7 @@ function menu() {
 	//echo substr($_SERVER['PHP_SELF'],1);
 	$array_selected = Array();
 	$array_selected[$globals['base_url'] .'beers.php'] = '';
-	$array_selected[$globals['base_url']. 'business.php'] = '';
+	$array_selected[$globals['base_url']. 'businesses.php'] = '';
 	$array_selected[$globals['base_url']. 'user.php'] = '';
 	$array_selected[$_SERVER['PHP_SELF']] = ' class="Selected" ';
 	echo '		<li><a '. $array_selected[$globals['base_url'] .'beers.php'] .'href="'.$globals['base_url'].'beers.php" title="'. $idioma['beers'] .'">'. $idioma['beers']  .'</a></li>'."\n";
@@ -234,7 +243,7 @@ function laterales() {
 /*  print('
 	<div id="banners_left">
 		<ul>
-		<li><a href=""><img src="'.$globals['base_static'].'img/banner_2.png" alt="prueba banner" title="banner" /></a></li>
+		<li><a href=""><img src="'.$globals['img_url'].'banner_2.png" alt="prueba banner" title="banner" /></a></li>
 		<li>Aquí irían banners, por ejemplo</p>
 		<li>Y más banners</li>
 		<li>Y más banners</li>
@@ -464,7 +473,7 @@ function get_user_uri($user, $view='') {
 	global $globals;
 
 	if (!empty($globals['base_user_url'])) {
-		$uri= $globals['base_url'] . $globals['base_user_url'] . htmlspecialchars($user);
+		$uri= $globals['base_user_url'] . htmlspecialchars($user);
 		if (!empty($view)) $uri .= "/$view";
 	} else {
 		$uri = $globals['base_url'].'user.php?username='.htmlspecialchars($user);
@@ -502,13 +511,9 @@ function guess_user_id ($str) {
 function get_business_uri($business, $view='') {
 	global $globals;
 
-	if (!empty($globals['base_user_url'])) {
-		$uri= $globals['base_url'] . $globals['base_user_url'] . htmlspecialchars($business);
-		if (!empty($view)) $uri .= "/$view";
-	} else {
-		$uri = $globals['base_url'].'business.php?login='.htmlspecialchars($business);
-		if (!empty($view)) $uri .= "&amp;view=$view";
-	}
+	$uri = $globals['base_url'].'business.php?login='.htmlspecialchars($business);
+	if (!empty($view)) $uri .= "&amp;view=$view";
+
 	return $uri;
 }
 
@@ -542,7 +547,7 @@ function get_avatar_url($user, $avatar, $size) {
 		// Don't check every time, but 1/10, decrease VM pressure 
 		// Disabled for the moment, it fails just too much for size 40
 		//if (rand(0, 10) < 10) return $globals['base_url'] . $file;
-		$file_path = birrolpath.'/'.$file;
+		$file_path = birrolpath.$file;
 		if (is_readable($file_path)) {
 			return $globals['base_static'] . $file;
 		} else {
@@ -554,7 +559,7 @@ function get_avatar_url($user, $avatar, $size) {
 
 function get_no_avatar_url($size) {
 	global $globals;
-	return $globals['base_url'].'img/no_gravatar_'.$size.'.png';
+	return $globals['img_url'].'no_gravatar_'.$size.'.png';
 }
 
 function get_date_time($epoch) {
@@ -575,7 +580,7 @@ function not_found($mess = '') { // TODO !!!
     echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' . "\n";
     echo "<title>". _('error') . "</title>\n";
     echo '<meta name="generator" content="meneame" />' . "\n";
-    echo '<link rel="icon" href="'.$globals['base_static'].'img/favicons/favicon4.ico" type="image/x-icon" />' . "\n";
+    echo '<link rel="icon" href="'.$globals['img_url'].'favicons/favicon4.ico" type="image/x-icon" />' . "\n";
     echo '</head>' . "\n";
     echo "<body>\n";
 	if (empty($mess)) {
@@ -600,7 +605,7 @@ function do_error($mess = false, $error = false, $send_status = true) {
 
 	echo '<p class="errt">'.$mess.'<br />'."\n";
 	if ($error) echo _('(error').' '.$error.')</p>'."\n";
-	echo '<div class="errl"><img src="'.$globals['base_url']. $globals['logo_grande'] .'" alt="ooops logo" /></div>'."\n";	// imagen? TODO
+	echo '<div class="errl"><img src="'. $globals['logo_grande'] .'" alt="ooops logo" /></div>'."\n";	// imagen? TODO
 
 	pie();
 	die;
@@ -769,9 +774,9 @@ function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nu
 				if( $campo == $campos[$i] ) {
 					$orden_aux = 1 - $orden;
 					if( $orden == 0 )
-						$flecha = '<img src="'. $globals['base_static']. 'img/common/bullet_arrow_up.png" alt=""/>';
+						$flecha = '<img src="'. $globals['img_url']. 'common/bullet_arrow_up.png" alt=""/>';
 					else
-						$flecha = '<img src="'. $globals['base_static']. 'img/common/bullet_arrow_down.png" alt=""/>';
+						$flecha = '<img src="'. $globals['img_url']. 'common/bullet_arrow_down.png" alt=""/>';
 				} else {
 					$orden_aux = 0;
 					$flecha = '';
@@ -888,10 +893,10 @@ function get_stars( $points ) {
 	else
 		$stars = 5;
 
-	$file = "img/star_$stars.png";
-	$file_path = birrolpath.'/'.$file;
+	$file = "star_$stars.png";
+	$file_path = imgpath.$file;
 	if (is_readable($file_path))
-		return $globals['base_static'] . $file;
+		return $globals['img_url'] . $file;
 
 } // get_stars
 

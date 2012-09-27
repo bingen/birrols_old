@@ -21,8 +21,8 @@
 // AFFERO GENERAL PUBLIC LICENSE is also included in the file called "COPYING".
 
 include('config.php');
-include(includepath.'ts.php');
-include(includepath.'log.php');
+include(libpath.'ts.php');
+include(libpath.'log.php');
 
   cabecera($idioma['tit_resgistro'], $_SERVER['PHP_SELF']);
   laterales();
@@ -262,13 +262,13 @@ include(includepath.'log.php');
 		if (mysqli_query( $query )) {
 			echo '<fieldset>'."\n";
 			echo '<legend><span class="sign">'.$idioma['id_registro_2'].'</span></legend>'."\n";
-			require_once(includepath.'user.php');
+			require_once(libpath.'user.php');
 			$user=new User();
 			$user->username=$username;
 			if(!$user->read()) {
 				register_error($idioma['err_insert_user']);
 			} else {
-				require_once(includepath.'mail.php');
+				require_once(libpath.'mail.php');
 				$sent = send_recover_mail($user, 1);
 				log_insert('user_new', $user->id, $user->id);
 			}

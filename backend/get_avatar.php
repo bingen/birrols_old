@@ -1,6 +1,6 @@
 <?php
 include_once('../config.php');
-include_once(birrolpath.'/lib/avatars.php');
+include_once(libpath.'avatars.php');
 
 if (!$_GET['id'] && !empty($_GET['user'])) {
 	$res = mysqli_query("select auto_id from usuarios where login = '".mysqli_real_escape_string( $mysql_link, $_GET['user'])."'") or die ('ERROR:'.mysqli_error());

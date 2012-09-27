@@ -43,7 +43,7 @@ class User {
 
 	function disable($auto = false) {
 
-		require_once(includepath.'avatars.php');
+		require_once(libpath.'avatars.php');
 		avatars_db_remove($this->id);
 		avatars_remove_user_files($this->id);
 

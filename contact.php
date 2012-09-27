@@ -19,7 +19,7 @@
 */
 
 include('config.php');
-include(includepath.'ts.php');
+include(libpath.'ts.php');
 
 //print_r( $_POST);
 //print_r( $_REQUEST);
@@ -126,7 +126,7 @@ function contact2() {
 		$mensaje_aux .= "ip: ". $globals['user_ip'] ." \n";
 		$mensaje_aux .= "------------------------------------------- \n\n";
 		$mensaje_aux .= $mensaje;
-		require_once(includepath.'mail.php');
+		require_once(libpath.'mail.php');
 		if( $sent = send_free_mail($email, $globals['email'], $asunto, $mensaje_aux, $nombre) )
 			echo '<p><strong>' .$idioma['cnt_sent'] . '</strong></p>';
 		echo '</fieldset>'."\n";

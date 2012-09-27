@@ -19,7 +19,7 @@
 */
 
 include('config.php');
-include(includepath.'log.php');
+include(libpath.'log.php');
 
 if( !$current_user->authenticated && empty($_POST['usuario']) && $_REQUEST['error'] != 'login' && !isset($_GET['error_acceso']) ) {
 	$url = $_SERVER['PHP_SELF'];
@@ -47,7 +47,9 @@ echo '	  </div> <!-- container_cuerpo -->'. "\n";
 pie();
 
 function beer_new_form(){
-  global $mysql_link, $idioma;
+  global $mysql_link, $idioma, $globals;
+  
+  echo "<script src='".$globals['js_url']. "jquery-ui.min.js'></script>\n";
   
   echo '<form action="'. $_SERVER['PHP_SELF'].'" method="post" id="thisform">' . "\n";
   echo '<fieldset>' . "\n";
@@ -76,8 +78,30 @@ function beer_new_form(){
   }
   echo "</select></dd>\n";
   
+   print("
+     <script type='text/javascript'>
+     jQuery(function(){
+      jQuery('#type').autocomplete({
+	source: lib_url + 'search_type.php?birrolpath=".birrolpath."',
+	select: function(event, ui) {
+		  $(this).val(ui.item.label);
+		  $('#type_id').val(ui.item.id);
+	}
+      });
+     });
+     </script>
+   ");
+//        alert(lib_url + 'search_type.php?birrolpath=".birrolpath."');
+//	source: 'liba/search_type.php?birrolpath=".birrolpath."',
+// 	minLength: 0,
+// 	select: function( event, ui ) {
+// 				alert( ui.item.value +', '+ ui.item.id +', '+ this.value );
+// 			}
   echo "<dt><label for='type'>" . $idioma['beer_type'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='type_id' id='type_id' value='' /></dd>\n";
+//   echo "<dd><input type='text' name='type_id' id='type_id' value='' class='type'/>\n";
+  echo "<dd><input id='type' name='type' />\n";
+  echo "<input type='hidden' id='type_id' name='type_id' />\n";
+  echo "</dd>\n";
   
   echo "<dt><label for='abv'>" . $idioma['beer_abv'] . ":</label></dt>\n";
   echo "<dd><input type='number' name='abv' id='abv' value='' min=0, max=100/></dd>\n";

@@ -22,8 +22,8 @@
 
 include('config.php');
 
-include(includepath.'ts.php');
-include(includepath.'log.php');
+include(libpath.'ts.php');
+include(libpath.'log.php');
 
 cabecera('',$_SERVER['PHP_SELF']);
 
@@ -42,7 +42,7 @@ echo '<div id="cuerpo">'. "\n";
 			if (!ts_is_human()) {
 				register_error($idioma['err_cod_seg']);
 			} else {
-				require_once(includepath.'user.php');
+				require_once(libpath.'user.php');
 				$user=new User();
 				if (preg_match('/.+@.+/', $_POST['username'])) {
 					// It's an email address
@@ -58,7 +58,7 @@ echo '<div id="cuerpo">'. "\n";
 					register_error($idioma['rp_disabled']);
 					return false;
 				}
-				require_once(includepath.'mail.php');
+				require_once(libpath.'mail.php');
 				$sent = send_recover_mail($user, 2);
 			}
 		}

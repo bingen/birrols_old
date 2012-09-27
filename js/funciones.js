@@ -95,7 +95,7 @@ function get_stars( score ) {
 		stars = 5;
 
 	file = "img/star_" + stars + ".png";
-//	file_path = birrolpath + '/' + file;
+//	file_path = birrolpath + file;
 //	if (is_readable($file_path))
 //		return $globals['base_static'] . $file;
 	// TODO !!
@@ -103,12 +103,12 @@ function get_stars( score ) {
 
 }
 
-// $(document).ready(function()
-// {
-// 	$(".usuario").autocomplete('lib/search_user.php',
+$(document).ready(function()
+{
+// 	$(".usuario").autocomplete('lib/search_type.php',
 // 	{
 // 	matchContains: true,
-//  	mustMatch: true,
+// 	mustMatch: false,
 // 	max: 30,
 // 	cacheLength: 1,
 // 	extraParams: {
@@ -217,7 +217,7 @@ function get_stars( score ) {
 // 		})
 // 	});
 // 
-// });
+});
 
 ////// MAPAS ////////////
 function cargarMapa( club, direccion, poblacion, provincia, pais, not_found ) {

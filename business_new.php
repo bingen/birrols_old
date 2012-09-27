@@ -19,7 +19,7 @@
 */
 
 include('config.php');
-include(includepath.'log.php');
+include(libpath.'log.php');
 
 if( !$current_user->authenticated && empty($_POST['usuario']) && $_REQUEST['error'] != 'login' && !isset($_GET['error_acceso']) ) {
 	$url = $_SERVER['PHP_SELF'];
@@ -49,8 +49,8 @@ pie();
 function bsns_new_form(){
   global $mysql_link, $idioma, $globals;
   
-  echo "<script src='".$globals['base_url']."js/jquery-ui.min.js'></script>\n";
-  echo "<script src='".$globals['base_url']."js/jquery.select-to-autocomplete.min.js'></script>\n";
+  echo "<script src='".$globals['js_url']. "jquery-ui.min.js'></script>\n";
+  echo "<script src='".$globals['js_url']. "jquery.select-to-autocomplete.min.js'></script>\n";
   
   echo '<form action="'. $_SERVER['PHP_SELF'].'" method="post" id="thisform">' . "\n";
   echo '<fieldset>' . "\n";
@@ -147,17 +147,17 @@ function bsns_new_insert(){
   $url = mysqli_real_escape_string( $mysql_link, $_POST['url'] );
   $email = mysqli_real_escape_string( $mysql_link, $_POST['email'] );
   $phone = mysqli_real_escape_string( $mysql_link, $_POST['phone'] );
-  $lat = $_POST['lat'];
-  $lon = $_POST['lon'];
+  $lat = ( empty($_POST['lat']) ? 0 : $_POST['lat'] );
+  $lon = ( empty($_POST['lon']) ? 0 : $_POST['lon'] );
   $description = mysqli_real_escape_string( $mysql_link, $_POST['description'] );
 //   $ = $_POST[''];
 
   $query = "INSERT INTO business SET name='$name', brewery=$brewery, pub=$pub, store=$store, country_id=$country_id, state='$state', city='$city', address_1='$address_1', address_2='$address_2', zip_code='$zip_code', url='$url', email='$email', phone='$phone', lat=$lat, lon =$lon, description='$description', register_id=$current_user->id";
-//   echo "<p> query: $query </p>\n";
+  echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
     log_insert('beer_new', mysqli_insert_id($mysql_link), $current_user->id);
   } else {
-//     echo "<p> error: ". mysqli_error( $mysql_link ) ."</p>";
+    echo "<p> error: ". mysqli_error( $mysql_link ) ."</p>";
     register_error($idioma['err_insert_beer']);
   }
 } // bsns_new_insert

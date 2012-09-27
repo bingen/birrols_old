@@ -27,7 +27,7 @@ if (empty($globals['recaptcha_public_key']) || empty($globals['recaptcha_private
 	session_start();
 //	echo '<p> Entra en el if de recaptcha </p>';
 } else {
-	require_once(includepath.'recaptchalib.php');
+	require_once(libpath.'recaptchalib.php');
 }
 
 class CaptchaSecurityImages {
@@ -85,7 +85,7 @@ class CaptchaSecurityImages {
 
 function ts_gfx() {
 	// Hack to avoid problems with monofont.ttf
-	putenv('GDFONTPATH=' . includepath);
+	putenv('GDFONTPATH=' . libpath);
 	
 	header('Content-Type: image/jpeg');
 	$captcha = new CaptchaSecurityImages(155,45,5);

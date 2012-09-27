@@ -9,7 +9,7 @@
 function send_recover_mail ($user, $tipo) {
 	global $idioma, $site_key, $globals;
 
-//	require_once(includepath.'user.php');
+//	require_once(libpath.'user.php');
 
 	$now = time();
 	$key = md5($user->id.$user->pass.$now.$site_key.get_server_name());
@@ -56,7 +56,7 @@ function send_match_info ($accion, $user, $send_key=false, $player=0, $inbox=tru
 //	global $site_key, $globals;
 	global $idioma, $globals, $partido;
 
-//	require_once(includepath.'user.php');
+//	require_once(libpath.'user.php');
 	$error = false;
 
 	$now = time();
@@ -210,7 +210,7 @@ function send_user_info ($accion, $user, $inbox=true) {
 
 	global $idioma, $globals;
 
-//	require_once(includepath.'user.php');
+//	require_once(libpath.'user.php');
 	$error = false;
 
 	$now = time();
@@ -270,7 +270,7 @@ function send_friend_info ($accion, $usuario, $amigo, $inbox=true) {
 
 	$error = false;
 
-	require_once(includepath.'user.php');
+	require_once(libpath.'user.php');
 	$user = new User();
 	$user->username = $amigo;
 	$user->read();
@@ -348,7 +348,7 @@ function send_free_mail ($from, $to, $subject, $message, $from_name) {
 //	global $site_key, $globals;
 	global $idioma, $globals, $partido;
 
-//	require_once(includepath.'user.php');
+//	require_once(libpath.'user.php');
 
 	$subject = mb_encode_mimeheader($subject,"UTF-8", "B", "\n");
 	$message = html_entity_decode( $message, ENT_QUOTES, "UTF-8" );
