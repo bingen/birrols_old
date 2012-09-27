@@ -33,3 +33,31 @@ html, body { height: 100%;
       background-color: #D5E5F4;
       color: #161A1C;
     }
+
+fieldset dl {
+	margin: 0;
+	padding: 0;
+}
+
+fieldset dt {
+	clear: left;
+	float: left;
+	width: 10em; /* increase for wider dt text */
+	text-align: right;
+	padding: 4px 10px 4px 5px;
+}
+
+fieldset dd {
+	padding: 3px 0 4px 0;
+	margin-left: 13em;
+}
+
+fieldset dd input {
+	width: 150px;
+}
+
+fieldset dt .button {
+	font-size: 10px;
+	vertical-align: super;
+}
+

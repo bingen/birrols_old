@@ -95,6 +95,11 @@ function beer_new_form(){
   echo "<dt><label for='ebc'>" . $idioma['beer_ebc'] . ":</label></dt>\n";
   echo "<dd><input type='number' name='ebc' id='ebc' value='' min=0, max=200/></dd>\n";
   
+  echo "<dt><label for='malts'>" . $idioma['beer_malts'] . ":</label></dt>\n";
+  echo "<dd><input type='text' name='malts' id='malts' value='' /></dd>\n";
+  echo "<dt><label for='hops'>" . $idioma['beer_hops'] . ":</label></dt>\n";
+  echo "<dd><input type='text' name='hops' id='hops' value='' /></dd>\n";
+    
   echo "<dt><label for='description'>" . $idioma['beer_desc'] . ":</label></dt>\n";
   echo "<dd><input type='text' name='description' id='description' value='' /></dd>\n";
   
@@ -117,12 +122,17 @@ function beer_new_insert(){
   $brewery_id = $_POST['brewery_id'];
   $category_id = $_POST['category_id'];
   $type_id = $_POST['type_id'];
-  $abv = $_POST['abv'];
-  $ibu = $_POST['ibu'];
+  $abv = ( empty($_POST['abv']) ? 0 : $_POST['abv'] );
+  $ibu = ( empty($_POST['ibu']) ? 0 : $_POST['ibu'] );
+  $og = ( empty($_POST['og']) ? 0 : $_POST['og'] );
+  $srm = ( empty($_POST['srm']) ? 0 : $_POST['srm'] );
+  $ebc = ( empty($_POST['ebc']) ? 0 : $_POST['ebc'] );
+  $malts = mysqli_real_escape_string( $mysql_link, $_POST['malts'] );
+  $hops = mysqli_real_escape_string( $mysql_link, $_POST['hops'] );
   $description = mysqli_real_escape_string( $mysql_link, $_POST['description'] );
 //   $ = $_POST[''];
 
-  $query = "INSERT INTO beers (name, brewery_id, category_id, type_id, abv, ibu, description, register_id) VALUES ('$name', $brewery_id, $category_id, $type_id, $abv, $ibu, '$description', $current_user->id)";
+  $query = "INSERT INTO beers (name, brewery_id, category_id, type_id, abv, ibu, og, srm, ebc, malts, hops, description, register_id) VALUES ('$name', $brewery_id, $category_id, $type_id, $abv, $ibu, $og, $srm, $ebc, '$malts', '$hops', '$description', $current_user->id)";
   echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
     log_insert('beer_new', mysqli_insert_id($mysql_link), $current_user->id);
