@@ -99,7 +99,7 @@ function bsns_new_form(){
   echo "<dd><input type='text' name='address_1' id='address_1' value='' /></dd>\n";
   echo "<dt><label for='address_2'>" . $idioma['bsns_address'] . " 2:</label></dt>\n";
   echo "<dd><input type='text' name='address_2' id='address_2' value='' /></dd>\n";
-  echo "<dt><label for='zip_code'>" . $idioma['bsns_address'] . " 1:</label></dt>\n";
+  echo "<dt><label for='zip_code'>" . $idioma['bsns_zip'] . ":</label></dt>\n";
   echo "<dd><input type='text' name='zip_code' id='zip_code' value='' /></dd>\n";
   
   echo "<dt><label for='url'>" . $idioma['bsns_url'] . ":</label></dt>\n";
