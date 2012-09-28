@@ -118,9 +118,9 @@ CREATE TABLE IF NOT EXISTS beers (
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
 
 DROP VIEW IF EXISTS beers_view;
-CREATE VIEW beers_view AS (SELECT b.auto_id, b.name, b.brewery_id, w.name brewery, c.category, t.type, b.abv, b.ibu, b.description, b.score
-FROM beers b, business w, beer_categories c, beer_types t
-WHERE w.brewery AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b.type_id = t.auto_id);
+CREATE VIEW beers_view AS (SELECT b.auto_id, b.name, b.brewery_id, w.name brewery, c.category, t.type, b.abv, b.ibu, b.description, b.score, p.name country
+FROM beers b, business w, beer_categories c, beer_types t, countries p
+WHERE w.brewery AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b.type_id = t.auto_id AND w.country_id = p.auto_id);
 
 # --------------------------------------------------------
 

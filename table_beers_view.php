@@ -23,16 +23,16 @@ include_once('config.php');
 
 	if($current_user->admin) {
 	  $campos = "auto_id,name,brewery,category,type,abv,ibu,description,score";
-	  $cabecera = $idioma['beer_id']. ',' .$idioma['beer_name']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
+	  $cabecera = $idioma['beer_id']. ',' .$idioma['beer_name']. ',' .$idioma['bsns_country']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
+	  $filtros_array = "1,1,1,1,1,1,1,1,1,1";
+	  $colspan_array = "1,1,1,1,1,1,1,1,1,1";
+	  $orden_array = "1,1,1,1,0,0,0,0,0,1,1";
+	} else {
+	  $campos = "name,brewery,category,type,abv,ibu,description,score";
+	  $cabecera = $idioma['beer_name']. ',' .$idioma['bsns_country']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
 	  $filtros_array = "1,1,1,1,1,1,1,1,1";
 	  $colspan_array = "1,1,1,1,1,1,1,1,1";
 	  $orden_array = "1,1,1,0,0,0,0,0,1,1";
-	} else {
-	  $campos = "name,brewery,category,type,abv,ibu,description,score";
-	  $cabecera = $idioma['beer_name']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
-	  $filtros_array = "1,1,1,1,1,1,1,1";
-	  $colspan_array = "1,1,1,1,1,1,1,1";
-	  $orden_array = "1,1,0,0,0,0,0,1,1";
 	}
 	$tabla = 'beers_view';
 //	if( empty($estado) )
@@ -66,6 +66,7 @@ function beers($beer_id=0, $query_cond='') {
 		    echo "			<th class=\"col-auto_id\"><strong>".$idioma['beer_id']."</strong></th> \n";
 		print("
 	    <th class=\"col-name\"><strong>".$idioma['beer_name']."</strong></th>
+	    <th class=\"col-country\"><strong>".$idioma['bsns_country']."</strong></th>
 	    <th class=\"col-brewery\"><strong>".$idioma['brewery']."</strong></th>
 	    <th class=\"col-category\"><strong>".$idioma['beer_category']."</strong></th>
 	    <th class=\"col-type\"><strong>".$idioma['beer_type']." 1</strong></th>
@@ -96,17 +97,18 @@ function beers($beer_id=0, $query_cond='') {
 // 		print_r($row);
 
 //		if( $current_user->authenticated ) {
-			$url_partido = $globals['base_url'].'beer.php?id='.$row->auto_id;
-			echo '<tr '.$zebra.' onclick="window.location=\''. $url_partido .'\'">' . "\n";
+			$url_row = $globals['base_url'].'beer.php?id='.$row->auto_id;
+			echo '<tr '.$zebra.' onclick="window.location=\''. $url_row .'\'">' . "\n";
 			if($current_user->admin)
-			    echo '<td class="col-auto_id"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->auto_id.'</a></td>' . "\n";
-			echo '<td class="col-name"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->name.'</a></td>' . "\n";
+			    echo '<td class="col-auto_id"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->auto_id.'</a></td>' . "\n";
+			echo '<td class="col-name"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->name.'</a></td>' . "\n";
+			echo '<td class="col-country"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->country.'</a></td>' . "\n";
 			echo '<td class="col-brewery"><a href="'.get_business_uri($row->brewery_id).'" title="'. $idioma['put_url_jugador'] .'">'.$row->brewery.'</a></td>' . "\n";
-			echo '<td class="col-category"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->category.'</a></td>' . "\n";
-			echo '<td class="col-type"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->type.'</a></td>' . "\n";
-			echo '<td class="col-abv"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->abv.'</a></td>' . "\n";
-			echo '<td class="col-ibu"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->ibu.'</a></td>' . "\n";
-			echo '<td class="col-desc"><a href="'. $url_partido .'" title="'. $idioma['put_url_partido'] .'">'.$row->description.'</a></td>' . "\n";
+			echo '<td class="col-category"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->category.'</a></td>' . "\n";
+			echo '<td class="col-type"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->type.'</a></td>' . "\n";
+			echo '<td class="col-abv"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->abv.'</a></td>' . "\n";
+			echo '<td class="col-ibu"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->ibu.'</a></td>' . "\n";
+			echo '<td class="col-desc"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->description.'</a></td>' . "\n";
 			echo '<td class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></td>' . "\n";
 			echo '</tr>';
 //		} // end if authenticated

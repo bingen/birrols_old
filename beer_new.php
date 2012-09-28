@@ -59,17 +59,32 @@ function beer_new_form(){
   echo "<dt><label for='name'>" . $idioma['beer_name'] . ":</label></dt>\n";
   echo "<dd><input type='text' name='name' id='name' value='' autofocus='autofocus'/></dd>\n";
   
-  echo "<dt><label for='brewery_id'>" . $idioma['brewery'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='brewery_id' id='brewery_id' value='' list='breweries' />\n";
-  echo "<datalist id='breweries'>\n";
-  $res=mysqli_query($mysql_link, "SELECT auto_id, name FROM business WHERE brewery") or die ('ERROR:'.mysqli_error($mysql_link));
-  while( $brewery=mysqli_fetch_row($res) )
-    echo "<option value='". $brewery[0]. "' >". $brewery[1] ."</option>\n";
-  print('
-   ');
-  echo "</datalist>\n";
+  // brewery ///////////
+   print("
+     <script type='text/javascript'>
+     jQuery(function(){
+      jQuery('#brewery').autocomplete({
+	source: lib_url + 'search_brewery.php?birrolpath=".birrolpath."',
+	select: function(event, ui) {
+		  $(this).val(ui.item.label);
+		  $('#brewery_id').val(ui.item.id);
+	}
+      });
+     });
+     </script>
+   ");
+  echo "<dt><label for='brewery'>" . $idioma['brewery'] . ":</label></dt>\n";
+  echo "<dd><input type='text' name='brewery' id='brewery' value='' />\n";
+//   echo "<dd><input type='text' name='brewery_id' id='brewery_id' value='' list='breweries' />\n";
+//   echo "<datalist id='breweries'>\n";
+//   $res=mysqli_query($mysql_link, "SELECT auto_id, name FROM business WHERE brewery") or die ('ERROR:'.mysqli_error($mysql_link));
+//   while( $brewery=mysqli_fetch_row($res) )
+//     echo "<option value='". $brewery[0]. "' >". $brewery[1] ."</option>\n";
+//   echo "</datalist>\n";
+  echo "<input type='hidden' id='brewery_id' name='brewery_id' />\n";
   echo "</dd>\n";
   
+  // category //////////////
   echo "<dt><label for='category_id'>" . $idioma['beer_category'] . ":</label></dt>\n";
   echo "<dd><select name='category_id' id='category_id' >\n";
   $res=mysqli_query($mysql_link, "SELECT auto_id, category FROM beer_categories") or die ('ERROR:'.mysqli_error($mysql_link));
@@ -78,31 +93,32 @@ function beer_new_form(){
   }
   echo "</select></dd>\n";
   
-   print("
-     <script type='text/javascript'>
-     jQuery(function(){
+  // type //////////////
+  print("
+    <script type='text/javascript'>
+    jQuery(function(){
       jQuery('#type').autocomplete({
-	source: lib_url + 'search_type.php?birrolpath=".birrolpath."',
+	source: lib_url + 'search_type.php?birrolpath=".birrolpath."&category_id=' + document.getElementById('category_id').value/*,
 	select: function(event, ui) {
 		  $(this).val(ui.item.label);
-		  $('#type_id').val(ui.item.id);
+		  $('#type_id').val(ui.item.id);*/
 	}
+      });
+      $('#category_id').change(function(){
+	document.getElementById('type').value = '';
+	document.getElementById('type_id').value = '';
+	$('#type').autocomplete( 'option', 'source', lib_url + 'search_type.php?birrolpath=".birrolpath."&category_id=' + $('#category_id option:selected').attr('value') );
       });
      });
      </script>
    ");
-//        alert(lib_url + 'search_type.php?birrolpath=".birrolpath."');
-//	source: 'liba/search_type.php?birrolpath=".birrolpath."',
-// 	minLength: 0,
-// 	select: function( event, ui ) {
-// 				alert( ui.item.value +', '+ ui.item.id +', '+ this.value );
-// 			}
   echo "<dt><label for='type'>" . $idioma['beer_type'] . ":</label></dt>\n";
 //   echo "<dd><input type='text' name='type_id' id='type_id' value='' class='type'/>\n";
   echo "<dd><input id='type' name='type' />\n";
-  echo "<input type='hidden' id='type_id' name='type_id' />\n";
+//   echo "<input type='hidden' id='type_id' name='type_id' />\n";
   echo "</dd>\n";
   
+  // numerical parameters //////////////
   echo "<dt><label for='abv'>" . $idioma['beer_abv'] . ":</label></dt>\n";
   echo "<dd><input type='number' name='abv' id='abv' value='' min=0, max=100/></dd>\n";
   
@@ -119,6 +135,7 @@ function beer_new_form(){
   echo "<dt><label for='ebc'>" . $idioma['beer_ebc'] . ":</label></dt>\n";
   echo "<dd><input type='number' name='ebc' id='ebc' value='' min=0, max=200/></dd>\n";
   
+  // text desc //////////////////
   echo "<dt><label for='malts'>" . $idioma['beer_malts'] . ":</label></dt>\n";
   echo "<dd><input type='text' name='malts' id='malts' value='' /></dd>\n";
   echo "<dt><label for='hops'>" . $idioma['beer_hops'] . ":</label></dt>\n";
@@ -145,7 +162,8 @@ function beer_new_insert(){
   $name = mysqli_real_escape_string( $mysql_link, $_POST['name'] );
   $brewery_id = $_POST['brewery_id'];
   $category_id = $_POST['category_id'];
-  $type_id = $_POST['type_id'];
+  $type = mysqli_real_escape_string( $mysql_link, $_POST['type'] );
+//   $type_id = ( empty($_POST['type_id']) ? 0 : $_POST['type_id'] );
   $abv = ( empty($_POST['abv']) ? 0 : $_POST['abv'] );
   $ibu = ( empty($_POST['ibu']) ? 0 : $_POST['ibu'] );
   $og = ( empty($_POST['og']) ? 0 : $_POST['og'] );
@@ -156,6 +174,19 @@ function beer_new_insert(){
   $description = mysqli_real_escape_string( $mysql_link, $_POST['description'] );
 //   $ = $_POST[''];
 
+  // if brewery doesn't exists
+  // TODO
+  // if type not exists, create it
+  $query = "SELECT auto_id FROM beer_types WHERE type LIKE '$type' AND category_id = $category_id";
+  $res = mysqli_query( $mysql_link, $query ) OR die( mysqli_error( $mysql_link ) );
+  $obj = mysqli_fetch_object( $res );
+  $type_id = $obj->auto_id;
+  if( empty( $type_id ) ) {
+    $query = "INSERT INTO beer_types SET type = '$type', category_id = $category_id";
+    $res = mysqli_query( $mysql_link, $query ) OR die( mysqli_error( $mysql_link ) );
+    $type_id = mysqli_insert_id( $mysql_link );
+  }
+  
   $query = "INSERT INTO beers (name, brewery_id, category_id, type_id, abv, ibu, og, srm, ebc, malts, hops, description, register_id) VALUES ('$name', $brewery_id, $category_id, $type_id, $abv, $ibu, $og, $srm, $ebc, '$malts', '$hops', '$description', $current_user->id)";
   echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
