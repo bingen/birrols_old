@@ -98,13 +98,16 @@ $idioma['err_avatar_2'] = 'El tamaño de la imagen excede el límite';
 $idioma['err_register_auth'] = "Debes abandonar la sesión para dar de alta otro usuario";
 $idioma['err_mail'] = 'Error enviando notifiación.';
 $idioma['err_login'] = 'Debes estar logueado';
+$idioma['err_brewery_miss'] = 'No existe la brewery. Debes escogerla del menú o crearla previamente.';
+$idioma['err_name_miss'] = 'Debes informar el nombre.';
+//$idioma['err_'] = ;
+
 // TODO: existen?
 $idioma['err_inv_friend_1'] = 'Error: invitado vacío';
 $idioma['err_inv_friend_2'] = 'Error: invitado no existe';
 $idioma['err_inv_friend_3'] = 'Error: invitado ya está en tu lista';
 $idioma['err_inv_friend_4'] = 'Error: no es posible invitarse a uno mismo';
 $idioma['err_invitar'] = 'Error enviando invitación';
-//$idioma['err_'] = ;
 
 
 $idioma['shr_general'] = $globals['app_name']. ', el portal para amantes de la cerveza artesana';
@@ -223,6 +226,8 @@ $idioma['bsns_sel_country'] = 'Selecciona el país';
 $idioma['bsns_phone'] = 'Teléfono';
 $idioma['bsns_lat'] = 'Latitud';
 $idioma['bsns_lon'] = 'Longitud';
+$idioma['bsns_avatar_1'] = 'Logo';
+$idioma['bsns_avatar_2'] = 'El logo debe ser una imagen cuadrada en jpeg, gif o png de no más de '. substr($globals['avatars_max_size'], 0, -3) .' KB, sin transparencias';
 //$idioma['bsns_'] = '';
 
 $idioma['about_what_1'] = 'Bírrols, el portal de birra de buen';

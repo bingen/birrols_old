@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS taps (
   modified timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (auto_id),
   UNIQUE KEY tap (pub_id, tap_id)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
+) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 # --------------------------------------------------------
 
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS beer_categories (
   category enum('Ale', 'Lager', 'Lambic') character set utf8 NOT NULL,
   PRIMARY KEY  (auto_id),
   UNIQUE KEY category (category)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
+) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 TRUNCATE TABLE beer_categories;
 
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS beer_types (
   category_id int(11),
   PRIMARY KEY  (auto_id),
   UNIQUE KEY type (type)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
+) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE IF NOT EXISTS beers (
   auto_id int(11) NOT NULL auto_increment,
@@ -111,16 +111,29 @@ CREATE TABLE IF NOT EXISTS beers (
   malts char(128) collate utf8_spanish_ci default NULL,
   hops char(128) collate utf8_spanish_ci default NULL,
   description text collate utf8_spanish_ci default NULL,
+  avatar int(10) unsigned NOT NULL default '0',
   score decimal(3,2) default 0,
   register_id int(11), 
   PRIMARY KEY  (auto_id),
-  UNIQUE KEY name (name)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;;
+  UNIQUE KEY name (brewery_id,name)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 DROP VIEW IF EXISTS beers_view;
 CREATE VIEW beers_view AS (SELECT b.auto_id, b.name, b.brewery_id, w.name brewery, c.category, t.type, b.abv, b.ibu, b.description, b.score, p.name country
 FROM beers b, business w, beer_categories c, beer_types t, countries p
 WHERE w.brewery AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b.type_id = t.auto_id AND w.country_id = p.auto_id);
+
+--
+-- Table structure for table business_avatars
+--
+
+DROP TABLE IF EXISTS beer_avatars;
+CREATE TABLE IF NOT EXISTS `beer_avatars` (
+  avatar_id int(11) NOT NULL,
+  avatar_modified timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  avatar_image blob NOT NULL,
+  PRIMARY KEY  (avatar_id)
+) DEFAULT CHARSET=utf8;
 
 # --------------------------------------------------------
 

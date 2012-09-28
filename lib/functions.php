@@ -91,6 +91,7 @@ function cabecera($title='',$script='', $no_cache=false) {
 	  <script type='text/javascript'> 
 	    var base_url = '".$globals['base_url']."';
 	    var lib_url = '".$globals['lib_url']."';
+	    var birrolpath = '". birrolpath ."';
 	  </script>
 	");
 	echo '    <script src="'.$globals['js_url']. 'jquery.min.js" type="text/javascript" charset="utf-8"></script>'."\n";

@@ -119,6 +119,15 @@ function bsns_new_form(){
   
 //   echo "<dt><label for=''>" . $idioma[''] . ":</label></dt>\n";
 //   echo "<dd></dd>\n";
+  // logo
+  if (is_avatars_enabled()) {
+    echo '<input type="hidden" name="MAX_FILE_SIZE" value="'.$globals['avatars_max_size'].'" />' . "\n";
+    echo '<dt><label>'.$idioma['bsns_avatar_1'].':</label></dt>' . "\n";
+    echo '<dd><input type="file" class="button" autocomplete="off" name="image" />' . "\n";
+    echo '</dd>' . "\n";
+    echo '<dt></dt>' . "\n";
+    echo '<dd><span class="note">' . $idioma['bsns_avatar_2'] . '</span></dd>' . "\n";
+  }
   
   echo '<dt></dt><dd><input type="submit" class="button" name="submit" value="'.$idioma['id_enviar'].'" /></dd>' . "\n";
   
@@ -138,7 +147,7 @@ function bsns_new_insert(){
   $brewery = ( empty($_POST['brewery']) ? 0 : $_POST['brewery'] );
   $pub = ( empty($_POST['pub']) ? 0 : $_POST['pub'] );
   $store = ( empty($_POST['store']) ? 0 : $_POST['store'] );
-  $country_id = $_POST['country_id'];
+  $country_id = ( empty($_POST['country_id']) ? 0 : $_POST['country_id'] );
   $state = mysqli_real_escape_string( $mysql_link, $_POST['state'] );
   $city = mysqli_real_escape_string( $mysql_link, $_POST['city'] );
   $address_1 = mysqli_real_escape_string( $mysql_link, $_POST['address_1'] );
@@ -152,14 +161,63 @@ function bsns_new_insert(){
   $description = mysqli_real_escape_string( $mysql_link, $_POST['description'] );
 //   $ = $_POST[''];
 
+  if( empty( $name ) ) {
+    register_error( $idioma['err_name_miss'] );
+    return FALSE;
+  }
+
+  // Manage avatars upload
+  if (!empty($_FILES['image']['tmp_name']) ) {
+    if(avatars_check_upload_size('image')) {
+      $avatar_mtime = avatars_manage_upload($user->id, 'image');
+      if (!$avatar_mtime) {
+	$messages .= '<p class="form-error">'.$idioma['err_avatar_1'].'</p>';
+	$errors = 1;
+	$avatar = 0;
+      } else {
+	$avatar = $avatar_mtime;
+      }
+    } else {
+      $messages .= '<p class="form-error">'.$idioma['err_avatar_2'].'</p>';
+      $errors = 1;
+      $avatar = 0;
+    }
+  }
+
   $query = "INSERT INTO business SET name='$name', brewery=$brewery, pub=$pub, store=$store, country_id=$country_id, state='$state', city='$city', address_1='$address_1', address_2='$address_2', zip_code='$zip_code', url='$url', email='$email', phone='$phone', lat=$lat, lon =$lon, description='$description', register_id=$current_user->id";
   echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
-    log_insert('beer_new', mysqli_insert_id($mysql_link), $current_user->id);
+    $business_id = mysqli_insert_id($mysql_link);
+    log_insert('beer_new', $business_id, $current_user->id);
   } else {
     echo "<p> error: ". mysqli_error( $mysql_link ) ."</p>";
     register_error($idioma['err_insert_beer']);
+    return FALSE;
   }
+
+  // Manage avatars upload
+  if (!empty($_FILES['image']['tmp_name']) ) {
+    if(avatars_check_upload_size('image')) {
+      $avatar_mtime = avatars_manage_upload($business_id, 'image');
+      if (!$avatar_mtime) {
+	$messages .= '<p class="form-error">'.$idioma['err_avatar_1'].'</p>';
+	$errors = 1;
+	$avatar = 0;
+      } else {
+	$avatar = $avatar_mtime;
+	$query = "UPDATE business SET avatar=$avatar WHERE auto_id = $business_id";
+	if( $res = mysqli_query( $mysql_link, $query ) ) {
+	  $messages .= '<p class="form-error">'.$idioma['err_avatar_1'].'</p>';
+	  $errors = 1;
+	}
+      }
+    } else {
+      $messages .= '<p class="form-error">'.$idioma['err_avatar_2'].'</p>';
+      $errors = 1;
+      $avatar = 0;
+    }
+  }
+
 } // bsns_new_insert
 
 ?>
