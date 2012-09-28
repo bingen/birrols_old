@@ -101,8 +101,8 @@ function beer_new_form(){
 	source: lib_url + 'search_type.php?birrolpath=".birrolpath."&category_id=' + document.getElementById('category_id').value/*,
 	select: function(event, ui) {
 		  $(this).val(ui.item.label);
-		  $('#type_id').val(ui.item.id);*/
-	}
+		  $('#type_id').val(ui.item.id);
+	}*/
       });
       $('#category_id').change(function(){
 	document.getElementById('type').value = '';
