@@ -38,7 +38,18 @@ function mysqli_result($res, $row, $field=0) {
     $datarow = $res->fetch_array(); 
     return $datarow[$field]; 
 } 
-
+function check_login(){
+  global $current_user;
+  
+  if( !$current_user->authenticated && empty($_POST['usuario']) && $_REQUEST['error'] != 'login' && !isset($_GET['error_acceso']) ) {
+	$url = $_SERVER['PHP_SELF'];
+	$_REQUEST['error'] = 'login';
+	$query_string = http_build_query( $_REQUEST );
+	$url = $_SERVER['PHP_SELF'] . (empty($query_string) ? '' : '?'. http_build_query( $_REQUEST ));
+	header("Location:". $url);
+	exit();
+  }
+}
 function cabecera($title='',$script='', $no_cache=false) {
 	global $idioma, $current_user, $globals, $url, $error_acceso;
 	
@@ -286,6 +297,15 @@ echo '</body>'."\n";
 // 		echo '  </head>'."\n";
 // 	}
 echo '</html>'."\n";
+}
+function show_textfield( $field, $label, $value, $link='' ){
+  echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
+  echo "<dd><span name='$field' id='$field'> ".( empty($link) ? $value : "<a href='$link' alt='$value'>$value</a>" ) ." </span></dd>\n";
+}
+function show_checkbox( $field, $label, $value ){
+  echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
+  echo "<dd><input type='checkbox' name='$field' id='$field' ". ( $value ? "checked='checked'" : " " ) ." />\n";
+  echo "</dd>\n";
 }
 
 function clean_input_string($string) {

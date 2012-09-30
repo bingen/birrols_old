@@ -21,14 +21,7 @@
 include('config.php');
 include(libpath.'log.php');
 
-if( !$current_user->authenticated && empty($_POST['usuario']) && $_REQUEST['error'] != 'login' && !isset($_GET['error_acceso']) ) {
-	$url = $_SERVER['PHP_SELF'];
-	$_REQUEST['error'] = 'login';
-	$query_string = http_build_query( $_REQUEST );
-	$url = $_SERVER['PHP_SELF'] . (empty($query_string) ? '' : '?'. http_build_query( $_REQUEST ));
-	header("Location:". $url);
-	exit();
-}
+check_login();
 cabecera('', $_SERVER['PHP_SELF']);
 echo '<div id="cuerpo">'. "\n";
 if( !$current_user->authenticated ) {

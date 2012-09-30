@@ -22,14 +22,7 @@ include('config.php');
 include(libpath.'log.php');
 include(libpath.'avatars.php');
 
-if( !$current_user->authenticated && empty($_POST['usuario']) && $_REQUEST['error'] != 'login' && !isset($_GET['error_acceso']) ) {
-	$url = $_SERVER['PHP_SELF'];
-	$_REQUEST['error'] = 'login';
-	$query_string = http_build_query( $_REQUEST );
-	$url = $_SERVER['PHP_SELF'] . (empty($query_string) ? '' : '?'. http_build_query( $_REQUEST ));
-	header("Location:". $url);
-	exit();
-}
+check_login();
 cabecera('', $_SERVER['PHP_SELF']);
 echo '<div id="cuerpo">'. "\n";
 if( !$current_user->authenticated ) {
@@ -56,7 +49,7 @@ function bsns_new_form(){
   echo '<form enctype="multipart/form-data" action="'. $_SERVER['PHP_SELF'].'" method="post" id="thisform">' . "\n";
   echo '<fieldset>' . "\n";
   echo '<legend><span class="sign">' . $idioma['bsns_new'] . '</span></legend>' . "\n";
-  echo '<dl>' . "\n";
+  echo '<dl id="business_list">' . "\n";
   
   echo "<dt><label for='name'>" . $idioma['beer_name'] . ":</label></dt>\n";
   echo "<dd><input type='text' name='name' id='name' value='' autofocus='autofocus'/></dd>\n";
@@ -112,11 +105,11 @@ function bsns_new_form(){
   
   echo "<dt><label for='lat'>" . $idioma['bsns_lat'] . ":</label></dt>\n";
   echo "<dd><input type='number' name='lat' id='lat' value='' min=-90, max=90/></dd>\n";
-  echo "<dt><label for='lon'>" . $idioma['bsns_lat'] . ":</label></dt>\n";
+  echo "<dt><label for='lon'>" . $idioma['bsns_lon'] . ":</label></dt>\n";
   echo "<dd><input type='number' name='lon' id='lon' value='' min=-180, max=180/></dd>\n";
   
   echo "<dt><label for='description'>" . $idioma['beer_desc'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='description' id='description' value='' /></dd>\n";
+  echo "<dd><textarea name='description' id='description'> </textarea></dd>\n";
   
 //   echo "<dt><label for=''>" . $idioma[''] . ":</label></dt>\n";
 //   echo "<dd></dd>\n";
@@ -168,6 +161,8 @@ function bsns_new_insert(){
     register_error( $idioma['err_name_miss'] );
     return FALSE;
   }
+  if ( !empty($url) && !preg_match('/^http/', $url) ) $url = 'http://'.$url;
+
 
   $query = "INSERT INTO business SET name='$name', brewery=$brewery, pub=$pub, store=$store, country_id=$country_id, state='$state', city='$city', address_1='$address_1', address_2='$address_2', zip_code='$zip_code', url='$url', email='$email', phone='$phone', lat=$lat, lon =$lon, description='$description', register_id=$current_user->id";
   echo "<p> query: $query </p>\n";
