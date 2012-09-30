@@ -20,6 +20,7 @@
 
 include('config.php');
 include(libpath.'log.php');
+include(libpath.'avatars.php');
 
 if( !$current_user->authenticated && empty($_POST['usuario']) && $_REQUEST['error'] != 'login' && !isset($_GET['error_acceso']) ) {
 	$url = $_SERVER['PHP_SELF'];
@@ -52,7 +53,7 @@ function bsns_new_form(){
   echo "<script src='".$globals['js_url']. "jquery-ui.min.js'></script>\n";
   echo "<script src='".$globals['js_url']. "jquery.select-to-autocomplete.min.js'></script>\n";
   
-  echo '<form action="'. $_SERVER['PHP_SELF'].'" method="post" id="thisform">' . "\n";
+  echo '<form enctype="multipart/form-data" action="'. $_SERVER['PHP_SELF'].'" method="post" id="thisform">' . "\n";
   echo '<fieldset>' . "\n";
   echo '<legend><span class="sign">' . $idioma['bsns_new'] . '</span></legend>' . "\n";
   echo '<dl>' . "\n";
@@ -141,6 +142,8 @@ function bsns_new_form(){
 function bsns_new_insert(){
   global $mysql_link, $idioma, $current_user;
   
+  $messages = '';
+  
 //   print_r($_POST);
   
   $name = mysqli_real_escape_string( $mysql_link, $_POST['name'] );
@@ -166,24 +169,6 @@ function bsns_new_insert(){
     return FALSE;
   }
 
-  // Manage avatars upload
-  if (!empty($_FILES['image']['tmp_name']) ) {
-    if(avatars_check_upload_size('image')) {
-      $avatar_mtime = avatars_manage_upload($user->id, 'image');
-      if (!$avatar_mtime) {
-	$messages .= '<p class="form-error">'.$idioma['err_avatar_1'].'</p>';
-	$errors = 1;
-	$avatar = 0;
-      } else {
-	$avatar = $avatar_mtime;
-      }
-    } else {
-      $messages .= '<p class="form-error">'.$idioma['err_avatar_2'].'</p>';
-      $errors = 1;
-      $avatar = 0;
-    }
-  }
-
   $query = "INSERT INTO business SET name='$name', brewery=$brewery, pub=$pub, store=$store, country_id=$country_id, state='$state', city='$city', address_1='$address_1', address_2='$address_2', zip_code='$zip_code', url='$url', email='$email', phone='$phone', lat=$lat, lon =$lon, description='$description', register_id=$current_user->id";
   echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
@@ -198,25 +183,21 @@ function bsns_new_insert(){
   // Manage avatars upload
   if (!empty($_FILES['image']['tmp_name']) ) {
     if(avatars_check_upload_size('image')) {
-      $avatar_mtime = avatars_manage_upload($business_id, 'image');
+      $avatar_mtime = avatars_manage_upload('business', $business_id, 'image');
       if (!$avatar_mtime) {
 	$messages .= '<p class="form-error">'.$idioma['err_avatar_1'].'</p>';
 	$errors = 1;
 	$avatar = 0;
-      } else {
+      }/* else {
 	$avatar = $avatar_mtime;
-	$query = "UPDATE business SET avatar=$avatar WHERE auto_id = $business_id";
-	if( $res = mysqli_query( $mysql_link, $query ) ) {
-	  $messages .= '<p class="form-error">'.$idioma['err_avatar_1'].'</p>';
-	  $errors = 1;
-	}
-      }
+      }*/
     } else {
       $messages .= '<p class="form-error">'.$idioma['err_avatar_2'].'</p>';
       $errors = 1;
       $avatar = 0;
     }
   }
+  echo $messages ."\n";
 
 } // bsns_new_insert
 

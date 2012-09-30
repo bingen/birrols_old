@@ -131,7 +131,7 @@ function cabecera($title='',$script='', $no_cache=false) {
 	if($current_user->authenticated) {
 		echo '	<div id="login" class="login">'."\n";
 		echo '<ul id="headtools">' . "\n";
- 		echo '<li class="noborder">'.$idioma['saludo'].'&nbsp; <a href="'.get_user_uri($current_user->username).'" title="'.$idioma['usr_info'].'">'.$current_user->username.'&nbsp;<img src="'.get_avatar_url($current_user->id, $current_user->avatar, 20).'" width="15" height="15" alt="'.$current_user->username.'"/></a></li>' . "\n";
+ 		echo '<li class="noborder">'.$idioma['saludo'].'&nbsp; <a href="'.get_user_uri($current_user->username).'" title="'.$idioma['usr_info'].'">'.$current_user->username.'&nbsp;<img src="'.get_avatar_url('users', $current_user->id, $current_user->avatar, 20).'" width="15" height="15" alt="'.$current_user->username.'"/></a></li>' . "\n";
 		echo '<li><a href="'.$globals['base_url']. 'index.php?op=logout">'. $idioma['desconectar'].' <img src="'.$globals['img_url'].'common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
 		echo '</ul>' . "\n";
 		echo '	</div>'."\n"; // login
@@ -521,7 +521,7 @@ function get_business_uri($business, $view='') {
 function get_cache_dir_chain($key) {
 	// Very fast cache dir generator for two levels
 	// mask == 2^8 - 1 or 1 << 8 -1
-	return sprintf("%02x/%02x", ($key >> 8) & 255, $key & 255);
+	return sprintf("%02x/%02x", ($key >> 8) & 255, $key & 255) . '/';
 }
 
 function create_cache_dir_chain($base, $chain) {
@@ -533,17 +533,17 @@ function create_cache_dir_chain($base, $chain) {
 	}
 }
 
-function get_avatar_url($user, $avatar, $size) {
+function get_avatar_url($object, $id, $avatar, $size) {
 	global $mysql_link, $globals;
 
 	// If it does not get avatar status, check the database
-	if ($user > 0 && $avatar < 0) {
-		mysqli_query($mysql_link, "select avatar from users where auto_id = $user") or die ('ERROR:'.mysqli_error($mysql_link));
+	if ($id > 0 && $avatar < 0) {
+		mysqli_query($mysql_link, "SELECT avatar FROM $object where auto_id = $id") or die ('ERROR:'.mysqli_error($mysql_link));
 		$avatar = (int) mysqli_result($res,0,0);
 	}
 
 	if ($avatar > 0 && $globals['cache_dir']) {
-		$file = $globals['cache_dir'] . '/'.$globals['avatars_dir'].'/'.get_cache_dir_chain($user). "/$user-$avatar-$size.jpg";
+		$file = $globals['cache_dir'] . '/'.$globals['avatars_dir'][$object]. get_cache_dir_chain($id). "$id-$avatar-$size.jpg";
 		//echo '<p> avatar: '.$avatar.'. file:'.$file.'</p>';
 		// Don't check every time, but 1/10, decrease VM pressure 
 		// Disabled for the moment, it fails just too much for size 40
@@ -552,7 +552,7 @@ function get_avatar_url($user, $avatar, $size) {
 		if (is_readable($file_path)) {
 			return $globals['base_static'] . $file;
 		} else {
-			return $globals['base_url'] . "backend/get_avatar.php?id=$user&amp;size=$size&amp;time=$avatar";
+			return $globals['base_url'] . "backend/get_avatar.php?object=$object&amp;id=$id&amp;size=$size&amp;time=$avatar";
 		}
 	} 
 	return get_no_avatar_url($size);

@@ -8,10 +8,10 @@
 // AFFERO GENERAL PUBLIC LICENSE is also included in the file called "COPYING".
 
 function log_insert($type, $ref_id, $user_id=0) {
-//	global $db, $globals;
+  global $mysql_link, $globals;
 
 	$ip = $globals['user_ip'];
-	return mysqli_query("insert into logs (log_date, log_type, log_ref_id, log_user_id, log_ip) values (now(), '$type', $ref_id, $user_id, '$ip')");
+	return mysqli_query($mysql_link, "INSERT INTO logs (log_date, log_type, log_ref_id, log_user_id, log_ip) VALUES (now(), '$type', $ref_id, $user_id, '$ip')");
 }
 
 function log_conditional_insert($type, $ref_id, $user_id=0, $seconds=0) {
@@ -24,12 +24,12 @@ function log_conditional_insert($type, $ref_id, $user_id=0, $seconds=0) {
 }
 
 function log_get_date($type, $ref_id, $user_id=0, $seconds=0) {
-//	global $db, $globals;
+	global $mysql_link;
 
 	if ($seconds > 0) {
 		$interval = "and log_date > date_sub(now(), interval $seconds second)";
 	}
-	$res = mysqli_query("select count(*) from logs where log_type='$type' and log_ref_id = $ref_id $interval and log_user_id = $user_id order by log_date desc limit 1") or die ('ERROR:'.mysqli_error());
+	$res = mysqli_query($mysql_link, "select count(*) from logs where log_type='$type' and log_ref_id = $ref_id $interval and log_user_id = $user_id order by log_date desc limit 1") or die ('ERROR:'.mysqli_error($mysql_link));
 	return (int) mysqli_result($res,0);
 }
 ?>

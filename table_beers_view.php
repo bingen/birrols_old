@@ -22,17 +22,24 @@ include_once('config.php');
 
 
 	if($current_user->admin) {
-	  $campos = "auto_id,name,brewery,category,type,abv,ibu,description,score";
+	  $campos = "auto_id,name,country,brewery,category,type,abv,ibu,description,score";
 	  $cabecera = $idioma['beer_id']. ',' .$idioma['beer_name']. ',' .$idioma['bsns_country']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
 	  $filtros_array = "1,1,1,1,1,1,1,1,1,1";
 	  $colspan_array = "1,1,1,1,1,1,1,1,1,1";
 	  $orden_array = "1,1,1,1,0,0,0,0,0,1,1";
 	} else {
-	  $campos = "name,brewery,category,type,abv,ibu,description,score";
+	  $campos = "name,country,brewery,category,type,abv,ibu,description,score";
 	  $cabecera = $idioma['beer_name']. ',' .$idioma['bsns_country']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
 	  $filtros_array = "1,1,1,1,1,1,1,1,1";
 	  $colspan_array = "1,1,1,1,1,1,1,1,1";
 	  $orden_array = "1,1,1,0,0,0,0,0,1,1";
+	}
+	if( $current_user->authenticated ) { // fav
+	  $campos .= ",fav";
+// 	  $cabecera .= ',' . $idioma['fav'];
+	  $cabecera .= ',' . "<img src='". $globals['img_url'] ."common/heart.png' alt='".$idioma['beer_sc']."' />";
+	  $filtros_array .= ",1";
+	  $orden_array .= ",1";
 	}
 	$tabla = 'beers_view';
 //	if( empty($estado) )
@@ -53,7 +60,6 @@ function beers($beer_id=0, $query_cond='') {
 	else $query_beer = " WHERE 1 ";
 
 	if( $beer_id != 0 ) {
-// 		echo '	   <table class="'. $tabla .'-table" id="'. $tabla .'-head-1">' . "\n";
 		echo '	   <table class="principal-table" id="'. $tabla .'-table">' . "\n";
 		echo '	 <thead>' . "\n";
 		$fila_0 = 0;
@@ -74,6 +80,10 @@ function beers($beer_id=0, $query_cond='') {
 	    <th class=\"col-ibu\"><strong>".$idioma['beer_ibu']." 3</strong></th>
 	    <th class=\"col-desc\"><strong>".$idioma['beer_desc']." 4</strong></th>
 	    <th class=\"col-score\"><strong>".$idioma['beer_score']."</strong></th>
+		");
+	  if( $current_user->authenticated )
+	    echo "	    <th class=\"col-fav\"><strong><img src='". $globals['img_url'] ."common/heart.png' alt='".$idioma['beer_sc']."' /></strong></th>\n";
+	  print("
 	  </tr>
 	 </thead>
 		");
@@ -110,6 +120,8 @@ function beers($beer_id=0, $query_cond='') {
 			echo '<td class="col-ibu"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->ibu.'</a></td>' . "\n";
 			echo '<td class="col-desc"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->description.'</a></td>' . "\n";
 			echo '<td class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></td>' . "\n";
+		if( $current_user->authenticated ) // TODO:
+			echo '<td class="col-fav"><img src="'. $TODO . '" alt="'. $TODO . '"/></td>' . "\n";
 			echo '</tr>';
 //		} // end if authenticated
 	} // end for matches

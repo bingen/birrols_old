@@ -1,4 +1,5 @@
 <?
+// Modified by ßingen
 // The source code packaged with this file is Free Software, Copyright (C) 2005 by
 // Ricardo Galli <gallir at uib dot es>.
 // It's licensed under the AFFERO GENERAL PUBLIC LICENSE unless stated otherwise.
@@ -7,37 +8,37 @@
 // AFFERO GENERAL PUBLIC LICENSE is also included in the file called "COPYING".
 
 
-function get_avatars_dir() {
+function get_avatars_dir($object) {
 	global $globals;
-	return birrolpath.$globals['cache_dir'].'/'.$globals['avatars_dir'];
+	return birrolpath.$globals['cache_dir'].$globals['avatars_dir'][$object];
 }
 
-function is_avatars_enabled() {
+function is_avatars_enabled($object) {
 	global $globals;
-	return !empty($globals['cache_dir']) && is_writable(get_avatars_dir());
+	return !empty($globals['cache_dir']) && is_writable(get_avatars_dir($object));
 }
 
-function avatars_manage_upload($user, $name) {
+function avatars_manage_upload($object, $id, $name) {
 //	global $globals;
 
 	$time = time();
 
-	$chain = get_cache_dir_chain($user);
-	@mkdir(get_avatars_dir());
-	create_cache_dir_chain(get_avatars_dir(), $chain);
-	$subdir = get_avatars_dir() . '/'. $chain;
+	$chain = get_cache_dir_chain($id);
+	@mkdir(get_avatars_dir($object));
+	create_cache_dir_chain(get_avatars_dir($object), $chain);
+	$subdir = get_avatars_dir($object) . $chain;
 	if (!is_writable($subdir)) return false;
-	$file_base = $subdir . "/$user-$time";
+	$file_base = $subdir . "$id-$time";
 
-	avatars_remove_user_files($user);
+	avatars_remove_user_files($object, $id);
 	move_uploaded_file($_FILES[$name]['tmp_name'], $file_base . '-orig.img');
 	$size = @getimagesize("$file_base-orig.img");
 	avatar_resize("$file_base-orig.img", "$file_base-80.jpg", 80);
 	$size = @getimagesize("$file_base-80.jpg");
-	if (!($size[0] == 80 && $size[1] == 80 && ($mtime = avatars_db_store($user, "$file_base-80.jpg", $time)))) {
+	if ( !( $size[0] == 80 && $size[1] == 80 && ($mtime = avatars_db_store($object, $id, "$file_base-80.jpg", $time)) ) ) {
 		// Mark FALSE in DB
-		avatars_db_remove($user);
-		avatars_remove_user_files($user);
+		avatars_db_remove($object, $id);
+		avatars_remove_user_files($object, $id);
 		return false;
 	}
 	/*
@@ -50,13 +51,13 @@ function avatars_manage_upload($user, $name) {
 	return $mtime;
 }
 
-function avatars_remove_user_files($user) {
+function avatars_remove_user_files($object, $id) {
 //	global $globals;
-	$subdir = @get_avatars_dir() . '/'. get_cache_dir_chain($user);
+	$subdir = @get_avatars_dir($object) . get_cache_dir_chain($id);
 	if ( $subdir && ($handle = @opendir( $subdir )) ) {
 		while ( false !== ($file = readdir($handle))) {
-			if ( preg_match("/^$user-/", $file) ) {
-				@unlink($subdir . '/' . $file);
+			if ( preg_match("/^$id-/", $file) ) {
+				@unlink($subdir . $file);
 			}
 		}
 		closedir($handle);
@@ -68,31 +69,32 @@ function avatars_check_upload_size($name) {
 	return $_FILES[$name]['size'] < $globals['avatars_max_size'];
 }
 
-function avatars_db_store($user, $file, $now) {
-//	global $db;
+function avatars_db_store($object, $id, $file, $now) {
+	global $mysql_link;
+	
 	$bytes = file_get_contents($file);
 	if (strlen($bytes)>0 && strlen($bytes) < 30000) {
 		$bytes = addslashes($bytes);
-		mysqli_query("replace into avatars set avatar_id = $user, avatar_image='$bytes'");
-		mysqli_query("update usuarios set avatar = $now  where auto_id=$user");
+		mysqli_query($mysql_link, "REPLACE INTO ". $object. "_avatars SET avatar_id = $id, avatar_image='$bytes'");
+		mysqli_query($mysql_link, "UPDATE $object SET avatar = $now  WHERE auto_id=$id");
 		return $now;
 	}
 	return false;
 }
 
-function avatars_db_remove($user) {
-//	global $db;
-	mysqli_query("delete from avatars where avatar_id=$user");
-	mysqli_query("update usuarios set avatar = 0  where auto_id=$user");
+function avatars_db_remove($object, $id) {
+	global $mysql_link;
+	mysqli_query($mysql_link, "DELETE FROM ". $object. "_avatars where avatar_id=$id");
+	mysqli_query($mysql_link, "UPDATE $object SET avatar = 0  WHERE auto_id=$id");
 }
 
-function avatar_get_from_file($user, $size) {
-//	global $globals, $db;
+function avatar_get_from_file($object, $id, $size) {
+	global $mysql_link;
 
-	$res = mysqli_query("select avatar from usuarios where auto_id=$user");
+	$res = mysqli_query($mysql_link, "SELECT avatar FROM $object WHERE auto_id=$id");
 	$time = mysqli_result($res,0,0);
 	if(! $time > 0) return false;
-	$file = get_avatars_dir() . '/'. get_cache_dir_chain($user) . "/$user-$time-$size.jpg";
+	$file = get_avatars_dir($object) . get_cache_dir_chain($id) . "$id-$time-$size.jpg";
 	if (is_readable($file)) {
 		return  file_get_contents($file);
 	} else {
@@ -101,22 +103,22 @@ function avatar_get_from_file($user, $size) {
 
 }
 
-function avatar_get_from_db($user, $size=0) {
+function avatar_get_from_db($object, $id, $size=0) {
 	global $globals;
-	$res = mysqli_query("select avatar_image from avatars where avatar_id=$user");
+	$res = mysqli_query($mysql_link, "SELECT avatar_image FROM ". $object. "avatars WHERE avatar_id=$id");
 	$img = mysqli_result($res,0,0);
 	if (!strlen($img) > 0) {
 		return false;
 	}
-	$res = mysqli_query("select avatar from usuarios where auto_id=$user");
+	$res = mysqli_query($mysql_link, "SELECT avatar FROM $object WHERE auto_id=$id");
 	$time = mysqli_result($res,0,0);
 
-	$chain = get_cache_dir_chain($user);
+	$chain = get_cache_dir_chain($id);
 	@mkdir(get_avatars_dir());
-	create_cache_dir_chain(get_avatars_dir(), $chain);
-	$subdir = get_avatars_dir() . '/'. $chain;
+	create_cache_dir_chain(get_avatars_dir($object), $chain);
+	$subdir = get_avatars_dir($object) . $chain;
 	if (!is_writable($subdir)) return false;
-	$file_base = $subdir . "/$user-$time";
+	$file_base = $subdir . "$id-$time";
 
 	file_put_contents ($file_base . '-80.jpg', $img);
 	if ($size > 0 && $size != 80 && in_array($size, $globals['avatars_allowed_sizes'])) {
@@ -128,42 +130,44 @@ function avatar_get_from_db($user, $size=0) {
 
 
 function avatar_resize($infile,$outfile,$size) {
+  global $idioma;
+  
 	$image_info = getImageSize($infile);
 	switch ($image_info['mime']) {
 		case 'image/gif':
 		if (imagetypes() & IMG_GIF)  {
 			$src_img = imageCreateFromGIF($infile) ;
 		} else {
-			$ermsg = 'GIF images are not supported<br />';
+			$ermsg = $idioma['err_img'] . 'GIF';
 		}
 		break;
 		case 'image/jpeg':
 		if (imagetypes() & IMG_JPG)  {
 			$src_img = imageCreateFromJPEG($infile) ;
 		} else {
-			$ermsg = 'JPEG images are not supported<br />';
+			$ermsg = $idioma['err_img'] . 'JPEG ';
 		}
 		break;
 		case 'image/png':
 		if (imagetypes() & IMG_PNG)  {
 			$src_img = imageCreateFromPNG($infile) ;
 		} else {
-			$ermsg = 'PNG images are not supported<br />';
+			$ermsg = $idioma['err_img'] . 'PNG';
 		}
 		break;
 		case 'image/wbmp':
 		if (imagetypes() & IMG_WBMP)  {
 			$src_img = imageCreateFromWBMP($infile) ;
 		} else {
-			$ermsg = 'WBMP images are not supported<br />';
+			$ermsg = $idioma['err_img'] . 'WBMP';
 		}
 		break;
 		default:
-		$ermsg = $image_info['mime'].' images are not supported<br />';
+		$ermsg = $idioma['err_img'] . $image_info['mime'];
 		break;
 	}
 	if (isset($ermsg)) {
-		echo "Error: $ermsg";
+		echo "Error: $ermsg <br />";
 		die;
 	}
 	$dst_img = ImageCreateTrueColor($size,$size);

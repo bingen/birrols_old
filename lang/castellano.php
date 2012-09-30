@@ -44,6 +44,7 @@ $idioma['store'] = 'Tienda';
 $idioma['retailers'] = 'Bares y tiendas';
 $idioma['breweries'] = 'Breweries';
 $idioma['brewery'] = 'Brewery';
+$idioma['fav'] = 'Favorito';
 //$idioma[''] = '';
 
 $idioma['id_registro'] = 'Registro';
@@ -100,6 +101,7 @@ $idioma['err_mail'] = 'Error enviando notifiación.';
 $idioma['err_login'] = 'Debes estar logueado';
 $idioma['err_brewery_miss'] = 'No existe la brewery. Debes escogerla del menú o crearla previamente.';
 $idioma['err_name_miss'] = 'Debes informar el nombre.';
+$idioma['err_img'] = 'No se admite el formato ';
 //$idioma['err_'] = ;
 
 // TODO: existen?

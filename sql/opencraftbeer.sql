@@ -22,10 +22,12 @@ SET character_set_client = utf8;
 
 CREATE TABLE IF NOT EXISTS business (
   auto_id int(11) NOT NULL auto_increment,
-  -- type enum('disabled','brewery', 'retailer', 'pub','store') character set utf8 NOT NULL default 'disabled',
   brewery boolean NOT NULL default FALSE,
   pub boolean NOT NULL default FALSE,
   store boolean NOT NULL default FALSE,
+  homebrew_store boolean NOT NULL default FALSE,
+  food boolean NOT NULL default FALSE,
+  wifi boolean NOT NULL default FALSE,
   name char(60) collate utf8_spanish_ci NOT NULL,
   avatar int(10) unsigned NOT NULL default '0',
   description text collate utf8_spanish_ci NOT NULL,
@@ -127,8 +129,8 @@ WHERE w.brewery AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b
 -- Table structure for table business_avatars
 --
 
-DROP TABLE IF EXISTS beer_avatars;
-CREATE TABLE IF NOT EXISTS `beer_avatars` (
+DROP TABLE IF EXISTS beers_avatars;
+CREATE TABLE IF NOT EXISTS `beers_avatars` (
   avatar_id int(11) NOT NULL,
   avatar_modified timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   avatar_image blob NOT NULL,
@@ -202,11 +204,11 @@ INSERT INTO languages VALUES (1,'Castellano'),(2,'Català'), (3,'English');
 UNLOCK TABLES;
 
 --
--- Table structure for table avatars
+-- Table structure for table users_avatars
 --
 
-DROP TABLE IF EXISTS avatars;
-CREATE TABLE IF NOT EXISTS `avatars` (
+DROP TABLE IF EXISTS users_avatars;
+CREATE TABLE IF NOT EXISTS `users_avatars` (
   avatar_id int(11) NOT NULL,
   avatar_modified timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   avatar_image blob NOT NULL,
