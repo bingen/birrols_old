@@ -56,6 +56,7 @@ echo "         </div> \n"; // search-type-buttons
 echo "      </div> \n"; // search bar
 
 // jQuery call to load map on amp button click
+// TODO: leaflet
     echo '<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />'."\n";
     echo ' <!--[if lte IE 8]>'."\n";
     echo '     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />'."\n";

@@ -30,6 +30,7 @@ $idioma['password'] = 'Clave';
 $idioma['entrar'] = 'Entrar';
 $idioma['cancelar'] = 'Cancelar';
 $idioma['back'] = 'Atrás';
+$idioma['google_login'] = 'Login con google';
 
 $idioma['forgot_pwd'] = '¿Has olvidado la contraseña?';
 

@@ -22,7 +22,6 @@
 
 include('config.php');
 include(libpath.'ts.php');
-include(libpath.'log.php');
 
   cabecera($idioma['tit_resgistro'], $_SERVER['PHP_SELF']);
   laterales();
@@ -270,7 +269,6 @@ include(libpath.'log.php');
 			} else {
 				require_once(libpath.'mail.php');
 				$sent = send_recover_mail($user, 1);
-				log_insert('user_new', $user->id, $user->id);
 			}
 			echo '</fieldset>'."\n";
 		} else {

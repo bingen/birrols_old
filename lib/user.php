@@ -26,9 +26,11 @@ class User {
 	var $sex = '';
 	var $country = '';
 	var $birthday = 0;
+	var $validated_date = 0;
 	
 	var $authenticated = FALSE;
 	var $ocb_user = False;
+	var $now = 0;
 
 	function User($id=0) {
 		if ($id>0) {
@@ -86,14 +88,18 @@ class User {
 		$url = mysqli_real_escape_string( $mysql_link, htmlspecialchars($this->url));
 		$country = $this->country;
 		$sex = $this->sex;
-		$birthday = $this->birthday;
-		$fecha_aux = date('Y-m-d', $birthday);
+		$birthday = date('Y-m-d', $this->birthday);
+		$validated_date = date('Y-m-d', $this->validated_date);
 		if($this->id===0) { 
-			mysqli_query($mysql_link, "INSERT INTO users (username, password, email, type, date, ip, name, last_name, language_id, url, country, sex, birthday) VALUES ('$username', '$password', '$email', $type, FROM_UNIXTIME($date), '$ip', '$name', '$last_name', $language_id, '$url', '$country', '$sex', '$fecha_aux'") or die ('ERROR:'.mysqli_error($mysql_link));
+			$query = "INSERT INTO users (username, password, email, type, date, ip, name, last_name, language_id, url, country, sex, birthday, validated_date) VALUES ('$username', '$password', '$email', '$type', FROM_UNIXTIME($date), '$ip', '$name', '$last_name', $language_id, '$url', '$country', '$sex', '$birthday', '$validated_date')";
+// 			echo "\n<p> sql: ". $query. " </p>\n";
+			mysqli_query($mysql_link, $query) or die ('ERROR:'.mysqli_error($mysql_link));
 			$this->id = mysqli_insert_id($mysql_link);
+			include_once(libpath."log.php");
+			log_insert( 'user_new', $this->id, $this->id );
 		} else {
 			if ($full_save) $modified = ', modified = now() ' ;
-			$query = "UPDATE users set username='$username', password='$password', email='$email', type='$type', avatar=$avatar, date=FROM_UNIXTIME($date), ip='$ip', name='$name', last_name='$last_name', language_id=$language_id, url='$url', country='$country',  sex='$sex', birthday='$fecha_aux'   $modified WHERE auto_id=$this->id";
+			$query = "UPDATE users set username='$username', password='$password', email='$email', type='$type', avatar=$avatar, date=FROM_UNIXTIME($date), ip='$ip', name='$name', last_name='$last_name', language_id=$language_id, url='$url', country='$country',  sex='$sex', birthday='$birthday'   $modified WHERE auto_id=$this->id";
 // 			echo "\n<p> sql: ". $query. " </p>\n";
 			mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
 		} // if id === 0
@@ -166,13 +172,15 @@ class User {
 		if(!empty($_COOKIE['ocb_user'])) {
 			$this->ocb_user=explode(":", $_COOKIE['ocb_user']);
 		}
-
+ 
 		if($this->ocb_user[0] && !empty($_COOKIE['ocb_key'])) {
 			$userInfo=explode(":", base64_decode($_COOKIE['ocb_key']));
 			if($this->ocb_user[0] === $userInfo[0]) {
 				$cookietime = (int) $userInfo[3];
 				$dbusername = mysqli_real_escape_string( $mysql_link, $this->ocb_user[0]);
-				$res=mysqli_query($mysql_link, "SELECT SQL_CACHE auto_id, password, type, UNIX_TIMESTAMP(validated_date) as validated_date, email, avatar, language_id FROM users WHERE username = '$dbusername'") or die ('ERROR:'.mysqli_error($mysql_link));
+				$query = "SELECT SQL_CACHE auto_id, password, type, UNIX_TIMESTAMP(validated_date) as validated_date, email, avatar, language_id FROM users WHERE username = '$dbusername'";
+// 				echo "<p> query: $query </p> \n";
+				$res=mysqli_query($mysql_link, $query) or die ('ERROR:'.mysqli_error($mysql_link));
 				$user = mysqli_fetch_object($res);
 
 				// We have two versions from now
@@ -180,7 +188,7 @@ class User {
 				switch ($userInfo[2]) {
 					case '3':
 						if (($this->now - $cookietime) > 864000) $cookietime = 'expired'; // after 10 days expiration is forced
-						$key = md5($user->email.$site_key.$dbusername.$user->auto_id.$cookietime);
+						$key = md5($user->email .$site_key . $dbusername . $user->auto_id . $cookietime);
 						break;
 					case '2':
 						$key = md5($user->email.$site_key.$dbusername.$user->auto_id);
@@ -199,14 +207,6 @@ class User {
 				}
 
 				$this->id = $user->auto_id;
-// 				$this->username  = $userInfo[0];
-// 				$this->password = $user->password;
-// 				$this->type = $user->type;
-// 				if ($this->type == 'admin') $this->admin = true;
-// 				$this->email = $user->email;
-// 				$this->avatar = $user->avatar;
-// 				$this->validated_date = $user->validated_date;
-// 				$this->language_id = $user->language_id;
 				$this->read();
 				$this->authenticated = TRUE;
 
@@ -216,7 +216,7 @@ class User {
 					$this->SetIDCookie(2, $userInfo[4] > 0 ? true : false);
 				}
 			}
-		}
+		} // if ocb_user && ocb_key
 	} // UserAuth
 
 
@@ -258,14 +258,6 @@ class User {
   		if ($user->type == 'disabled' || $user->type == 'autodisabled' || ! $user->validated_date) return false;
  		if ($user->auto_id > 0 && $user->password == $hash) {
 			$this->id = $user->auto_id;
-//  			echo "<p> id: $this->id </p>\n";
-// 			$this->username = $username;
-// 			$this->password = $user->password;
-// 			$this->email = $user->email;
-// 			$this->type = $user->type;
-// 			$this->avatar = $user->avatar;
-// 			$this->validated_date = $user->validated_date;
-// 			$this->language_id = $user->language_id;
 			$this->read();
 			$this->authenticated = TRUE;
 			$this->SetIDCookie(1, $remember);

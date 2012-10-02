@@ -152,8 +152,8 @@ function bsns_new_insert(){
   $url = mysqli_real_escape_string( $mysql_link, $_POST['url'] );
   $email = mysqli_real_escape_string( $mysql_link, $_POST['email'] );
   $phone = mysqli_real_escape_string( $mysql_link, $_POST['phone'] );
-  $lat = ( empty($_POST['lat']) ? 0 : $_POST['lat'] );
-  $lon = ( empty($_POST['lon']) ? 0 : $_POST['lon'] );
+  $lat = ( empty($_POST['lat']) ? 'NULL' : $_POST['lat'] );
+  $lon = ( empty($_POST['lon']) ? 'NULL' : $_POST['lon'] );
   $description = mysqli_real_escape_string( $mysql_link, $_POST['description'] );
 //   $ = $_POST[''];
 
@@ -168,7 +168,7 @@ function bsns_new_insert(){
   echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
     $business_id = mysqli_insert_id($mysql_link);
-    log_insert('beer_new', $business_id, $current_user->id);
+    log_insert('business_new', $business_id, $current_user->id);
   } else {
     echo "<p> error: ". mysqli_error( $mysql_link ) ."</p>";
     register_error($idioma['err_insert_beer']);

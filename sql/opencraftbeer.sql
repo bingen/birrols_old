@@ -195,12 +195,13 @@ DROP TABLE IF EXISTS languages;
 CREATE TABLE IF NOT EXISTS languages (
   auto_id int(11) NOT NULL auto_increment,
   language char(32) NOT NULL,
+  locale char(10) default NULL,
 PRIMARY KEY auto_id (auto_id),
 UNIQUE KEY language (language)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 LOCK TABLES languages WRITE;
-INSERT INTO languages VALUES (1,'Castellano'),(2,'Català'), (3,'English');
+INSERT INTO languages VALUES (1,'Castellano', 'es'),(2,'Català', 'ca'), (3,'English', 'en');
 UNLOCK TABLES;
 
 --
@@ -223,7 +224,7 @@ DROP TABLE IF EXISTS logs;
 CREATE TABLE IF NOT EXISTS logs (
   log_id int(11) NOT NULL auto_increment,
   log_date timestamp NOT NULL default CURRENT_TIMESTAMP,
-  log_type enum('login_failed','user_new','user_delete') NOT NULL,
+  log_type char(32) NOT NULL,
   log_ref_id int(11) unsigned NOT NULL,
   log_user_id int(11) NOT NULL,
   log_ip char(24) character set utf8 collate utf8_spanish_ci default NULL,

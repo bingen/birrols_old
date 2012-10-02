@@ -108,6 +108,15 @@ function cabecera($title='',$script='', $no_cache=false) {
 	echo '    <script src="'.$globals['js_url']. 'jquery.min.js" type="text/javascript" charset="utf-8"></script>'."\n";
 	echo '    <script src="'.$globals['js_url']. 'funciones.js" type="text/javascript" charset="utf-8"></script>'."\n";
 	echo '    <script src="'.$globals['js_url']. 'reload.js" type="text/javascript" charset="utf-8"></script>'."\n";
+	// google login
+// 	echo '    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>'."\n";
+  // TODO: google login with javascript:
+// 	echo '    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>'."\n";
+// 	echo '    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/googleapis/0.0.4/googleapis.min.js"></script>'."\n";
+// 	echo '    <script type="text/javascript" src="//ajax.googleapis.com/jsapi"></script>'."\n";
+// 	echo "<script src='". $globals['js_url'] ."google_login.js' type='text/javascript' charset='utf-8'> </script> \n";
+///////////////////////
+
 //	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.bgiframe.min.js"></script>' ."\n";
 //	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.dimensions.js"></script>'."\n";
 //	echo '    <script type="text/javascript" src="'.$globals['js_url']. 'jquery.autocomplete.js"></script>'."\n";
@@ -139,6 +148,12 @@ function cabecera($title='',$script='', $no_cache=false) {
 	echo '	</div>'."\n"; // titulo
 
 	echo '	<div id="aux_2">'."\n";
+// 	echo "<p> session </p> \n";
+// 	print_r($_SESSION);
+// 	echo "<p> user </p> \n";
+// 	print_r($current_user);
+// 	echo "<p> cookie </p> \n";
+// 	print_r( $_COOKIE );
 	if($current_user->authenticated) {
 		echo '	<div id="login" class="login">'."\n";
 		echo '<ul id="headtools">' . "\n";
@@ -151,6 +166,7 @@ function cabecera($title='',$script='', $no_cache=false) {
 	} else {
 	  login_no();
 	}
+	// TODO: google login with javascript: echo "<div id='navbar'></div> \n";
 	menu();
 	echo '	</div>'."\n"; // aux_2
 	echo '	<div id="fake-aux_1" style="clear: both;"></div>'. "\n";
@@ -177,6 +193,8 @@ function cabecera($title='',$script='', $no_cache=false) {
 
 function login_no() {
 	global $idioma, $error_acceso, $url;
+	
+	$google_client = google_client();
 
 		echo '<div id="login-no">'."\n";
 		if( !empty($url) )
@@ -192,9 +210,27 @@ function login_no() {
 		echo '<p style="margin:0"><a href="contact.php" title="registrar">'.$idioma['hlp_contact'].'</a></p>'."\n";
 		echo '  </form>'."\n";
 		if($error_acceso){echo '<p class="error">'.$idioma['err_acceso'].'</p>'."\n";}
-		echo '</div>'."\n";
+		echo "<a class='button' href='".$google_client->createAuthUrl()."' title='". $idioma['google_login'] ."'>". $idioma['google_login'] ." </a> \n";
+		echo '</div>'."\n"; // login-no
 }
+function google_client() {
+  global $globals;
+  
+  require_once birrolpath. 'google-api-php-client/src/apiClient.php';
+  require_once birrolpath. 'google-api-php-client/src/contrib/apiOauth2Service.php';
 
+  $client = new apiClient();
+  $client->setApplicationName($globals['google_app_name']);
+  // Visit https://code.google.com/apis/console?api=plus to generate your
+  // oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
+  $client->setClientId($globals['google_client_id']);
+  $client->setClientSecret($globals['google_client_secret']);
+  $client->setRedirectUri($globals['google_redirect_uri']);
+  $client->setDeveloperKey($globals['google_api_key']);
+  $client->setScopes(array('https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'));
+  
+  return $client;
+}
 function compartir( $url, $texto='', $label=false ) {
 
 	global $globals, $idioma;
