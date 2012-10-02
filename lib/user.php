@@ -89,9 +89,14 @@ class User {
 		$country = $this->country;
 		$sex = $this->sex;
 		$birthday = date('Y-m-d', $this->birthday);
-		$validated_date = date('Y-m-d', $this->validated_date);
+		if( empty($this->validated_date) )
+		  $validated_date = date('Y-m-d', time());
+		else
+		  $validated_date = date('Y-m-d', $this->validated_date);
+		$username_register = ( empty($this->username_register) ? $username : mysqli_real_escape_string( $mysql_link, $this->username_register) );
+		$email_register = ( empty($this->email_register) ? $email : mysqli_real_escape_string( $mysql_link, $this->email_register) );
 		if($this->id===0) { 
-			$query = "INSERT INTO users (username, password, email, type, date, ip, name, last_name, language_id, url, country, sex, birthday, validated_date) VALUES ('$username', '$password', '$email', '$type', FROM_UNIXTIME($date), '$ip', '$name', '$last_name', $language_id, '$url', '$country', '$sex', '$birthday', '$validated_date')";
+			$query = "INSERT INTO users (username, password, email, type, date, ip, name, last_name, language_id, url, country, sex, birthday, validated_date, username_register, email_register) VALUES ('$username', '$password', '$email', '$type', FROM_UNIXTIME($date), '$ip', '$name', '$last_name', $language_id, '$url', '$country', '$sex', '$birthday', '$validated_date', '$username_register', '$email_register')";
 // 			echo "\n<p> sql: ". $query. " </p>\n";
 			mysqli_query($mysql_link, $query) or die ('ERROR:'.mysqli_error($mysql_link));
 			$this->id = mysqli_insert_id($mysql_link);

@@ -54,6 +54,8 @@ if (isset($_GET['code'])) {
     } else { // new user
       $current_user->username = $email;
       $current_user->email = $email;
+      $current_user->username_register = $email;
+      $current_user->email_register = $email;
       $current_user->name = filter_var($user['name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
       $current_user->last_name = filter_var($user['family_name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
       $current_user->sex = strtoupper(substr($user['gender'],0,1));
