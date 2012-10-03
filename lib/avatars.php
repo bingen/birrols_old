@@ -120,7 +120,7 @@ function avatar_get_from_db($object, $id, $size=0) {
 	global $mysql_link, $globals;
 	
 	$query = "SELECT avatar_image FROM ". $object. "_avatars WHERE avatar_id=$id";
-	echo "<p> query: $query </p> \n";
+// 	echo "<p> query: $query </p> \n";
 	$res = mysqli_query($mysql_link, $query);
 	$img = mysqli_result($res,0,0);
 	if (!strlen($img) > 0) {

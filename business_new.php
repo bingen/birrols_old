@@ -20,7 +20,6 @@
 
 include('config.php');
 include(libpath.'log.php');
-include(libpath.'avatars.php');
 
 check_login();
 cabecera('', $_SERVER['PHP_SELF']);
@@ -45,6 +44,7 @@ function bsns_new_form(){
   
   echo "<script src='".$globals['js_url']. "jquery-ui.min.js'></script>\n";
   echo "<script src='".$globals['js_url']. "jquery.select-to-autocomplete.min.js'></script>\n";
+  echo "<script src='".$globals['js_url']. "business_new.js'></script>\n";
   
   echo '<form enctype="multipart/form-data" action="'. $_SERVER['PHP_SELF'].'" method="post" id="thisform">' . "\n";
   echo '<fieldset>' . "\n";
@@ -55,23 +55,15 @@ function bsns_new_form(){
   echo "<dd><input type='text' name='name' id='name' value='' autofocus='autofocus'/></dd>\n";
 
   // type
-  echo "<dt><label for='brewery'>" . $idioma['brewery'] . ":</label></dt>\n";
-  echo "<dd><input type='checkbox' name='brewery' id='brewery' value='1'  />\n";
-  echo "</dd>\n";
-  echo "<dt><label for='pub'>" . $idioma['pub'] . ":</label></dt>\n";
-  echo "<dd><input type='checkbox' name='pub' id='pub' value='1' />\n";
-  echo "</dd>\n";
-  echo "<dt><label for='store'>" . $idioma['store'] . ":</label></dt>\n";
-  echo "<dd><input type='checkbox' name='store' id='store' value='1' />\n";
-  echo "</dd>\n";
+  input_checkbox('brewery',$idioma['brewery'],1);
+  input_checkbox('pub',$idioma['pub'],1);
+  input_checkbox('store',$idioma['store'],1);
+  input_checkbox( 'homebrew_store', $idioma['bsns_homebrew_store'], 1 );
+  input_checkbox( 'food', $idioma['bsns_food'], 1 );
+  input_checkbox( 'wifi', $idioma['bsns_wifi'], 1 );
 
-  print("
-    <script type='text/javascript'>
-    jQuery(function(){
-      jQuery('select.turn-to-ac').selectToAutocomplete();
-    });
-    </script>
-  ");
+  input_number( 'taps', $idioma['bsns_taps'], 0, 999 );
+
   echo "<dt><label for='country_id'>" . $idioma['bsns_country'] . ":</label></dt>\n";
   echo "<dd><select name='country_id' id='country_id' class='turn-to-ac' >\n";
   echo "<option value='' selected='selected'>". $idioma['bsns_sel_country'] ."</option> \n";
@@ -82,19 +74,12 @@ function bsns_new_form(){
     echo '<option value="'. $country->auto_id .'" data-alternative-spellings="'. $country->alternative_spellings .'" data-relevancy-booster="'. $country->relevancy . '">'. $country->name .'</option>' ."\n";
   echo "</select>\n";
   echo "</dd>\n";
-  echo "<dt><label for='state'>" . $idioma['bsns_state'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='state' id='state' />\n";
-  echo "</dd>\n";
-  echo "<dt><label for='city'>" . $idioma['bsns_city'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='city' id='city' />\n";
-  echo "</dd>\n";
+  input_textfield( 'state', $idioma['bsns_state'] );
+  input_textfield( 'city', $idioma['bsns_city'] );
   
-  echo "<dt><label for='address_1'>" . $idioma['bsns_address'] . " 1:</label></dt>\n";
-  echo "<dd><input type='text' name='address_1' id='address_1' value='' /></dd>\n";
-  echo "<dt><label for='address_2'>" . $idioma['bsns_address'] . " 2:</label></dt>\n";
-  echo "<dd><input type='text' name='address_2' id='address_2' value='' /></dd>\n";
-  echo "<dt><label for='zip_code'>" . $idioma['bsns_zip'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='zip_code' id='zip_code' value='' /></dd>\n";
+  input_textfield( 'address_1', $idioma['bsns_address'] . '1');
+  input_textfield( 'address_2', $idioma['bsns_address'] . '2');
+  input_textfield( 'zip_code', $idioma['bsns_zip'] );
   
   echo "<dt><label for='url'>" . $idioma['bsns_url'] . ":</label></dt>\n";
   echo "<dd><input type='url' name='url' id='url' value='' /></dd>\n";
@@ -103,10 +88,8 @@ function bsns_new_form(){
   echo "<dt><label for='phone'>" . $idioma['bsns_phone'] . ":</label></dt>\n";
   echo "<dd><input type='phone' name='phone' id='phone' value='' /></dd>\n";
   
-  echo "<dt><label for='lat'>" . $idioma['bsns_lat'] . ":</label></dt>\n";
-  echo "<dd><input type='number' name='lat' id='lat' value='' min=-90, max=90/></dd>\n";
-  echo "<dt><label for='lon'>" . $idioma['bsns_lon'] . ":</label></dt>\n";
-  echo "<dd><input type='number' name='lon' id='lon' value='' min=-180, max=180/></dd>\n";
+  input_number( 'lat', $idioma['bsns_lat'], -90, 90, 0.01 );
+  input_number( 'lon', $idioma['bsns_lat'], -180, 180, 0.01 );
   
   echo "<dt><label for='description'>" . $idioma['beer_desc'] . ":</label></dt>\n";
   echo "<dd><textarea name='description' id='description'> </textarea></dd>\n";
@@ -114,14 +97,7 @@ function bsns_new_form(){
 //   echo "<dt><label for=''>" . $idioma[''] . ":</label></dt>\n";
 //   echo "<dd></dd>\n";
   // logo
-  if (is_avatars_enabled()) {
-    echo '<input type="hidden" name="MAX_FILE_SIZE" value="'.$globals['avatars_max_size'].'" />' . "\n";
-    echo '<dt><label>'.$idioma['bsns_avatar_1'].':</label></dt>' . "\n";
-    echo '<dd><input type="file" class="button" autocomplete="off" name="image" />' . "\n";
-    echo '</dd>' . "\n";
-    echo '<dt></dt>' . "\n";
-    echo '<dd><span class="note">' . $idioma['bsns_avatar_2'] . '</span></dd>' . "\n";
-  }
+  input_avatar('business');
   
   echo '<dt></dt><dd><input type="submit" class="button" name="submit" value="'.$idioma['id_enviar'].'" /></dd>' . "\n";
   
@@ -133,7 +109,7 @@ function bsns_new_form(){
 } // bsns_new_form
 
 function bsns_new_insert(){
-  global $mysql_link, $idioma, $current_user;
+  global $mysql_link, $idioma, $current_user, $messages;
   
   $messages = '';
   
@@ -143,6 +119,10 @@ function bsns_new_insert(){
   $brewery = ( empty($_POST['brewery']) ? 0 : $_POST['brewery'] );
   $pub = ( empty($_POST['pub']) ? 0 : $_POST['pub'] );
   $store = ( empty($_POST['store']) ? 0 : $_POST['store'] );
+  $homebrew_store = ( empty($_POST['homebrew_store']) ? 0 : $_POST['homebrew_store'] );
+  $food = ( empty($_POST['food']) ? 0 : $_POST['food'] );
+  $wifi = ( empty($_POST['wifi']) ? 0 : $_POST['wifi'] );
+  $taps = ( empty($_POST['taps']) ? 0 : $_POST['taps'] );
   $country_id = ( empty($_POST['country_id']) ? 0 : $_POST['country_id'] );
   $state = mysqli_real_escape_string( $mysql_link, $_POST['state'] );
   $city = mysqli_real_escape_string( $mysql_link, $_POST['city'] );
@@ -164,7 +144,7 @@ function bsns_new_insert(){
   if ( !empty($url) && !preg_match('/^http/', $url) ) $url = 'http://'.$url;
 
 
-  $query = "INSERT INTO business SET name='$name', brewery=$brewery, pub=$pub, store=$store, country_id=$country_id, state='$state', city='$city', address_1='$address_1', address_2='$address_2', zip_code='$zip_code', url='$url', email='$email', phone='$phone', lat=$lat, lon =$lon, description='$description', register_id=$current_user->id";
+  $query = "INSERT INTO business SET name='$name', brewery=$brewery, pub=$pub, store=$store, homebrew_store=$homebrew_store, food=$food, wifi=$wifi, taps=$taps, country_id=$country_id, state='$state', city='$city', address_1='$address_1', address_2='$address_2', zip_code='$zip_code', url='$url', email='$email', phone='$phone', lat=$lat, lon =$lon, description='$description', register_id=$current_user->id";
   echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
     $business_id = mysqli_insert_id($mysql_link);
@@ -175,23 +155,8 @@ function bsns_new_insert(){
     return FALSE;
   }
 
-  // Manage avatars upload
-  if (!empty($_FILES['image']['tmp_name']) ) {
-    if(avatars_check_upload_size('image')) {
-      $avatar_mtime = avatars_manage_upload('business', $business_id, 'image');
-      if (!$avatar_mtime) {
-	$messages .= '<p class="form-error">'.$idioma['err_avatar_1'].'</p>';
-	$errors = 1;
-	$avatar = 0;
-      }/* else {
-	$avatar = $avatar_mtime;
-      }*/
-    } else { // check size error
-      $messages .= '<p class="form-error">'.$idioma['err_avatar_2'].'</p>';
-      $errors = 1;
-      $avatar = 0;
-    }
-  }
+  manage_avatars_upload( 'business', $business_id );
+  
   echo $messages ."\n";
 
 } // bsns_new_insert

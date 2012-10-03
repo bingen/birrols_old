@@ -45,6 +45,7 @@ echo '</legend>'."\n";
   echo '<dl id="business_list">' . "\n";
   
   echo '<img class="thumbnail" src="'.get_avatar_url('business', $row->auto_id, $row->avatar, 80).'" width="80" height="80" alt="'.$row->name.'" title="logo" />'."\n";
+  echo '<img src="'. get_stars($row->score). '" alt="'. $row->score . '"/>'."\n";
 
 //   show_textfield( 'name', $idioma['beer_name'], $row->name );
 
@@ -55,6 +56,8 @@ echo '</legend>'."\n";
   show_checkbox( 'homebrew_store', $idioma['bsns_homebrew_store'], $row->homebrew_store );
   show_checkbox( 'food', $idioma['bsns_food'], $row->food );
   show_checkbox( 'wifi', $idioma['bsns_wifi'], $row->wifi );
+
+  show_textfield( 'taps', $idioma['bsns_taps'], $row->taps );
 
   show_textfield( 'country', $idioma['bsns_country'], $row->country );
   show_textfield( 'state', $idioma['bsns_state'], $row->state );

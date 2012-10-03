@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS business (
   name char(60) collate utf8_spanish_ci NOT NULL,
   avatar int(10) unsigned NOT NULL default '0',
   description text collate utf8_spanish_ci NOT NULL,
+  taps int(3) default 0,
   score decimal(3,2) default 0,
   address_1 char(128) collate utf8_spanish_ci default NULL,
   address_2 char(128) collate utf8_spanish_ci default NULL,
@@ -60,21 +61,25 @@ CREATE TABLE IF NOT EXISTS `business_avatars` (
   PRIMARY KEY  (avatar_id)
 ) DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table taps
+--
+
+DROP TABLE IF EXISTS taps;
+CREATE TABLE IF NOT EXISTS taps (
+  auto_id int(11) NOT NULL,
+  business_id int(11) NOT NULL,
+  tap_id int(3) NOT NULL,
+  beer_id int(11) NOT NULL,
+  modified timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (auto_id)
+) DEFAULT CHARSET=utf8;
+
 DROP VIEW IF EXISTS business_view;
 CREATE VIEW business_view AS (SELECT b.*, c.name country
 FROM business b, countries c
 WHERE b.country_id = c.auto_id
 );
-
-CREATE TABLE IF NOT EXISTS taps (
-  auto_id int(11) NOT NULL auto_increment,
-  pub_id int(11) NOT NULL,
-  tap_id int(11) NOT NULL,
-  beer_id int(11) NOT NULL,
-  modified timestamp NOT NULL default CURRENT_TIMESTAMP,
-  PRIMARY KEY  (auto_id),
-  UNIQUE KEY tap (pub_id, tap_id)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 # --------------------------------------------------------
 

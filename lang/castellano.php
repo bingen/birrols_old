@@ -233,6 +233,7 @@ $idioma['bsns_avatar_2'] = 'El logo debe ser una imagen cuadrada en jpeg, gif o 
 $idioma['bsns_homebrew_store'] = 'Productos para homebrewers';
 $idioma['bsns_food'] = 'Comida';
 $idioma['bsns_wifi'] = 'WiFi';
+$idioma['bsns_taps'] = 'Tiradores';
 //$idioma['bsns_'] = '';
 
 $idioma['about_what_1'] = 'Bírrols, el portal de birra de buen';

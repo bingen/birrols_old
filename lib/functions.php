@@ -38,6 +38,7 @@ function mysqli_result($res, $row, $field=0) {
     $datarow = $res->fetch_array(); 
     return $datarow[$field]; 
 } 
+
 function check_login(){
   global $current_user;
   
@@ -189,8 +190,6 @@ function cabecera($title='',$script='', $no_cache=false) {
 // 	echo '  </div>'."\n"; // cabecera
 	echo '<div id="container_cuerpo">'."\n";
 }
-
-
 function login_no() {
 	global $idioma, $error_acceso, $url;
 	
@@ -259,7 +258,6 @@ function compartir( $url, $texto='', $label=false ) {
 	echo '	</div>' ."\n"; // social
 
 }
-
 function menu() {
 	global $globals, $current_user, $idioma;
 //	print_r($current_user);
@@ -282,7 +280,6 @@ function menu() {
     </div>
   ');
 }
-
 function laterales() {
 	global $idioma, $current_user;
 
@@ -310,7 +307,6 @@ function laterales() {
 	echo "<div id='banner'>Espacio reservado para publicidad.</div> \n";
 	echo '</div>' . "\n";
 }
-
 function pie($no_cache=false) {
   global $globals;
   
@@ -334,6 +330,7 @@ echo '</body>'."\n";
 // 	}
 echo '</html>'."\n";
 }
+
 function show_textfield( $field, $label, $value, $link='' ){
   echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
   echo "<dd><span name='$field' id='$field'> ".( empty($link) ? $value : "<a href='$link' alt='$value'>$value</a>" ) ." </span></dd>\n";
@@ -343,6 +340,54 @@ function show_checkbox( $field, $label, $value ){
   echo "<dd><input type='checkbox' name='$field' id='$field' ". ( $value ? "checked='checked'" : " " ) ." />\n";
   echo "</dd>\n";
 }
+function input_textfield( $field, $label ){
+  echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
+  echo "<dd><input type='text' name='$field' id='$field' />\n";
+  echo "</dd>\n";
+}
+function input_number( $field, $label, $min='', $max='', $step='' ){
+  echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
+  echo "<dd><input type='number' name='$field' id='$field' ". ( empty($min) ? "" : "min='$min' " ) . ( empty($max) ? "" : "max='$max' " ) . ( empty($step) ? "" : "step='$step' " ) ." /></dd>\n";
+}
+function input_checkbox( $field, $label, $value=1 ){
+  echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
+  echo "<dd><input type='checkbox' name='$field' id='$field' value='$value'  />\n";
+  echo "</dd>\n";
+}
+function input_avatar($object) {
+  global $globals, $idioma;
+  
+  include_once(libpath.'avatars.php');
+  
+  if (is_avatars_enabled($object)) {
+    echo '<input type="hidden" name="MAX_FILE_SIZE" value="'.$globals['avatars_max_size'].'" />' . "\n";
+    echo '<dt><label>'.$idioma['bsns_avatar_1'].':</label></dt>' . "\n";
+    echo '<dd><input type="file" class="button" autocomplete="off" name="image" />' . "\n";
+    echo '</dd>' . "\n";
+    echo '<dt></dt>' . "\n";
+    echo '<dd><span class="note">' . $idioma['bsns_avatar_2'] . '</span></dd>' . "\n";
+  }
+}
+function manage_avatars_upload( $object, $id ){
+  global $messages;
+  
+  include_once(libpath.'avatars.php');
+  
+  // Manage avatars upload
+  if (!empty($_FILES['image']['tmp_name']) ) {
+    if(avatars_check_upload_size('image')) {
+      $avatar_mtime = avatars_manage_upload($object, $id, 'image');
+      if (!$avatar_mtime) {
+	$messages .= '<p class="form-error">'.$idioma['err_avatar_1'].'</p>';
+	return false;
+      }
+    } else { // check size error
+      $messages .= '<p class="form-error">'.$idioma['err_avatar_2'].'</p>';
+      return false;
+    }
+  }
+  return TRUE;
+} // manage avatars upload
 
 function clean_input_string($string) {
 	return preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', stripslashes($string));

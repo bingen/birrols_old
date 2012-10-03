@@ -45,6 +45,7 @@ echo '</legend>'."\n";
   echo '<dl id="beer_list">' . "\n";
   
   echo '<img class="thumbnail" src="'.get_avatar_url('beers', $row->auto_id, $row->avatar, 80).'" width="80" height="80" alt="'.$row->name.'" title="logo" />'."\n";
+  echo '<img src="'. get_stars($row->score). '" alt="'. $row->score . '"/>'."\n";
 
 //   show_textfield( 'name', $idioma['beer_name'], $row->name );
 

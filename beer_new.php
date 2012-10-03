@@ -105,6 +105,9 @@ function beer_new_form(){
 //   echo "<dt><label for=''>" . $idioma[''] . ":</label></dt>\n";
 //   echo "<dd></dd>\n";
   
+  // foto
+  input_avatar('beers');
+
   echo '<dt></dt><dd><input type="submit" class="button" id="submit" name="submit" value="'.$idioma['id_enviar'].'" disabled="disabled" /></dd>' . "\n";
   
   echo '</dl>' . "\n";
@@ -166,5 +169,10 @@ function beer_new_insert(){
     echo "<p> error: ". mysqli_error( $mysql_link ) ."</p>";
     register_error($idioma['err_insert_beer']);
   }
-}
+
+  manage_avatars_upload( 'business', $business_id );
+  
+  echo $messages ."\n";
+
+} // beer_new_insert
 ?>
