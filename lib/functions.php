@@ -594,7 +594,9 @@ function get_avatar_url($object, $id, $avatar, $size) {
 
 	// If it does not get avatar status, check the database
 	if ($id > 0 && $avatar < 0) {
-		mysqli_query($mysql_link, "SELECT avatar FROM $object where auto_id = $id") or die ('ERROR:'.mysqli_error($mysql_link));
+		$query = "SELECT avatar FROM $object where auto_id = $id";
+// 		echo "<p> query: $query </p> \n";
+		mysqli_query($mysql_link, $query) or die ('ERROR:'.mysqli_error($mysql_link));
 		$avatar = (int) mysqli_result($res,0,0);
 	}
 

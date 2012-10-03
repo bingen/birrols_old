@@ -2,4 +2,5 @@
 *~
 # Ignore everyting in the cache directory
 /cache
-
+# Ignore config, since there are google keys
+config.php

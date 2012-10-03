@@ -38,8 +38,8 @@ if (isset($_GET['code'])) {
   // See http://www.php.net/manual/en/filter.filters.sanitize.php
     $email = filter_var($user['email'], FILTER_SANITIZE_EMAIL);
     $img = filter_var($user['picture'], FILTER_VALIDATE_URL);
-//     echo "\n <p> user </p> \n";
-//     print_r( $user);
+    echo "\n <p> user </p> \n";
+    print_r( $user);
 //     echo "\n <p> email: $email </p> \n";
 //     echo "\n <p> img: $img </p> \n";
 //     $personMarkup = "<div><img src='$img?sz=50'></div>";
@@ -50,6 +50,7 @@ if (isset($_GET['code'])) {
     $res = mysqli_query( $mysql_link, $query );
     $row = mysqli_fetch_object( $res );
     if( !empty($row->auto_id) ) { // user exists
+      echo "<p> userl: ". $row->auto_id . " </p>\n";
       $current_user->User( $row->auto_id );
     } else { // new user
       $current_user->username = $email;
@@ -64,10 +65,18 @@ if (isset($_GET['code'])) {
       $row = mysqli_fetch_object( $res );
       $current_user->language_id = $row->auto_id;
       $current_user->validated_date = time();
+      $current_user->google_id = $user['id'];
 //       $current_user-> = filter_var($user[''], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
       $current_user->store();
       $current_user->read();
-    }
+      // avatar
+      if( !empty($user['picture']) ) {
+	include_once(libpath. 'avatars.php');
+	$avatar_mtime = avatars_manage_upload( 'users', $current_user->id, '', $user['picture'] );
+	echo "<p> mtime: $avatar_mtime </p>\n";
+      }
+      echo "<p> url: ". $user['picture']. " </p>\n";
+    } // if user exists
     $current_user->authenticated = TRUE;
     $current_user->SetIDCookie(1, FALSE);
   }
@@ -79,6 +88,8 @@ if (isset($_GET['code'])) {
 // 	print_r($current_user);
 // 	echo "<p> cookie </p> \n";
 // 	print_r( $_COOKIE );
+
+
   header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
 
 }

@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS users (
   birthday date NOT NULL default '1900-00-00',
   username_register char(32) collate utf8_spanish_ci default NULL,
   email_register char(64) collate utf8_spanish_ci default NULL,
+  google_id char(32) default NULL,
   PRIMARY KEY auto_id (auto_id),
   UNIQUE KEY username (username)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;

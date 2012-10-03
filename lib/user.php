@@ -27,6 +27,7 @@ class User {
 	var $country = '';
 	var $birthday = 0;
 	var $validated_date = 0;
+	var $google_id = '';
 	
 	var $authenticated = FALSE;
 	var $ocb_user = False;
@@ -62,6 +63,7 @@ class User {
 		$this->country = 'disabled';
 		$this->sex = '';
 		$this->birthday = strtotime('1900-01-01');
+		$this->google_id = '';
 		return $this->store();
 	}
 
@@ -95,8 +97,9 @@ class User {
 		  $validated_date = date('Y-m-d', $this->validated_date);
 		$username_register = ( empty($this->username_register) ? $username : mysqli_real_escape_string( $mysql_link, $this->username_register) );
 		$email_register = ( empty($this->email_register) ? $email : mysqli_real_escape_string( $mysql_link, $this->email_register) );
+		$google_id = $this->google_id;
 		if($this->id===0) { 
-			$query = "INSERT INTO users (username, password, email, type, date, ip, name, last_name, language_id, url, country, sex, birthday, validated_date, username_register, email_register) VALUES ('$username', '$password', '$email', '$type', FROM_UNIXTIME($date), '$ip', '$name', '$last_name', $language_id, '$url', '$country', '$sex', '$birthday', '$validated_date', '$username_register', '$email_register')";
+			$query = "INSERT INTO users (username, password, email, type, date, ip, name, last_name, language_id, url, country, sex, birthday, validated_date, username_register, email_register, google_id) VALUES ('$username', '$password', '$email', '$type', FROM_UNIXTIME($date), '$ip', '$name', '$last_name', $language_id, '$url', '$country', '$sex', '$birthday', '$validated_date', '$username_register', '$email_register', '$google_id')";
 // 			echo "\n<p> sql: ". $query. " </p>\n";
 			mysqli_query($mysql_link, $query) or die ('ERROR:'.mysqli_error($mysql_link));
 			$this->id = mysqli_insert_id($mysql_link);
@@ -104,7 +107,7 @@ class User {
 			log_insert( 'user_new', $this->id, $this->id );
 		} else {
 			if ($full_save) $modified = ', modified = now() ' ;
-			$query = "UPDATE users set username='$username', password='$password', email='$email', type='$type', avatar=$avatar, date=FROM_UNIXTIME($date), ip='$ip', name='$name', last_name='$last_name', language_id=$language_id, url='$url', country='$country',  sex='$sex', birthday='$birthday'   $modified WHERE auto_id=$this->id";
+			$query = "UPDATE users set username='$username', password='$password', email='$email', type='$type', avatar=$avatar, date=FROM_UNIXTIME($date), ip='$ip', name='$name', last_name='$last_name', language_id=$language_id, url='$url', country='$country',  sex='$sex', birthday='$birthday', google_id='$google_id'   $modified WHERE auto_id=$this->id";
 // 			echo "\n<p> sql: ". $query. " </p>\n";
 			mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
 		} // if id === 0
@@ -146,6 +149,7 @@ class User {
 			$this->birthday = strtotime($user->birthday);
 			$this->username_register = $user->username_register;
 			$this->email_register = $user->email_register;
+			$this->google_id = $user->google_id;
 			$this->read = true;
 
 			return true;

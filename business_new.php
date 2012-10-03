@@ -186,7 +186,7 @@ function bsns_new_insert(){
       }/* else {
 	$avatar = $avatar_mtime;
       }*/
-    } else {
+    } else { // check size error
       $messages .= '<p class="form-error">'.$idioma['err_avatar_2'].'</p>';
       $errors = 1;
       $avatar = 0;

@@ -18,7 +18,7 @@ function is_avatars_enabled($object) {
 	return !empty($globals['cache_dir']) && is_writable(get_avatars_dir($object));
 }
 
-function avatars_manage_upload($object, $id, $name) {
+function avatars_manage_upload($object, $id, $name, $url='') {
 //	global $globals;
 
 	$time = time();
@@ -31,7 +31,18 @@ function avatars_manage_upload($object, $id, $name) {
 	$file_base = $subdir . "$id-$time";
 
 	avatars_remove_user_files($object, $id);
-	move_uploaded_file($_FILES[$name]['tmp_name'], $file_base . '-orig.img');
+	if( !empty($name) ) { // file uploaded
+	  move_uploaded_file($_FILES[$name]['tmp_name'], $file_base . '-orig.img');
+	} else { // file from url
+	  $file = fopen($url,"rb");
+	  $newfile = fopen($file_base . '-orig.img', "wb");
+	  if($newfile){
+	    while(!feof($file)) {
+	    // Write the url file to the directory.
+	      fwrite($newfile,fread($file,1024 * 8),1024 * 8); // write the file to the new directory at a rate of 8kb until we reach the end.
+	    } // while
+	  }// if newfile
+	} // if !empty($name)
 	$size = @getimagesize("$file_base-orig.img");
 	avatar_resize("$file_base-orig.img", "$file_base-80.jpg", 80);
 	$size = @getimagesize("$file_base-80.jpg");
@@ -91,7 +102,9 @@ function avatars_db_remove($object, $id) {
 function avatar_get_from_file($object, $id, $size) {
 	global $mysql_link;
 
-	$res = mysqli_query($mysql_link, "SELECT avatar FROM $object WHERE auto_id=$id");
+	$query = "SELECT avatar FROM $object WHERE auto_id=$id";
+// 	echo "<p> query: $query </p> \n";
+	$res = mysqli_query($mysql_link, $query);
 	$time = mysqli_result($res,0,0);
 	if(! $time > 0) return false;
 	$file = get_avatars_dir($object) . get_cache_dir_chain($id) . "$id-$time-$size.jpg";
@@ -104,13 +117,18 @@ function avatar_get_from_file($object, $id, $size) {
 }
 
 function avatar_get_from_db($object, $id, $size=0) {
-	global $globals;
-	$res = mysqli_query($mysql_link, "SELECT avatar_image FROM ". $object. "avatars WHERE avatar_id=$id");
+	global $mysql_link, $globals;
+	
+	$query = "SELECT avatar_image FROM ". $object. "_avatars WHERE avatar_id=$id";
+	echo "<p> query: $query </p> \n";
+	$res = mysqli_query($mysql_link, $query);
 	$img = mysqli_result($res,0,0);
 	if (!strlen($img) > 0) {
 		return false;
 	}
-	$res = mysqli_query($mysql_link, "SELECT avatar FROM $object WHERE auto_id=$id");
+	$query = "SELECT avatar FROM $object WHERE auto_id=$id";
+// 	echo "<p> query: $query </p> \n";
+	$res = mysqli_query($mysql_link, $query);
 	$time = mysqli_result($res,0,0);
 
 	$chain = get_cache_dir_chain($id);
