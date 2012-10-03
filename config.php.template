@@ -1,0 +1,82 @@
+<?
+/*
+    Open craft beer
+    Web app for craft beer lovers
+    Copyright (C) 2005 Ricardo Galli <gallir at uib dot es>
+    Copyright (C) 2012 ßingen Eguzkitza <bingentxu@gmail.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+define("birrolpath", dirname(__FILE__).'/');
+define("libpath", dirname(__FILE__).'/lib/');
+define("langpath", dirname(__FILE__).'/lang/');
+define("imgpath", dirname(__FILE__).'/img/');
+
+$site_key = 11228833;
+
+$db['server'] = 'localhost';
+$db['name'] = 'birrols';
+$db['user'] = 'birrols';
+$db['password'] = 'flint';
+
+$globals['app_name'] = 'Birrols';
+$globals['base_url'] = implode('/',explode('/', $_SERVER['SCRIPT_NAME'], -1)) . '/';
+$globals['base_static'] = $globals['base_url']; // TODO
+$globals['js_url'] = $globals['base_url'] . "js/";
+$globals['css_url'] = $globals['base_url'] . "css/";
+$globals['img_url'] = $globals['base_url'] . "img/";
+$globals['lib_url'] = $globals['base_url'] . "lib/";
+$globals['logo'] = $globals['img_url']. "logo_ocb_01_60.png";
+$globals['logo_grande'] = $globals['img_url']. "logo_ocb_01.png";
+
+// Check it's writeable by the web server
+$globals['cache_dir'] = 'cache/';
+$globals['avatars_dir'] = array( 'users' => 'avatar/', 'beers' => 'photo/', 'business' => 'logo/');
+$globals['avatars_max_size'] = 200000;
+$globals['avatars_allowed_sizes'] = Array (80, 40, 25, 20);
+
+$globals['sorting'] = array('ASC', 'DESC');
+
+$globals['email'] = 'info@birrols.com';
+
+// Use proxy detecttion
+$globals['check_behind_proxy'] = false;
+if ($globals['check_behind_proxy']) {
+	require_once(libpath.'check_behind_proxy.php');
+	$globals['user_ip'] = check_ip_behind_proxy();
+} else {
+	if( array_key_exists( "REMOTE_ADDR", $_SERVER ) )
+		$globals['user_ip'] = $_SERVER["REMOTE_ADDR"];
+	else // para evitar warning en actualizar_estados en local
+		$globals['user_ip'] = "local?";
+}
+
+$globals['invitaciones_alta'] = FALSE;
+
+$globals['google_app_name'] = 'Birrols';
+$globals['google_client_id'] = "xxxx.apps.googleusercontent.com";
+$globals['google_client_secret'] = "";
+$globals['google_redirect_uri'] = "http://localhost/opencraftbeer/oauth2callback.php";
+$globals['google_api_key'] = "";
+
+setlocale(LC_ALL, 'es_ES.UTF-8');
+
+include(libpath.'functions.php');
+$mysql_link = conecta();
+require_once(libpath.'user.php');
+$language = 'castellano';	// OJO: posibilidad de seleccionar en la página o por usuario
+require(langpath. $language.'.php');
+
+?>
