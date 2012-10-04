@@ -1,6 +1,6 @@
 <?php
 /*
-    Open craft beer
+    Birrols
     Web app for craft beer lovers
     Copyright (C) 2012 ßingen Eguzkitza <bingentxu@gmail.com>
 
@@ -132,7 +132,12 @@ $idioma['mail_rec_msg'] = 'Correo enviado, mira tu buzón, allí están las inst
 $idioma['mail_inv_subject'] = 'Invitado a nuevo portal de deportes';
 $idioma['mail_inv_body_1'] = ' te ha invitado a darte de alta en '. $globals['app_name']. ', el portal para amantes de la cerveza artesana';
 $idioma['mail_inv_body_2'] = 'Para darte de alta pincha en el siguiente enlace en menos de 1 semana:';
-//$idioma['mail_inv_body_3'] = '';
+$idioma['mail_stats_subject'] = "Estadísticas de ". $globals['app_name'];
+$idioma['mail_stats_users'] = "Número de usuarios: ";
+$idioma['mail_stats_business'] = "Número de establecimentos: ";
+$idioma['mail_stats_beers'] = "Número de bírrols: ";
+
+//$idioma['mail_'] = '';
 
 $idioma['pwd_changed'] = 'La clave se ha cambiado';
 $idioma['pro_data_updated'] = 'Datos actualizados';

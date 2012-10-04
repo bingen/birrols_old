@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS taps (
   business_id int(11) NOT NULL,
   tap_id int(3) NOT NULL,
   beer_id int(11) NOT NULL,
+  actual boolean default FALSE,
   modified timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (auto_id)
 ) DEFAULT CHARSET=utf8;
