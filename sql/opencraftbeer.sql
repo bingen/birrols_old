@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS taps (
   tap_id int(3) NOT NULL,
   beer_id int(11) NOT NULL,
   actual boolean default FALSE,
+  register_id int(11), 
   modified timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (auto_id)
 ) DEFAULT CHARSET=utf8;
@@ -132,7 +133,7 @@ FROM beers b, business w, beer_categories c, beer_types t, countries p
 WHERE w.brewery AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b.type_id = t.auto_id AND w.country_id = p.auto_id);
 
 --
--- Table structure for table business_avatars
+-- Table structure for table beers_avatars
 --
 
 DROP TABLE IF EXISTS beers_avatars;

@@ -46,13 +46,15 @@ function beer_new_form(){
   echo "<script type='text/javascript'> var err_brewery_miss = '". $idioma['err_brewery_miss'] ."'; </script>";
   echo "<script src='".$globals['js_url']. "beer_new.js'></script>\n";
   
-  echo '<form action="'. $_SERVER['PHP_SELF'].'" method="post" id="thisform">' . "\n";
+  // http://stackoverflow.com/questions/3586919/why-would-files-be-empty-when-uploading-files-to-php
+  // 7. Make sure your FORM tag has the enctype="multipart/form-data" attribute
+  echo '<form enctype="multipart/form-data" action="'. $_SERVER['PHP_SELF'].'" method="post" id="thisform">' . "\n";
   echo '<fieldset>' . "\n";
   echo '<legend><span class="sign">' . $idioma['beer_new'] . '</span></legend>' . "\n";
   echo '<dl>' . "\n";
   
   echo "<dt><label for='name'>" . $idioma['beer_name'] . ":</label></dt>\n";
-  echo "<dd><input type='text' name='name' id='name' value='' autofocus='autofocus' onChange='enable_disable_submit();'/></dd>\n";
+  echo "<dd><input type='text' name='name' id='name' value='' autofocus='autofocus' /></dd>\n";
   
   // brewery ///////////
   echo "<dt><label for='brewery'>" . $idioma['brewery'] . ":</label></dt>\n";
@@ -108,7 +110,7 @@ function beer_new_form(){
   // foto
   input_avatar('beers');
 
-  echo '<dt></dt><dd><input type="submit" class="button" id="submit" name="submit" value="'.$idioma['id_enviar'].'" disabled="disabled" /></dd>' . "\n";
+  echo '<dt></dt><dd><input type="submit" class="button" id="submit" name="submit" value="'.$idioma['id_enviar'].'" /></dd>' . "\n";
   
   echo '</dl>' . "\n";
   echo '<input type="hidden" name="process" id="process" value="1"/>' . "\n";
@@ -118,7 +120,7 @@ function beer_new_form(){
 }
 
 function beer_new_insert(){
-  global $mysql_link, $idioma, $current_user;
+  global $mysql_link, $idioma, $current_user, $messages;
   
   $name = mysqli_real_escape_string( $mysql_link, $_POST['name'] );
   $brewery = mysqli_real_escape_string( $mysql_link, $_POST['brewery'] );
@@ -164,13 +166,16 @@ function beer_new_insert(){
   $query = "INSERT INTO beers (name, brewery_id, category_id, type_id, abv, ibu, og, srm, ebc, malts, hops, description, register_id) VALUES ('$name', $brewery_id, $category_id, $type_id, $abv, $ibu, $og, $srm, $ebc, '$malts', '$hops', '$description', $current_user->id)";
   echo "<p> query: $query </p>\n";
   if( $res = mysqli_query( $mysql_link, $query ) ) {
-    log_insert('beer_new', mysqli_insert_id($mysql_link), $current_user->id);
+    $beer_id = mysqli_insert_id($mysql_link);
+    log_insert('beer_new', $beer_id, $current_user->id);
+    print_r($_FILES);
+    print_r($_REQUEST);
+    manage_avatars_upload( 'beers', $beer_id );
   } else {
     echo "<p> error: ". mysqli_error( $mysql_link ) ."</p>";
     register_error($idioma['err_insert_beer']);
   }
 
-  manage_avatars_upload( 'business', $business_id );
   
   echo $messages ."\n";
 

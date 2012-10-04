@@ -82,7 +82,7 @@ function bsns_new_form(){
   input_textfield( 'zip_code', $idioma['bsns_zip'] );
   
   echo "<dt><label for='url'>" . $idioma['bsns_url'] . ":</label></dt>\n";
-  echo "<dd><input type='url' name='url' id='url' value='' /></dd>\n";
+  echo "<dd><input type='url' name='url' id='url' value='http://' /></dd>\n";
   echo "<dt><label for='email'>" . $idioma['id_email'] . ":</label></dt>\n";
   echo "<dd><input type='email' name='email' id='email' value='' /></dd>\n";
   echo "<dt><label for='phone'>" . $idioma['bsns_phone'] . ":</label></dt>\n";
@@ -149,14 +149,13 @@ function bsns_new_insert(){
   if( $res = mysqli_query( $mysql_link, $query ) ) {
     $business_id = mysqli_insert_id($mysql_link);
     log_insert('business_new', $business_id, $current_user->id);
+    manage_avatars_upload( 'business', $business_id );
   } else {
     echo "<p> error: ". mysqli_error( $mysql_link ) ."</p>";
     register_error($idioma['err_insert_beer']);
     return FALSE;
   }
 
-  manage_avatars_upload( 'business', $business_id );
-  
   echo $messages ."\n";
 
 } // bsns_new_insert

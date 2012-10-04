@@ -373,6 +373,7 @@ function manage_avatars_upload( $object, $id ){
   
   include_once(libpath.'avatars.php');
   
+  print_r($_FILES);
   // Manage avatars upload
   if (!empty($_FILES['image']['tmp_name']) ) {
     if(avatars_check_upload_size('image')) {

@@ -1,13 +1,14 @@
-function enable_disable_submit() {
-  if( $('#brewery_id').val() != '' && $('#name').val() != '' ) {
-    $('#submit').removeAttr("disabled");
-  } else {
-    $('#submit').attr("disabled", "disabled");
-  }
-} // enable_disable_submit
-
 $(document).ready(function()
 {
+  function enable_disable_submit() {
+    if( $('#brewery_id').val() != '' && $('#name').val() != '' ) {
+      $('#submit').removeAttr("disabled");
+    } else {
+      $('#submit').attr("disabled", "disabled");
+    }
+  } // enable_disable_submit
+  enable_disable_submit();
+  $('#name').change(enable_disable_submit);
   // autocomplete brewery
   jQuery(function(){
     jQuery('#brewery').autocomplete({

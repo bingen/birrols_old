@@ -91,7 +91,7 @@ include(libpath.'ts.php');
 
 	echo '<div class="recoverpass"><h4><a href="rec_pwd.php">'.$idioma['forgot_pwd'].'</a></h4></div>';
 
-	echo '<form action="register.php" method="post" id="thisform" onSubmit="return check_checkfield(\'acceptlegal\', \''.$idioma['err_legal'].'\')">' . "\n";
+	echo '<form enctype="multipart/form-data" action="register.php" method="post" id="thisform" onSubmit="return check_checkfield(\'acceptlegal\', \''.$idioma['err_legal'].'\')">' . "\n";
 	echo '<fieldset>' . "\n";
 	echo '<legend><span class="sign">' . $idioma['id_registro'] . '</span></legend>' . "\n";
 
