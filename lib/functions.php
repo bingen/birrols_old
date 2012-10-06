@@ -335,23 +335,37 @@ function show_textfield( $field, $label, $value, $link='' ){
   echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
   echo "<dd><span name='$field' id='$field'> ".( empty($link) ? $value : "<a href='$link' alt='$value'>$value</a>" ) ." </span></dd>\n";
 }
-function show_checkbox( $field, $label, $value ){
+function show_checkbox( $field, $label, $value, $name ){
   echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
   echo "<dd><input type='checkbox' name='$field' id='$field' ". ( $value ? "checked='checked'" : " " ) ." />\n";
   echo "</dd>\n";
 }
-function input_textfield( $field, $label ){
+function show_avatar( $object, $id, $avatar, $name, $size=80  ){
+  echo "<img class='thumbnail' src='".get_avatar_url($object, $id, $avatar, $size)."' width='$size' height='$size' alt='".$name."' title='logo' /> \n";
+}
+function show_stars( $score ){
+  echo '<img src="'. get_stars($score). '" alt="'. $score . '"/>'."\n";
+}
+function show_error($message) {
+	global $idioma;
+
+	echo '<div class="form-error">';
+	echo "<p>$message</p>";
+	echo '<input type=button value="'.$idioma['back'].'" onClick="history.go(-1)">'. "\n";
+	echo "</div>\n";
+}
+function input_textfield( $field, $label, $value='' ){
   echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
-  echo "<dd><input type='text' name='$field' id='$field' />\n";
+  echo "<dd><input type='text' name='$field' id='$field' value='$value' />\n";
   echo "</dd>\n";
 }
-function input_number( $field, $label, $min='', $max='', $step='' ){
+function input_number( $field, $label, $min='', $max='', $step='', $value='' ){
   echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
-  echo "<dd><input type='number' name='$field' id='$field' ". ( empty($min) ? "" : "min='$min' " ) . ( empty($max) ? "" : "max='$max' " ) . ( empty($step) ? "" : "step='$step' " ) ." /></dd>\n";
+  echo "<dd><input type='number' name='$field' id='$field' ". ( empty($min) ? "" : "min='$min' " ) . ( empty($max) ? "" : "max='$max' " ) . ( empty($step) ? "" : "step='$step' " ) ." value='$value' /></dd>\n";
 }
-function input_checkbox( $field, $label, $value=1 ){
+function input_checkbox( $field, $label, $value=1, $checked=false ){
   echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
-  echo "<dd><input type='checkbox' name='$field' id='$field' value='$value'  />\n";
+  echo "<dd><input type='checkbox' name='$field' id='$field' value='$value' ". ( $checked ? "checked='checked'": "" )." />\n";
   echo "</dd>\n";
 }
 function input_avatar($object) {
@@ -714,16 +728,6 @@ function do_error($mess = false, $error = false, $send_status = true) {
 
 	pie();
 	die;
-}
-
-
-function register_error($message) {
-	global $idioma;
-
-	echo '<div class="form-error">';
-	echo "<p>$message</p>";
-	echo '<input type=button value="'.$idioma['back'].'" onClick="history.go(-1)">'. "\n";
-	echo "</div>\n";
 }
 
 function paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla='' ) {

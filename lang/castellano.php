@@ -103,6 +103,9 @@ $idioma['err_login'] = 'Debes estar logueado';
 $idioma['err_brewery_miss'] = 'No existe la brewery. Debes escogerla del menú o crearla previamente.';
 $idioma['err_name_miss'] = 'Debes informar el nombre.';
 $idioma['err_img'] = 'No se admite el formato ';
+$idioma['err_no_beer'] = "Cerveza no encontrada";
+$idioma['err_perms_beer'] = 'No tienes permisos para modificar esta cerveza';
+$idioma['err_perms_business'] = 'No tienes permisos para modificar este establecimento';
 //$idioma['err_'] = ;
 
 // TODO: existen?

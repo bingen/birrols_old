@@ -1,4 +1,4 @@
-#    Open craft beer
+#    Birrols
 #    Web app for craft beer lovers.
 #    Copyright (C) 2012 ßingen Eguzkitza <bingentxu@gmail.com>
 #

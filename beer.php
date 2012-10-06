@@ -26,27 +26,26 @@ if( empty( $id ) ) {
   exit;
 }
 
-$query = "SELECT * FROM beers_view WHERE auto_id = $id";
-$res = mysqli_query( $mysql_link, $query ) OR die( mysqli_error( $mysql_link ) );
-$row = mysqli_fetch_object( $res );
-
 cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
 
 laterales();
 
 echo '<div id="cuerpo">'. "\n";
 
-echo '<fieldset id="business"><legend>'. $row->name;
-if($row->register_id == $current_user->id || $current_user->admin ) {
-  echo ' [<a href="'. $globals['base_url'] .'profile.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
-}
-echo '</legend>'."\n";
+$query = "SELECT * FROM beers_view WHERE auto_id = $id";
+$res = mysqli_query( $mysql_link, $query ) OR die( mysqli_error( $mysql_link ) );
+if( $row = mysqli_fetch_object( $res ) ) {
+
+  echo '<fieldset id="business"><legend>'. $row->name;
+  if($row->register_id == $current_user->id || $current_user->admin ) {
+    echo ' [<a href="'. $globals['base_url'] .'profile.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
+  }
+  echo '</legend>'."\n";
 
   echo '<dl id="beer_list">' . "\n";
   
-  echo '<img class="thumbnail" src="'.get_avatar_url('beers', $row->auto_id, $row->avatar, 80).'" width="80" height="80" alt="'.$row->name.'" title="logo" />'."\n";
-  echo '<img src="'. get_stars($row->score). '" alt="'. $row->score . '"/>'."\n";
-
+  show_avatar( 'beers', $row->auto_id, $row->avatar, $row->name, 80 );
+  show_stars( $row->score );
 //   show_textfield( 'name', $idioma['beer_name'], $row->name );
 
   show_textfield( 'country', $idioma['bsns_country'], $row->country );
@@ -64,7 +63,9 @@ echo '</legend>'."\n";
 //   show_textfield( '', $idioma[''], $row-> );
   
   echo '</dl>' . "\n";
-
+} else { // no $row
+  show_error( $idioma['err_no_beer'] );
+}
 echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 echo '	  </div> <!-- container_cuerpo -->'. "\n";
 
