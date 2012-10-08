@@ -153,7 +153,8 @@ function bsns_form(){
   input_textfield( 'zip_code', $idioma['bsns_zip'], $zip_code );
   
   echo "<dt><label for='url'>" . $idioma['bsns_url'] . ":</label></dt>\n";
-  echo "<dd><input type='url' name='url' id='url' ". (empty($url) ? "value='http://'" : "value='$url'" ) ." /></dd>\n";
+//   echo "<dd><input type='url' name='url' id='url' ". (empty($url) ? "value='http://'" : "value='$url'" ) ." /></dd>\n";
+  echo "<dd><input type='url' name='url' id='url' value='$url' /></dd>\n";
   echo "<dt><label for='email'>" . $idioma['id_email'] . ":</label></dt>\n";
   echo "<dd><input type='email' name='email' id='email' value='$email' /></dd>\n";
   echo "<dt><label for='phone'>" . $idioma['bsns_phone'] . ":</label></dt>\n";
