@@ -38,7 +38,7 @@ echo '<div id="cuerpo">'. "\n";
 
 echo '<fieldset id="business"><legend>'. $row->name;
 if($row->register_id == $current_user->id || $current_user->admin ) {
-  echo ' [<a href="'. $globals['base_url'] .'profile.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
+  echo ' [<a href="'. $globals['base_url'] .'business_edit.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
 }
 echo '</legend>'."\n";
 

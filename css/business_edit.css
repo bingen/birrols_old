@@ -1,0 +1,63 @@
+/*
+Author: ßingen <bingen at gmail dot com>
+License: CC-by-sa
+http://creativecommons.org/licenses/by-sa/3.0/
+*/
+
+* { margin: 0px;
+padding: 0px;
+}
+html, body { height: 100%;
+}
+
+    .ui-autocomplete {
+      padding: 0;
+      list-style: none;
+      background-color: #fff;
+      width: 218px;
+      border: 1px solid #B0BECA;
+      max-height: 350px;
+      overflow-y: scroll;
+    }
+    .ui-autocomplete .ui-menu-item a {
+      border-top: 1px solid #B0BECA;
+      display: block;
+      padding: 4px 6px;
+      color: #353D44;
+      cursor: pointer;
+    }
+    .ui-autocomplete .ui-menu-item:first-child a {
+      border-top: none;
+    }
+    .ui-autocomplete .ui-menu-item a.ui-state-hover {
+      background-color: #D5E5F4;
+      color: #161A1C;
+    }
+
+fieldset dl {
+	margin: 0;
+	padding: 0;
+}
+
+fieldset dt {
+	clear: left;
+	float: left;
+	width: 10em; /* increase for wider dt text */
+	text-align: right;
+	padding: 4px 10px 4px 5px;
+}
+
+fieldset dd {
+	padding: 3px 0 4px 0;
+	margin-left: 13em;
+}
+
+fieldset dd input {
+	width: 150px;
+}
+
+fieldset dt .button {
+	font-size: 10px;
+	vertical-align: super;
+}
+

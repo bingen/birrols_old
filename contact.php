@@ -104,7 +104,7 @@ function contact2() {
 	global $idioma, $current_user, $globals;
 
 	if ( !$current_user->authenticated && !ts_is_human()) {
-		register_error($idioma['err_cod_seg']);
+		show_error($idioma['err_cod_seg']);
 		return;
 	}
 
@@ -131,7 +131,7 @@ function contact2() {
 			echo '<p><strong>' .$idioma['cnt_sent'] . '</strong></p>';
 		echo '</fieldset>'."\n";
 	} else {
-		register_error( $idioma['err_cnt_db'] );
+		show_error( $idioma['err_cnt_db'] );
 	}
 }
 
@@ -142,23 +142,23 @@ function check_user_fields() {
 	$error = false;
 
 /*	if(check_ban_proxy()) {
-		register_error($idioma['err_ip_1']);
+		show_error($idioma['err_ip_1']);
 		$error=true;
 	}*/
 	if( !isset($_POST["nombre"]) ) {
-		register_error($idioma['err_cnt_nombre']);
+		show_error($idioma['err_cnt_nombre']);
 		$error=true;
 	}
 	if(!check_email(trim($_POST["email"]))) {
-		register_error($idioma['err_invalid_email']);
+		show_error($idioma['err_invalid_email']);
 		$error=true;
 	}
 	if( !isset($_POST["asunto"]) ) {
-		register_error($idioma['err_cnt_asunto']);
+		show_error($idioma['err_cnt_asunto']);
 		$error=true;
 	}
 	if( !isset($_POST["mensaje"]) ) {
-		register_error($idioma['err_cnt_mensaje']);
+		show_error($idioma['err_cnt_mensaje']);
 		$error=true;
 	}
 
@@ -171,7 +171,7 @@ function check_user_fields() {
 	$registered = (int) $db->get_var("select count(*) from logs where log_date > date_sub(now(), interval 24 hour) and log_type in ('user_new', 'user_delete') and log_ip = '$user_ip'");
 	if($registered > 0) {
 		syslog(LOG_NOTICE, "Meneame, register not accepted by IP address ($_POST[username]) $user_ip");
-		register_error($idioma['err_ip_2']);
+		show_error($idioma['err_ip_2']);
 		$error=true;
 	}
 	if ($error) return false;
@@ -182,7 +182,7 @@ function check_user_fields() {
 	$registered = (int) $db->get_var("select count(*) from logs where log_date > date_sub(now(), interval 6 hour) and log_type in ('user_new', 'user_delete') and log_ip like '$ip_class'");
 	if($registered > 0) {
 		syslog(LOG_NOTICE, "Meneame, register not accepted by IP class ($_POST[username]) $ip_class");
-		register_error($idioma['err_ip_3']. " ($ip_class)");
+		show_error($idioma['err_ip_3']. " ($ip_class)");
 		$error=true;
 	}
 	if ($error) return false;
@@ -193,7 +193,7 @@ function check_user_fields() {
 	$registered = (int) $db->get_var("select count(*) from logs where log_date > date_sub(now(), interval 1 hour) and log_type in ('user_new', 'user_delete') and log_ip like '$ip_class'");
 	if($registered > 2) {
 		syslog(LOG_NOTICE, "Meneame, register not accepted by IP class ($_POST[username]) $ip_class");
-		register_error($idioma['err_ip_4'] . " ($ip_class)");
+		show_error($idioma['err_ip_4'] . " ($ip_class)");
 		$error=true;
 	}*/
 	if ($error) 

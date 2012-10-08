@@ -28,7 +28,7 @@ include(libpath.'ts.php');
   echo "<div id='registro'>\n";
 //	print_r($_POST);
 	if( $current_user->authenticated )
-		register_error($idioma['err_register_auth']);
+		show_error($idioma['err_register_auth']);
 	elseif(isset($_POST["process"])) {
 
 		switch (intval($_POST["process"])) {
@@ -59,21 +59,21 @@ include(libpath.'ts.php');
 					$key2 = $invitacion->clave;
 // 					echo "$now, $time; $key == $key2\n";
 					if( $time > $now || $now > $time + $globals['inv_time'] ) {
-						register_error($idioma['err_register_time']);
+						show_error($idioma['err_register_time']);
 						$error = true;
  						//header('Location: ./index.php');
  						//die;
 					}
 					if( $key != $key2 ) {
-						register_error($idioma['err_register_key']);
+						show_error($idioma['err_register_key']);
 						$error = true;
 					}
 				} else {
-					register_error($idioma['err_register_db']);
+					show_error($idioma['err_db']);
 					$error = true;
 				}
 			} else {
-				register_error($idioma['err_register_url']);
+				show_error($idioma['err_register_url']);
 				$error = true;
 			}
 		} // if alta por invitación
@@ -173,7 +173,7 @@ include(libpath.'ts.php');
 	global $idioma;
 
 	if($_POST["acceptlegal"] !== 'accept' ) {
-		register_error($idioma['err_legal']);
+		show_error($idioma['err_legal']);
 		return;
 	}
 	if (!check_user_fields()) return;
@@ -219,13 +219,13 @@ include(libpath.'ts.php');
 	global $idioma, $globals;
 //	global $db, $current_user, $globals;
 	if ( !ts_is_human()) {
-		register_error($idioma['err_cod_seg']);
+		show_error($idioma['err_cod_seg']);
 		return;
 	}
 
 	// comprobar invitación
 	if( $globals['invitaciones_alta'] && trim($_POST["email"]) != trim($_POST["inv_email"]) ) {
-		register_error($idioma['err_inv_meil']);
+		show_error($idioma['err_inv_meil']);
 		return;
 	}
 
@@ -265,14 +265,14 @@ include(libpath.'ts.php');
 			$user=new User();
 			$user->username=$username;
 			if(!$user->read()) {
-				register_error($idioma['err_insert_user']);
+				show_error($idioma['err_insert_user']);
 			} else {
 				require_once(libpath.'mail.php');
 				$sent = send_recover_mail($user, 1);
 			}
 			echo '</fieldset>'."\n";
 		} else {
-			register_error( $query . $idioma['err_insert_user'] );
+			show_error( $query . $idioma['err_insert_user'] );
 		}
 		$res = mysqli_query("SELECT auto_id, deporte FROM deportes") or die ('ERROR:'.mysqli_error());
 		while( $deportes=mysqli_fetch_row($res) ) {
@@ -280,7 +280,7 @@ include(libpath.'ts.php');
 			if( empty($puntos) ) $puntos=-1;
 			if (mysqli_query("INSERT INTO puntuaciones (usuario_id, deporte_id, puntos) VALUES ($user->id, $deportes[0],$puntos)")) {
 			} else {
-				register_error("INSERT INTO puntuaciones (usuario_id, deporte_id, puntos) VALUES ($user->id, $deportes[0],$puntos)".$idioma['err_insert_user']);
+				show_error("INSERT INTO puntuaciones (usuario_id, deporte_id, puntos) VALUES ($user->id, $deportes[0],$puntos)".$idioma['err_insert_user']);
 			}
 		}
 		insert_privacidad( $user->id, 'email', $_POST['prv_email'] );
@@ -291,7 +291,7 @@ include(libpath.'ts.php');
 		insert_privacidad( $user->id, 'direccion', NADIE );
 		insert_privacidad( $user->id, 'url', NADIE );
 	} else {
-		register_error($idioma['err_user_exists']);
+		show_error($idioma['err_user_exists']);
 	}
   }
 
@@ -301,7 +301,7 @@ include(libpath.'ts.php');
 	$query = "INSERT INTO privacidad (usuario_id, campo, valor) VALUES ($userid, '$campo', $valor)";
 	if (mysqli_query( $query )) {
 	} else {
-		register_error( $idioma['err_insert_user'] );
+		show_error( $idioma['err_insert_user'] );
 	}
   }
   function check_user_fields() {
@@ -311,63 +311,63 @@ include(libpath.'ts.php');
 	$error = false;
 
 /*	if(check_ban_proxy()) {
-		register_error($idioma['err_ip_1']);
+		show_error($idioma['err_ip_1']);
 		$error=true;
 	}*/
 	if(!isset($_POST["username"]) || strlen($_POST["username"]) < 3) {
-		register_error($idioma['err_short_user']);
+		show_error($idioma['err_short_user']);
 		$error=true;
 	}
 	if(!check_username($_POST["username"])) {
-		register_error($idioma['err_invalid_user']);
+		show_error($idioma['err_invalid_user']);
 		$error=true;
 	}
 	if(user_exists(trim($_POST["username"])) ) {
-		register_error($idioma['err_user_exists']);
+		show_error($idioma['err_user_exists']);
 		$error=true;
 	}
 	if(!check_email(trim($_POST["email"]))) {
-		register_error($idioma['err_invalid_email']);
+		show_error($idioma['err_invalid_email']);
 		$error=true;
 	}
 // TODO: volver a poner lo del meil único!!!!!!!!!!
 /*	if(email_exists(trim($_POST["email"])) ) {
-		register_error($idioma['err_email_exists']);
+		show_error($idioma['err_email_exists']);
 		$error=true;
 	}*/
 	if($_POST["email"] !== $_POST["email2"] ) {
-		register_error($idioma['err_email_vrf']);
+		show_error($idioma['err_email_vrf']);
 		$error=true;
 	}
 	if(preg_match('/[ \']/', $_POST["password"]) || preg_match('/[ \']/', $_POST["password2"]) ) {
-		register_error($idioma['err_pwd_1']);
+		show_error($idioma['err_pwd_1']);
 		$error=true;
 	}
 	/*$comp = check_password($_POST["password"]);
 	if(! $comp) {*/
 	if(! check_password($_POST["password"])) {
 //		echo '<p> La bola no entrou: ' . $_POST["password"] . ': '. $comp . '</p>';
-		register_error($idioma['err_pwd_2']);
+		show_error($idioma['err_pwd_2']);
 		$error=true;
 	}
 	/*else {
 		echo '<p> La bola entrou: ' . $_POST["password"] . ': '. $comp . '</p>';
 	}*/
 	if($_POST["password"] !== $_POST["password2"] ) {
-		register_error($idioma['err_pwd_3']);
+		show_error($idioma['err_pwd_3']);
 		$error=true;
 	}
 	if(! check_phone(trim($_POST["telefono"]))) {
-		register_error($idioma['err_phone']);
+		show_error($idioma['err_phone']);
 		$error=true;
 	}
 	if(phone_exists(trim($_POST["telefono"])) ) {
-		register_error($idioma['err_phone_exists']);
+		show_error($idioma['err_phone_exists']);
 		$error=true;
 	}
 
 	if(! check_provincia($_POST["provincia"]) ) {
-		register_error($idioma['err_provincia']);
+		show_error($idioma['err_provincia']);
 		$error=true;
 	}
 
@@ -380,7 +380,7 @@ include(libpath.'ts.php');
 	$registered = (int) $db->get_var("select count(*) from logs where log_date > date_sub(now(), interval 24 hour) and log_type in ('user_new', 'user_delete') and log_ip = '$user_ip'");
 	if($registered > 0) {
 		syslog(LOG_NOTICE, "Meneame, register not accepted by IP address ($_POST[username]) $user_ip");
-		register_error($idioma['err_ip_2']);
+		show_error($idioma['err_ip_2']);
 		$error=true;
 	}
 	if ($error) return false;
@@ -391,7 +391,7 @@ include(libpath.'ts.php');
 	$registered = (int) $db->get_var("select count(*) from logs where log_date > date_sub(now(), interval 6 hour) and log_type in ('user_new', 'user_delete') and log_ip like '$ip_class'");
 	if($registered > 0) {
 		syslog(LOG_NOTICE, "Meneame, register not accepted by IP class ($_POST[username]) $ip_class");
-		register_error($idioma['err_ip_3']. " ($ip_class)");
+		show_error($idioma['err_ip_3']. " ($ip_class)");
 		$error=true;
 	}
 	if ($error) return false;
@@ -402,7 +402,7 @@ include(libpath.'ts.php');
 	$registered = (int) $db->get_var("select count(*) from logs where log_date > date_sub(now(), interval 1 hour) and log_type in ('user_new', 'user_delete') and log_ip like '$ip_class'");
 	if($registered > 2) {
 		syslog(LOG_NOTICE, "Meneame, register not accepted by IP class ($_POST[username]) $ip_class");
-		register_error($idioma['err_ip_4'] . " ($ip_class)");
+		show_error($idioma['err_ip_4'] . " ($ip_class)");
 		$error=true;
 	}*/
 	if ($error) 

@@ -112,11 +112,11 @@ CREATE TABLE IF NOT EXISTS beers (
   brewery_id int(11),
   category_id int(11),
   type_id int(11),
-  abv decimal(4,2),
-  ibu int(10),
-  og int(4),
-  srm int(3),
-  ebc int(3),
+  abv decimal(4,2) default NULL,
+  ibu int(10) default NULL,
+  og int(4) default NULL,
+  srm int(3) default NULL,
+  ebc int(3) default NULL,
   malts char(128) collate utf8_spanish_ci default NULL,
   hops char(128) collate utf8_spanish_ci default NULL,
   description text collate utf8_spanish_ci default NULL,
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS beers (
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 DROP VIEW IF EXISTS beers_view;
-CREATE VIEW beers_view AS (SELECT b.*, w.name brewery, c.category, t.type, p.name country
+CREATE VIEW beers_view AS (SELECT b.*, w.name brewery, w.user_admin_id, c.category, t.type, p.name country
 FROM beers b, business w, beer_categories c, beer_types t, countries p
 WHERE w.brewery AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b.type_id = t.auto_id AND w.country_id = p.auto_id);
 

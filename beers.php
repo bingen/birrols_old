@@ -25,7 +25,7 @@ cabecera('', $_SERVER['PHP_SELF']);
 echo '<div id="cuerpo">'. "\n";
 
 if( $current_user->authenticated )
-  echo "<a class='button' href='beer_new.php' title='". $idioma['beer_new'] ."'>". $idioma['beer_new'] ." </a> \n";
+  echo "<a class='button' href='beer_edit.php' title='". $idioma['beer_new'] ."'>". $idioma['beer_new'] ." </a> \n";
 
 $tabla = 'beers_view';
 echo '    <div id="'. $tabla .'-env" class="tabla-env">' . "\n";

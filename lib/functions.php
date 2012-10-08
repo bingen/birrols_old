@@ -387,17 +387,17 @@ function manage_avatars_upload( $object, $id ){
   
   include_once(libpath.'avatars.php');
   
-  print_r($_FILES);
+//   print_r($_FILES);
   // Manage avatars upload
   if (!empty($_FILES['image']['tmp_name']) ) {
     if(avatars_check_upload_size('image')) {
       $avatar_mtime = avatars_manage_upload($object, $id, 'image');
       if (!$avatar_mtime) {
-	$messages .= '<p class="form-error">'.$idioma['err_avatar_1'].'</p>';
+	$messages = $idioma['err_avatar_1'];
 	return false;
       }
     } else { // check size error
-      $messages .= '<p class="form-error">'.$idioma['err_avatar_2'].'</p>';
+      $messages = $idioma['err_avatar_2'];
       return false;
     }
   }

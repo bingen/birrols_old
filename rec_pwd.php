@@ -32,7 +32,7 @@ laterales();
 echo '<div id="cuerpo">'. "\n";
 
 	if( $current_user->authenticated )
-		register_error($idioma['err_register_auth']);
+		show_error($idioma['err_register_auth']);
 	else {
 		echo '<div class="genericform">'."\n";
 		echo '<fieldset>'."\n";
@@ -40,7 +40,7 @@ echo '<div id="cuerpo">'. "\n";
 
 		if(!empty($_POST['recover'])) {
 			if (!ts_is_human()) {
-				register_error($idioma['err_cod_seg']);
+				show_error($idioma['err_cod_seg']);
 			} else {
 				require_once(libpath.'user.php');
 				$user=new User();
@@ -51,11 +51,11 @@ echo '<div id="cuerpo">'. "\n";
 					$user->username=$_POST['username'];
 				}
 				if(!$user->read()) {
-					register_error($idioma['rp_no_user']);
+					show_error($idioma['rp_no_user']);
 					return false;
 				}
 				if($user->disabled()) {
-					register_error($idioma['rp_disabled']);
+					show_error($idioma['rp_disabled']);
 					return false;
 				}
 				require_once(libpath.'mail.php');

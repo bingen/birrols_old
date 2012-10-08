@@ -38,7 +38,7 @@ if( $row = mysqli_fetch_object( $res ) ) {
 
   echo '<fieldset id="business"><legend>'. $row->name;
   if($row->register_id == $current_user->id || $current_user->admin ) {
-    echo ' [<a href="'. $globals['base_url'] .'profile.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
+    echo ' [<a href="'. $globals['base_url'] .'beer_edit.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
   }
   echo '</legend>'."\n";
 
@@ -52,7 +52,7 @@ if( $row = mysqli_fetch_object( $res ) ) {
   show_textfield( 'brewery', $idioma['brewery'], $row->brewery, $globals['base_url']. "business?id=". $row->brewery_id );
   show_textfield( 'category', $idioma['beer_category'], $row->category );
   show_textfield( 'type', $idioma['beer_type'], $row->type );
-  show_textfield( 'abv', $idioma['beer_abv'], $row->abv."%" );
+  show_textfield( 'abv', $idioma['beer_abv'], ($row->abv ? $row->abv."%" : "") );
   show_textfield( 'ibu', $idioma['beer_ibu'], $row->ibu );
   show_textfield( 'og', $idioma['beer_og'], $row->og );
   show_textfield( 'srm', $idioma['beer_srm'], $row->srm );
