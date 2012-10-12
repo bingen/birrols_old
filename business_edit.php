@@ -42,6 +42,7 @@ function bsns_form(){
   global $mysql_link, $idioma, $globals, $current_user, $id;
   
   cabecera('', $_SERVER['PHP_SELF']);
+  echo '<div id="container_cuerpo">'."\n";
   echo '<div id="cuerpo">'. "\n";
   
   if( $id > 0 ) {
@@ -178,6 +179,8 @@ function bsns_form(){
   echo '</fieldset>' . "\n";
   echo '</form>' . "\n";
 
+  echo '	  </div> <!-- cuerpo -->'. "\n";
+//echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
   echo '	  </div> <!-- container_cuerpo -->'. "\n";
   pie();
   

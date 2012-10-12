@@ -62,21 +62,8 @@ CREATE TABLE IF NOT EXISTS `business_avatars` (
 ) DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table taps
+-- View business_view
 --
-
-DROP TABLE IF EXISTS taps;
-CREATE TABLE IF NOT EXISTS taps (
-  auto_id int(11) NOT NULL,
-  business_id int(11) NOT NULL,
-  tap_id int(3) NOT NULL,
-  beer_id int(11) NOT NULL,
-  actual boolean default FALSE,
-  register_id int(11), 
-  modified timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (auto_id)
-) DEFAULT CHARSET=utf8;
-
 DROP VIEW IF EXISTS business_view;
 CREATE VIEW business_view AS (SELECT b.*, c.name country
 FROM business b, countries c
@@ -182,18 +169,26 @@ CREATE TABLE IF NOT EXISTS users (
 -- WHERE type = 'lover');
 
 --
--- Table structure for table privacidad
+-- Table structure for table taps
 --
 
--- DROP TABLE IF EXISTS privacy;
--- CREATE TABLE IF NOT EXISTS privacy (
---   auto_id int(11) NOT NULL auto_increment,
---   user_id int(11) NOT NULL,
---   field char(30) NOT NULL,
---   value tinyint default 4,
--- PRIMARY KEY auto_id (auto_id),
---   UNIQUE KEY (user_id,field)
--- ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+DROP TABLE IF EXISTS taps;
+CREATE TABLE IF NOT EXISTS taps (
+  auto_id int(11) NOT NULL,
+  business_id int(11) NOT NULL,
+  tap_id int(3) NOT NULL,
+  beer_id int(11) NOT NULL,
+  actual boolean default FALSE,
+  register_id int(11), 
+  modified timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (auto_id)
+) DEFAULT CHARSET=utf8;
+
+DROP VIEW IF EXISTS taps_view;
+CREATE VIEW taps_view AS (SELECT t.*, w.name brewery, b.name beer, u.username user
+FROM taps t, beers b, business w, users u
+WHERE t.beer_id = b.auto_id AND b.brewery_id = w.auto_id AND t.register_id = u.auto_id
+);
 
 --
 -- Table structure for table languages

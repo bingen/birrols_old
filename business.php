@@ -22,25 +22,25 @@ include('config.php');
 
 $id = $_REQUEST['id'];
 if( empty( $id ) ) {
-  // TODO
-  exit;
+  $id = 0;
 }
-
-$query = "SELECT * FROM business_view WHERE auto_id = $id";
-$res = mysqli_query( $mysql_link, $query ) OR die( mysqli_error( $mysql_link ) );
-$row = mysqli_fetch_object( $res );
 
 cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
 
 laterales();
 
+echo '<div id="container_cuerpo">'."\n";
 echo '<div id="cuerpo">'. "\n";
 
-echo '<fieldset id="business"><legend>'. $row->name;
-if($row->register_id == $current_user->id || $current_user->admin ) {
-  echo ' [<a href="'. $globals['base_url'] .'business_edit.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
-}
-echo '</legend>'."\n";
+$query = "SELECT * FROM business_view WHERE auto_id = $id";
+$res = mysqli_query( $mysql_link, $query ) OR die( mysqli_error( $mysql_link ) );
+if( $row = mysqli_fetch_object( $res ) ) {
+
+  echo '<fieldset id="business"><legend>'. $row->name;
+  if($row->register_id == $current_user->id || $current_user->admin ) {
+    echo ' [<a href="'. $globals['base_url'] .'business_edit.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
+  }
+  echo '</legend>'."\n";
 
   echo '<dl id="business_list">' . "\n";
   
@@ -74,7 +74,46 @@ echo '</legend>'."\n";
 //   show_textfield( '', $idioma[''], $row-> );
   
   echo '</dl>' . "\n";
+  echo "</fieldset>\n";  
+  
+  // taps
+  if( $row->pub ) {
+    if( $current_user->authenticated && empty($row->user_admin_id) ) { // editables
+      $editable = TRUE;
+      echo "<script src='".$globals['js_url']. "jquery-ui.min.js'></script>\n";
+      echo "<script type='text/javascript'> var err_brewery_miss = '". $idioma['err_brewery_miss'] ."'; </script>";
+      echo "<script type='text/javascript'> var err_beer_miss = '". $idioma['err_beer_miss'] ."'; </script>";
+      echo "<script src='".$globals['js_url']. "business.js'></script>\n";
+    } else
+      $editable = FALSE;
+    echo "<fieldset id='taps_list'>\n";
+    for( $i=1; $i<=$row->taps; $i++ )
+    {
+      echo "<dl class='tap_item' id='tap_$i'>\n";
+      $query = "SELECT * FROM taps_view WHERE business_id=$id AND tap_id=$i AND actual";
+//       echo "<p> query: $query </p> \n";
+      $res = $mysql_link->query( $query );
+      $tap = $res->fetch_object();
+//       if( $tap = $res->fetch_object() ) {
+	show_textfield( 'tap_num_'. $i, $idioma['bsns_tap'], $i );
+	if( $editable ) {
+	  input_textfield( 'brewery_'. $i, $idioma['brewery'], $tap->brewery, 'brewery', " data-tap='$i' " );
+	  echo "<input type='hidden' id='brewery_id_$i' name='brewery_id_$i' value='".$tap->brewery_id."' />\n";
+	  input_textfield( 'beer_'. $i, $idioma['beer'], $tap->beer );
+	  echo "<input type='hidden' id='beer_id_$i' name='beer_id_$i' value='".$tap->brewery_id."' />\n";
+	  show_textfield( 'user_'. $i, $idioma['id_usuario'], "<a href='". $globals['base_url']."beer?id=".$tap->beer_id."'>". $tap->beer."</a>" );
+	} else {
+	} // fi editable
+//       } // fi tap
+      echo "</dl>\n";
+    }
+    echo "</fieldset>\n"; // taps_list
+  } // fi taps
+} else { // no $row
+  show_error( $idioma['err_no_business'] );
+}
 
+echo '	  </div> <!-- cuerpo -->'. "\n";
 echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 echo '	  </div> <!-- container_cuerpo -->'. "\n";
 

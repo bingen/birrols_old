@@ -44,6 +44,7 @@ $div = 'results';
 	</script>
 	");
 
+echo '<div id="container_cuerpo">'."\n";
 echo '<div id="cuerpo">'. "\n";
 
 echo "   <div id='business-container'> \n";
@@ -130,6 +131,7 @@ echo "      </div> \n"; // search container
 echo "   </div> \n"; // business container
 //echo " \n";
 
+echo '	  </div> <!-- cuerpo -->'. "\n";
 //echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 echo '	  </div> <!-- container_cuerpo -->'. "\n";
 

@@ -44,6 +44,7 @@ function beer_form(){
   global $mysql_link, $idioma, $globals, $current_user, $id;
   
   cabecera('', $_SERVER['PHP_SELF']);
+  echo '<div id="container_cuerpo">'."\n";
   echo '<div id="cuerpo">'. "\n";
   
   if( $id > 0 ) {
@@ -94,7 +95,7 @@ function beer_form(){
 
   echo "<script src='".$globals['js_url']. "jquery-ui.min.js'></script>\n";
   echo "<script type='text/javascript'> var err_brewery_miss = '". $idioma['err_brewery_miss'] ."'; </script>";
-  echo "<script src='".$globals['js_url']. "beer_new.js'></script>\n";
+  echo "<script src='".$globals['js_url']. "beer_edit.js'></script>\n";
   
   // http://stackoverflow.com/questions/3586919/why-would-files-be-empty-when-uploading-files-to-php
   // 7. Make sure your FORM tag has the enctype="multipart/form-data" attribute
@@ -161,6 +162,8 @@ function beer_form(){
   echo '</fieldset>' . "\n";
   echo '</form>' . "\n";
 
+  echo '	  </div> <!-- cuerpo -->'. "\n";
+//echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
   echo '	  </div> <!-- container_cuerpo -->'. "\n";
   pie();
 

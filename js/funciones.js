@@ -1,5 +1,4 @@
-function enablebutton (button, button2, target)
-{
+function enablebutton (button, button2, target) {
 	var string = target.value;
 	if (button2 != null) {
 		button2.disabled = false;
@@ -41,8 +40,7 @@ function securePasswordCheck(field) {
 	return false;
 }
 
-function checkfield (type, form, field)
-{
+function checkfield (type, form, field) {
 	var url = 'lib/checkfield.php?type='+type+'&name=' + encodeURIComponent(field.value);
 	$.get(url,
 		 function(html) {

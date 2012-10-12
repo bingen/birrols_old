@@ -22,7 +22,7 @@ include('config.php');
 
 $id = $_REQUEST['id'];
 if( empty( $id ) ) {
-  // TODO
+  $id=0;
   exit;
 }
 
@@ -30,6 +30,7 @@ cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
 
 laterales();
 
+echo '<div id="container_cuerpo">'."\n";
 echo '<div id="cuerpo">'. "\n";
 
 $query = "SELECT * FROM beers_view WHERE auto_id = $id";
@@ -63,9 +64,12 @@ if( $row = mysqli_fetch_object( $res ) ) {
 //   show_textfield( '', $idioma[''], $row-> );
   
   echo '</dl>' . "\n";
+  echo "</fieldset>\n";  
+  
 } else { // no $row
   show_error( $idioma['err_no_beer'] );
 }
+echo '	  </div> <!-- cuerpo -->'. "\n";
 echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 echo '	  </div> <!-- container_cuerpo -->'. "\n";
 

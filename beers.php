@@ -22,6 +22,7 @@ include('config.php');
 
 cabecera('', $_SERVER['PHP_SELF']);
 
+echo '<div id="container_cuerpo">'."\n";
 echo '<div id="cuerpo">'. "\n";
 
 if( $current_user->authenticated )
@@ -32,6 +33,7 @@ echo '    <div id="'. $tabla .'-env" class="tabla-env">' . "\n";
 include('table_'. $tabla .'.php');
 echo '    </div>' . "\n"; // beers-env
 
+echo '	  </div> <!-- cuerpo -->'. "\n";
 echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 echo '	  </div> <!-- container_cuerpo -->'. "\n";
 

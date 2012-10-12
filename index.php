@@ -29,6 +29,7 @@ cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
 
 laterales();
 
+echo '<div id="container_cuerpo">'."\n";
 echo '<div id="cuerpo">'. "\n";
 
 // $tabla = 'partidos_view';
@@ -36,6 +37,7 @@ echo '<div id="cuerpo">'. "\n";
 // include('tabla_'. $tabla .'.php');
 // echo '    </div>' . "\n"; // partidos-env
 
+echo '	  </div> <!-- cuerpo -->'. "\n";
 echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 echo '	  </div> <!-- container_cuerpo -->'. "\n";
 

@@ -146,7 +146,7 @@ function cabecera($title='',$script='', $no_cache=false) {
 	echo '	<div id="aux_1">'."\n";
 	echo '	<div id="titulo">'."\n";
 	echo '	  <h1><a href="'.$globals['base_url'].'index.php" title=""><img src="'. $globals['logo'] .'" alt="'. $globals['app_name'] .'"/></a></h1>'."\n";
-	echo '	</div>'."\n"; // titulo
+	echo '	</div> <!-- titulo -->'."\n"; // titulo
 
 	echo '	<div id="aux_2">'."\n";
 // 	echo "<p> session </p> \n";
@@ -161,7 +161,7 @@ function cabecera($title='',$script='', $no_cache=false) {
  		echo '<li class="noborder">'.$idioma['saludo'].'&nbsp; <a href="'.get_user_uri($current_user->username).'" title="'.$idioma['usr_info'].'">'.$current_user->username.'&nbsp;<img src="'.get_avatar_url('users', $current_user->id, $current_user->avatar, 20).'" width="15" height="15" alt="'.$current_user->username.'"/></a></li>' . "\n";
 		echo '<li><a href="'.$globals['base_url']. 'index.php?op=logout">'. $idioma['desconectar'].' <img src="'.$globals['img_url'].'common/door_out.png" alt="logout button" title="logout" width="16" height="16" /></a></li>' . "\n";
 		echo '</ul>' . "\n";
-		echo '	</div>'."\n"; // login
+		echo '	</div> <!-- login -->'."\n"; // login
 		echo '<input type="hidden" id="current_user_id" value="'. $current_user->id .'">' . "\n";
 		echo '<input type="hidden" id="current_user_login" value="'. $current_user->username .'">' . "\n";
 	} else {
@@ -169,9 +169,9 @@ function cabecera($title='',$script='', $no_cache=false) {
 	}
 	// TODO: google login with javascript: echo "<div id='navbar'></div> \n";
 	menu();
-	echo '	</div>'."\n"; // aux_2
+	echo '	</div> <!-- aux_2 -->'."\n"; // aux_2
 	echo '	<div id="fake-aux_1" style="clear: both;"></div>'. "\n";
-	echo '	</div>'."\n"; // aux_1
+	echo '	</div> <!-- aux_1 -->'."\n"; // aux_1
 
 	$url = get_server_name();
 	compartir( $url, $idioma['shr_general'] );
@@ -182,13 +182,12 @@ function cabecera($title='',$script='', $no_cache=false) {
 	echo '<li><a href="legal.php" title="'.$idioma['put_legal'].'">'.$idioma['hlp_legal'].'</a></li>' . "\n";
 	echo '<li><a href="contact.php" title="'.$idioma['put_contact'].'">'.$idioma['hlp_contact'].'</a></li>' . "\n";
 	echo '</ul>' . "\n";
-	echo '</div>'."\n"; //ayuda
+	echo '</div> <!-- ayuda -->'."\n"; //ayuda
 
 	echo '	<div id="fake-cabecera" style="clear: both;"></div>'. "\n"; // para ajustar automáticamente el alto de la cabecera
-	echo '  </div>'."\n"; // cabecera_in
+	echo '  </div> <!-- cabecera_in -->'."\n"; // cabecera_in
 	echo "  </header>\n";
-// 	echo '  </div>'."\n"; // cabecera
-	echo '<div id="container_cuerpo">'."\n";
+// 	echo '  </div> <!-- cabecera -->'."\n"; // cabecera
 }
 function login_no() {
 	global $idioma, $error_acceso, $url;
@@ -210,7 +209,7 @@ function login_no() {
 		echo '  </form>'."\n";
 		if($error_acceso){echo '<p class="error">'.$idioma['err_acceso'].'</p>'."\n";}
 		echo "<a class='button' href='".$google_client->createAuthUrl()."' title='". $idioma['google_login'] ."'>". $idioma['google_login'] ." </a> \n";
-		echo '</div>'."\n"; // login-no
+		echo '</div> <!-- login_no -->'."\n"; // login-no
 }
 function google_client() {
   global $globals;
@@ -255,7 +254,7 @@ function compartir( $url, $texto='', $label=false ) {
  	//echo '		<li><a title="Publicar en Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="link" data-locale="es" data-url="http://'. get_server_name() .'"></a> <script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></li>' ."\n";
 
 	echo '		</ul>' ."\n";
-	echo '	</div>' ."\n"; // social
+	echo '	</div> <!-- social-env -->' ."\n"; // social
 
 }
 function menu() {
@@ -277,7 +276,7 @@ function menu() {
 	    echo '<li><a '.$array_selected[$globals['base_url']. 'user.php'].' href="'. get_user_uri($current_user->username) .'" title="">'.$idioma['mnu_datos'].'</a></li>' . "\n";
   print('
 	</ul>
-    </div>
+    </div> <!-- menu -->
   ');
 }
 function laterales() {
@@ -305,7 +304,7 @@ function laterales() {
   ");*/
 	echo '<div id="derecha">' . "\n";
 	echo "<div id='banner'>Espacio reservado para publicidad.</div> \n";
-	echo '</div>' . "\n";
+	echo '</div> <!-- derecha -->' . "\n";
 }
 function pie($no_cache=false) {
   global $globals;
@@ -354,9 +353,9 @@ function show_error($message) {
 	echo '<input type=button value="'.$idioma['back'].'" onClick="history.go(-1)">'. "\n";
 	echo "</div>\n";
 }
-function input_textfield( $field, $label, $value='' ){
+function input_textfield( $field, $label, $value='', $class='', $data='' ){
   echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
-  echo "<dd><input type='text' name='$field' id='$field' value='$value' />\n";
+  echo "<dd><input type='text' name='$field' id='$field' value='$value' ".( empty($class) ? "" : "class='$class'" )."  ".( empty($data) ? "" : $data )." />\n";
   echo "</dd>\n";
 }
 function input_number( $field, $label, $min='', $max='', $step='', $value='' ){

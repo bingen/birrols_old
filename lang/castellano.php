@@ -37,6 +37,7 @@ $idioma['forgot_pwd'] = '¿Has olvidado la contraseña?';
 $idioma['volver'] = 'Volver';
 
 $idioma['beers'] = 'Cervezas';
+$idioma['beer'] = 'Cerveza';
 $idioma['businesses'] = 'Empresas';
 $idioma['pubs'] = 'Bares y pubs';
 $idioma['pub'] = 'Bar';
@@ -97,6 +98,7 @@ $idioma['err_register_auth'] = "Debes abandonar la sesión para dar de alta otro
 $idioma['err_mail'] = 'Error enviando notifiación.';
 $idioma['err_login'] = 'Debes estar logueado';
 $idioma['err_brewery_miss'] = 'No existe la brewery. Debes escogerla del menú o crearla previamente.';
+$idioma['err_beer_miss'] = 'No existe la cerveza. Debes escogerla del menú o crearla previamente.';
 $idioma['err_name_miss'] = 'Debes informar el nombre.';
 $idioma['err_img'] = 'No se admite el formato ';
 $idioma['err_no_beer'] = "Cerveza no encontrada";
@@ -136,7 +138,8 @@ $idioma['mail_stats_subject'] = "Estadísticas de ". $globals['app_name'];
 $idioma['mail_stats_users'] = "Número de usuarios: ";
 $idioma['mail_stats_business'] = "Número de establecimentos: ";
 $idioma['mail_stats_beers'] = "Número de bírrols: ";
-
+$idioma['mail_stats_inc_taps'] = "Tiradores repetidos: ";
+$idioma['mail_stats_orphan_beers'] = 'Cervezas sin brewery';
 //$idioma['mail_'] = '';
 
 $idioma['pwd_changed'] = 'La clave se ha cambiado';
@@ -239,6 +242,7 @@ $idioma['bsns_homebrew_store'] = 'Productos para homebrewers';
 $idioma['bsns_food'] = 'Comida';
 $idioma['bsns_wifi'] = 'WiFi';
 $idioma['bsns_taps'] = 'Tiradores';
+$idioma['bsns_tap'] = 'Tirador';
 //$idioma['bsns_'] = '';
 
 $idioma['about_what_1'] = 'Bírrols, el portal de birra de buen';
