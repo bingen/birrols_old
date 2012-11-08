@@ -140,6 +140,7 @@ $idioma['mail_stats_business'] = "Número de establecimentos: ";
 $idioma['mail_stats_beers'] = "Número de bírrols: ";
 $idioma['mail_stats_inc_taps'] = "Tiradores repetidos: ";
 $idioma['mail_stats_orphan_beers'] = 'Cervezas sin brewery';
+$idioma['mail_stats_dup_breweries'] = 'Breweries repetidas';
 //$idioma['mail_'] = '';
 
 $idioma['pwd_changed'] = 'La clave se ha cambiado';

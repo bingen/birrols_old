@@ -37,14 +37,14 @@ $res = mysqli_query( $mysql_link, $query ) OR die( mysqli_error( $mysql_link ) )
 if( $row = mysqli_fetch_object( $res ) ) {
 
   echo '<fieldset id="business"><legend>'. $row->name;
-  if($row->register_id == $current_user->id || $current_user->admin ) {
+  if($row->register_id === $current_user->id || $current_user->admin ) {
     echo ' [<a href="'. $globals['base_url'] .'business_edit.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
   }
   echo '</legend>'."\n";
 
   echo '<dl id="business_list">' . "\n";
   
-  echo '<img class="thumbnail" src="'.get_avatar_url('business', $row->auto_id, $row->avatar, 80).'" width="80" height="80" alt="'.$row->name.'" title="logo" />'."\n";
+  show_avatar( 'business', $row->auto_id, $row->avatar, $row->name, 80 );
   echo '<img src="'. get_stars($row->score). '" alt="'. $row->score . '"/>'."\n";
 
 //   show_textfield( 'name', $idioma['beer_name'], $row->name );
@@ -65,7 +65,7 @@ if( $row = mysqli_fetch_object( $res ) ) {
   show_textfield( 'address_1', $idioma['bsns_address']." 1", $row->address_1 );
   show_textfield( 'address_2', $idioma['bsns_address']." 2", $row->address_2 );
   show_textfield( 'zip_code', $idioma['bsns_zip'], $row->zip_code );
-  show_textfield( 'url', $idioma['bsns_url'], $row->url );
+  show_textfield( 'url', $idioma['bsns_url'], $row->url, $row->url );
   show_textfield( 'email', $idioma['id_email'], $row->email );
   show_textfield( 'phone', $idioma['bsns_phone'], $row->phone );
   show_textfield( 'lat', $idioma['bsns_lat'], $row->lat );

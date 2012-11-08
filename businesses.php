@@ -27,22 +27,11 @@ if( $current_user->authenticated )
 
 
 $tabla = 'business_view';
-$url = $globals['base_url'].'table_'. $tabla .'.php?';
+$url = $globals['base_url'].'table_'. $tabla .'.php';
 $div = 'results';
 
-	print("
-	<script type='text/javascript'>
-	function get_reload_url()  {
-			var url = '$url' + 'search_type=' + document.getElementById('search_type').value;
-			
-			if( document.getElementById('brewery-check').checked || document.getElementById('pub-check').checked || document.getElementById('store-check').checked ) {
-			    url = url + '&brewery=' + document.getElementById('brewery-check').checked + '&pub=' + document.getElementById('pub-check').checked + '&store=' + document.getElementById('store-check').checked;
-			 }
-			
-			return url;
-        }
-	</script>
-	");
+echo "<script type='text/javascript'> var table_url='$url';</script>\n";
+echo "<script src='".$globals['js_url']. "businesses.js' type='text/javascript' charset='utf-8'></script>\n";
 
 echo '<div id="container_cuerpo">'."\n";
 echo '<div id="cuerpo">'. "\n";
@@ -124,7 +113,7 @@ echo "             </li> \n"; // store-filter
 echo "           </ul> \n"; // type-list
 echo "         </ul> \n"; // filter-list
 echo "         </div> \n"; // filters
-echo "         <div id='results'> \n";
+echo "         <div id='results' class='results'> \n";
 include('table_'. $tabla .'.php');
 echo "         </div> \n"; // results
 echo "      </div> \n"; // search container

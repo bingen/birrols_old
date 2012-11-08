@@ -21,83 +21,25 @@
 include_once('config.php');
 
 
-	if($current_user->admin) {
-	  $campos = "auto_id,name,country,brewery,category,type,abv,ibu,description,score";
-	  $cabecera = $idioma['beer_id']. ',' .$idioma['beer_name']. ',' .$idioma['bsns_country']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
-	  $filtros_array = "1,1,1,1,1,1,1,1,1,1";
-	  $colspan_array = "1,1,1,1,1,1,1,1,1,1";
-	  $orden_array = "1,1,1,1,0,0,0,0,0,1,1";
-	} else {
-	  $campos = "name,country,brewery,category,type,abv,ibu,description,score";
-	  $cabecera = $idioma['beer_name']. ',' .$idioma['bsns_country']. ',' .$idioma['brewery']. ',' .$idioma['beer_category']. ',' .$idioma['beer_type']. ','  . $idioma['beer_abv']. ',' .$idioma['beer_ibu']. ' ,' .$idioma['beer_desc']. ',' .$idioma['beer_score'];
-	  $filtros_array = "1,1,1,1,1,1,1,1,1";
-	  $colspan_array = "1,1,1,1,1,1,1,1,1";
-	  $orden_array = "1,1,1,0,0,0,0,0,1,1";
-	}
-	if( $current_user->authenticated ) { // fav
-	  $campos .= ",fav";
-// 	  $cabecera .= ',' . $idioma['fav'];
-	  $cabecera .= ',' . "<img src='". $globals['img_url'] ."common/heart.png' alt='".$idioma['beer_sc']."' />";
-	  $filtros_array .= ",1";
-	  $orden_array .= ",1";
-	}
 	$tabla = 'beers_view';
-//	if( empty($estado) )
-//		$estado = $_REQUEST['estado'];
 
-//	$where = " AND estado = $estado ";
+	if( !empty($_REQUEST['ale']) && $_REQUEST['ale'] == 'true' )
+	    $query_cond .= " OR category_id = 1 ";
+	if( !empty( $_REQUEST['lager']) && $_REQUEST['lager'] == 'true' )
+	    $query_cond .= " OR category_id = 2 ";
+	if( !empty($_REQUEST['lambic']) && $_REQUEST['lambic'] == 'true' )
+	    $query_cond .= " OR category_id = 3 ";
+	if( !empty($query_cond) )
+	    $query_cond = 'AND (0 ' . $query_cond . ')';
 
-	$query_cond = tabla_head( $tabla, $where );
-	beers( 0, $query_cond );
+	$query_cond = list_head( $tabla, $query_cond );
+	beers( $query_cond );
 
-function beers($beer_id=0, $query_cond='') {
+function beers($query_cond='') {
 	global $mysql_link, $current_user, $globals, $idioma, $tabla;
 
-	if( $beer_id != 0 ) 
-		$query_beer = " WHERE auto_id = $beer_id ";
-	//elseif( $estado != 0 )
-	//	$query_partido = " WHERE estado = $estado ";
-	else $query_beer = " WHERE 1 ";
+	$query_beer = " WHERE 1 ";
 
-	if( $beer_id != 0 ) {
-		echo '	   <table class="principal-table" id="'. $tabla .'-table">' . "\n";
-		echo '	 <thead>' . "\n";
-		$fila_0 = 0;
-		$num_filas = 1;
-
-		print("
-	  <tr>
-		");
-		if($current_user->admin)
-		    echo "			<th class=\"col-auto_id\"><strong>".$idioma['beer_id']."</strong></th> \n";
-		print("
-	    <th class=\"col-name\"><strong>".$idioma['beer_name']."</strong></th>
-	    <th class=\"col-country\"><strong>".$idioma['bsns_country']."</strong></th>
-	    <th class=\"col-brewery\"><strong>".$idioma['brewery']."</strong></th>
-	    <th class=\"col-category\"><strong>".$idioma['beer_category']."</strong></th>
-	    <th class=\"col-type\"><strong>".$idioma['beer_type']." 1</strong></th>
-	    <th class=\"col-abv\"><strong>".$idioma['beer_abv']." 2</strong></th>
-	    <th class=\"col-ibu\"><strong>".$idioma['beer_ibu']." 3</strong></th>
-	    <th class=\"col-desc\"><strong>".$idioma['beer_desc']." 4</strong></th>
-	    <th class=\"col-score\"><strong>".$idioma['beer_score']."</strong></th>
-		");
-	  if( $current_user->authenticated )
-	    echo "	    <th class=\"col-fav\"><strong><img src='". $globals['img_url'] ."common/heart.png' alt='".$idioma['beer_sc']."' /></strong></th>\n";
-	  print("
-	  </tr>
-	 </thead>
-		");
-// 	    <th class=\"col-nivel\" colspan=4><strong>".$idioma['pts_nivel_l']."</strong></th>
-// 	    <th class=\"col-publico\"><strong>".$idioma['cp_publico']."</strong></th>
-
-//	</table>
-//		echo '    <div id="'. $tabla .'-1">' . "\n";
-	} else {// if( $partido_id == 0 )
-		//echo '    <div id="'. $tabla .'">' . "\n";
-	}
-	//echo '	<table class="'. $tabla .'-table" id="'. $tabla .'-body">' . "\n";
-
-	echo '    <tbody>' . "\n";
 	$query = "SELECT * FROM $tabla $query_beer $query_cond";
 // 	echo '<p> Query: '. $query. '</p>';
 	$beer_list = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
@@ -108,11 +50,12 @@ function beers($beer_id=0, $query_cond='') {
 
 //		if( $current_user->authenticated ) {
 			$url_row = $globals['base_url'].'beer.php?id='.$row->auto_id;
-			echo '<tr '.$zebra.' onclick="window.location=\''. $url_row .'\'">' . "\n";
+			echo '<li onclick="window.location=\''. $url_row .'\'">' . "\n";
 			if($current_user->admin)
-			    echo '<td class="col-auto_id"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->auto_id.'</a></td>' . "\n";
-			echo '<td class="col-name"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->name.'</a></td>' . "\n";
-			echo '<td class="col-country"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->country.'</a></td>' . "\n";
+			    echo '<div class="col-auto_id"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->auto_id.'</a></v>' . "\n";
+			show_avatar( 'beers', $row->auto_id, $row->avatar, $row->name, 40 );
+			echo '<h3 class="col-name"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->name.'</a></h3>' . "\n";
+			echo '<div class="col-country"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->country.'</a></div>' . "\n";
 			echo '<td class="col-brewery"><a href="'.get_business_uri($row->brewery_id).'" title="'. $idioma['put_url_jugador'] .'">'.$row->brewery.'</a></td>' . "\n";
 			echo '<td class="col-category"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->category.'</a></td>' . "\n";
 			echo '<td class="col-type"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->type.'</a></td>' . "\n";
@@ -121,8 +64,8 @@ function beers($beer_id=0, $query_cond='') {
 			echo '<td class="col-desc"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->description.'</a></td>' . "\n";
 			echo '<td class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></td>' . "\n";
 		if( $current_user->authenticated ) // TODO:
-			echo '<td class="col-fav"><img src="'. $TODO . '" alt="'. $TODO . '"/></td>' . "\n";
-			echo '</tr>';
+			echo '<div class="col-fav"><img src="'. $TODO . '" alt="'. $TODO . '"/></div>' . "\n";
+			echo '</li>';
 //		} // end if authenticated
 	} // end for matches
 	echo "\n<!-- Credits: using some famfamfam silk free icons -->\n";

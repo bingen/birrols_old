@@ -334,7 +334,7 @@ function show_textfield( $field, $label, $value, $link='' ){
   echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
   echo "<dd><span name='$field' id='$field'> ".( empty($link) ? $value : "<a href='$link' alt='$value'>$value</a>" ) ." </span></dd>\n";
 }
-function show_checkbox( $field, $label, $value, $name ){
+function show_checkbox( $field, $label, $value ){
   echo "<dt><label for='$field'>" . $label . ":</label></dt>\n";
   echo "<dd><input type='checkbox' name='$field' id='$field' ". ( $value ? "checked='checked'" : " " ) ." />\n";
   echo "</dd>\n";
@@ -618,7 +618,7 @@ function guess_user_id ($str) {
 		return (int) $str;
 	} else {
 		$str = mysqli_real_escape_string( $mysql_link, mb_substr($str,0,64));
-		$res = mysqli_query($mysql_link, "select auto_id from users where login = '$str'") or die ('ERROR:'.mysqli_error($mysql_link));
+		$res = mysqli_query($mysql_link, "select auto_id from users where username = '$str'") or die ('ERROR:'.mysqli_error($mysql_link));
 		$id = (int) mysqli_result($res,0 , 0);
 		return $id;
 	}
@@ -627,7 +627,7 @@ function guess_user_id ($str) {
 function get_business_uri($business, $view='') {
 	global $globals;
 
-	$uri = $globals['base_url'].'business.php?login='.htmlspecialchars($business);
+	$uri = $globals['base_url'].'business.php?id='.htmlspecialchars($business);
 	if (!empty($view)) $uri .= "&amp;view=$view";
 
 	return $uri;
@@ -983,6 +983,61 @@ function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nu
 	return "$where ORDER BY $campo ". $globals['ordenes'][$orden] ." LIMIT $fila_0, $num_filas";
 
 } // function tabla head
+
+function list_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=null, $orden_ini=null, $titulo='' )
+{
+	global $mysql_link, $campos, $cabecera, $filtros_array, $colspan_array, $orden_array, $idioma, $globals;
+
+	$num_filas = $_REQUEST['num_filas'];
+	if( empty($num_filas) || $num_filas == 0 ) $num_filas = 10;
+	$fila_0 = $_REQUEST['fila_0'];
+	if( empty($fila_0) ) $fila_0 = 0;
+
+	$campo = $_REQUEST['campo'];
+	if( empty($campo) ){
+		if( empty($campo_ini) )
+			$campo = '1';
+		else
+			$campo = $campo_ini;
+	}
+	$orden = $_REQUEST['orden'];
+	if( $_REQUEST['orden'] == NULL ){
+		if( empty($orden_ini) )
+			$orden = 0;
+		else
+			$orden = $orden_ini;
+	}
+
+	$cabecera = explode(",",$cabecera);
+	$campos = explode(",",$campos);
+	$filtros_array = explode(",",$filtros_array);
+	$orden_array = explode(",",$orden_array);
+	$num_campos = count($campos);
+	//print_r($campos);
+	//print_r($cabecera);
+	//print_r( $filtros_array );
+
+	$url['base'] = 'table_'. $tabla .'.php?';
+	$url['paginacion'] = 'num_filas='. $num_filas . '&fila_0=' . $fila_0;
+	$url['orden'] = '&campo=' . $campo . '&orden=' . $orden;
+	$url['extra'] = $url_extra;
+	$url['final'] = $url['base'] . $url['paginacion'] . $url['orden'] . $url['extra'];
+	//print_r( $url );
+	
+	$query = "SELECT count(*) FROM $tabla WHERE 1 $where";
+// 	echo '<p> Query: '. $query. '</p>';
+	$res = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
+	$num_registros = mysqli_result( $res, 0 );
+
+	paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla );
+	if( !empty($titulo) ) {
+		echo "<div class='principal-table-titulo'>$titulo</div> \n";
+	}
+	echo '	<div id="fake-paginacion-2" style="clear: both;"></div>'. "\n"; 
+
+	return "$where ORDER BY $campo ". $globals['ordenes'][$orden] ." LIMIT $fila_0, $num_filas";
+
+} // function list head
 
 function get_stars( $points ) {
 

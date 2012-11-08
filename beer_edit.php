@@ -109,7 +109,7 @@ function beer_form(){
 
   echo "<input type='hidden' id='id' name='id' value='$id' />\n";
 
-  if( $id > 0 ) show_avatar( 'business', $id, $avatar, '', 80 );
+  if( $id > 0 ) show_avatar( 'beers', $id, $avatar, '', 80 );
 
   echo "<dt><label for='name'>" . $idioma['beer_name'] . ":</label></dt>\n";
   echo "<dd><input type='text' name='name' id='name' value='$name' autofocus='autofocus' /></dd>\n";
