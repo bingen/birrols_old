@@ -23,6 +23,7 @@ include(libpath.'log.php');
 
 check_login();
 if( !$current_user->authenticated ) {
+  cabecera('', $_SERVER['PHP_SELF']);
   show_error($idioma['err_login']);
 } else { // current_user authenticated
 

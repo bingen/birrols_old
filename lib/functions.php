@@ -340,7 +340,10 @@ function show_checkbox( $field, $label, $value ){
   echo "</dd>\n";
 }
 function show_avatar( $object, $id, $avatar, $name, $size=80  ){
-  echo "<img class='thumbnail' src='".get_avatar_url($object, $id, $avatar, $size)."' width='$size' height='$size' alt='".$name."' title='logo' /> \n";
+  global $globals;
+  
+  $url = $globals['base_url']. $object .'.php?id='.$id;
+  echo "<a href='$url' alt='$name'><img class='thumbnail' src='".get_avatar_url($object, $id, $avatar, $size)."' width='$size' height='$size' alt='".$name."' title='logo' /> </a> \n";
 }
 function show_stars( $score ){
   echo '<img src="'. get_stars($score). '" alt="'. $score . '"/>'."\n";
@@ -729,7 +732,7 @@ function do_error($mess = false, $error = false, $send_status = true) {
 	die;
 }
 
-function paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla='' ) {
+function paginacion( $url, $num_registros, $num_filas, $fila_0, $div='' ) {
 //function paginacion(  ) {
 	global $globals, $idioma;
 //	global 	$num_registros, $num_filas, $fila_0;
@@ -739,19 +742,19 @@ function paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla='' ) {
 
 	echo '	  <div id="num_filas">'. "\n";
 	if( $num_filas != 10 )
-		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 10 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'-env\')" title="'.$idioma['cc_10'].'"> 10 </a>'. "\n";
+		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 10 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'.$idioma['cc_10'].'"> 10 </a>'. "\n";
 	else 
 		echo '10'. "\n";
 	if( $num_filas != 25 )
-		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 25 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'-env\')" title="'.$idioma['cc_25'].'"> 25 </a>'. "\n";
+		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 25 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'.$idioma['cc_25'].'"> 25 </a>'. "\n";
 	else 
 		echo '25'. "\n";
 	if( $num_filas != 50 )
-		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 50 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'-env\')" title="'.$idioma['cc_50'].'"> 50 </a>'. "\n";
+		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 50 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'.$idioma['cc_50'].'"> 50 </a>'. "\n";
 	else 
 		echo '50'. "\n";
 	if( $num_filas != 100 )
-		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 100 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'-env\')" title="'.$idioma['cc_100'].'"> 100 </a>'. "\n";
+		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 100 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'.$idioma['cc_100'].'"> 100 </a>'. "\n";
 	else 
 		echo '100'. "\n";
 	echo '	  </div>'. "\n"; //num_filas
@@ -759,18 +762,18 @@ function paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla='' ) {
 	echo '	  <div id="paginacion">'. "\n";
 	//echo '	  <p>'. "\n";
  	if( $fila_0 > 0 ) {
-		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' . 0 . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'-env\')" title="'.$idioma['cc_p_primera'].'"> << </a>'. "\n";
+		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' . 0 . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'.$idioma['cc_p_primera'].'"> << </a>'. "\n";
 		$aux = max(0, $fila_0-$num_filas);
-		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'-env\')" title="'.$idioma['cc_p_anterior'].'"> < </a>'. "\n";
+		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'.$idioma['cc_p_anterior'].'"> < </a>'. "\n";
 	} else {
 		echo '<<'. "\n";
 		echo '<'. "\n";
 	}
 	if( $fila_0+$num_filas < $num_registros ) {
 		$aux = $fila_0+$num_filas;
-		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'-env\')" title="'.$idioma['cc_p_siguiente'].'"> > </a>'. "\n";
+		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'.$idioma['cc_p_siguiente'].'"> > </a>'. "\n";
 		$aux = floor(($num_registros-1) / $num_filas) * $num_filas;
-		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'-env\')" title="'.$idioma['cc_p_ultima'].'"> >> </a>'. "\n";
+		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'.$idioma['cc_p_ultima'].'"> >> </a>'. "\n";
 	} else {
 		echo '>'. "\n";
 		echo '>>'. "\n";
@@ -785,7 +788,7 @@ function paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla='' ) {
 	for( $i = max($pagina-2, 1); $i < min($pagina+2, $num_paginas)+1; $i++ ) {
 		$aux = ($i-1) * $num_filas;
 		if( $i == $pagina ) $class_pag = 'actual'; else $class_pag = '';
-		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' . $aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $tabla .'-env\')" title="'. $i .'" class="'. $class_pag .'"> ' . $i .' </a>'. "\n";
+		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' . $aux . '&num_filas='. $num_filas . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'. $i .'" class="'. $class_pag .'"> ' . $i .' </a>'. "\n";
 	}
 	if( $num_paginas == 0 )
 		echo '		<a href="#" title="1" class="actual"> 1 </a>'. "\n";
@@ -800,7 +803,7 @@ function paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla='' ) {
 function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=null, $orden_ini=null, $titulo='' )
 {
 	global $mysql_link, $campos, $cabecera, $filtros_array, $colspan_array, $orden_array, $idioma, $globals;
-
+	
 	$num_filas = $_REQUEST['num_filas'];
 	if( empty($num_filas) || $num_filas == 0 ) $num_filas = 10;
 	$fila_0 = $_REQUEST['fila_0'];
@@ -984,9 +987,12 @@ function tabla_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nu
 
 } // function tabla head
 
-function list_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=null, $orden_ini=null, $titulo='' )
+function list_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=null, $orden_ini=null, $titulo='', $div = '' )
 {
-	global $mysql_link, $campos, $cabecera, $filtros_array, $colspan_array, $orden_array, $idioma, $globals;
+	global $mysql_link, $orden_array, $idioma, $globals;
+
+	if( empty($div) )
+	  $div = 'results';
 
 	$num_filas = $_REQUEST['num_filas'];
 	if( empty($num_filas) || $num_filas == 0 ) $num_filas = 10;
@@ -1008,9 +1014,6 @@ function list_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nul
 			$orden = $orden_ini;
 	}
 
-	$cabecera = explode(",",$cabecera);
-	$campos = explode(",",$campos);
-	$filtros_array = explode(",",$filtros_array);
 	$orden_array = explode(",",$orden_array);
 	$num_campos = count($campos);
 	//print_r($campos);
@@ -1029,7 +1032,7 @@ function list_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nul
 	$res = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
 	$num_registros = mysqli_result( $res, 0 );
 
-	paginacion( $url, $num_registros, $num_filas, $fila_0, $tabla );
+	paginacion( $url, $num_registros, $num_filas, $fila_0, $div );
 	if( !empty($titulo) ) {
 		echo "<div class='principal-table-titulo'>$titulo</div> \n";
 	}

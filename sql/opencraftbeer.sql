@@ -115,13 +115,19 @@ CREATE TABLE IF NOT EXISTS beers (
   score decimal(3,2) default 0,
   register_id int(11), 
   PRIMARY KEY  (auto_id),
-  UNIQUE KEY name (brewery_id,name)
+  UNIQUE KEY brewery_name (brewery_id,name)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 DROP VIEW IF EXISTS beers_view;
-CREATE VIEW beers_view AS (SELECT b.*, w.name brewery, w.user_admin_id, c.category, t.type, p.name country
-FROM beers b, business w, beer_categories c, beer_types t, countries p
-WHERE w.brewery AND b.brewery_id = w.auto_id AND b.category_id = c.auto_id AND b.type_id = t.auto_id AND w.country_id = p.auto_id);
+CREATE VIEW beers_view AS (
+  SELECT b.*, w.name brewery, w.user_admin_id, c.category, t.type, p.name country
+  FROM beers b 
+  INNER JOIN business w ON b.brewery_id = w.auto_id
+  LEFT JOIN beer_categories c ON b.category_id = c.auto_id
+  LEFT JOIN beer_types t ON  b.type_id = t.auto_id
+  LEFT JOIN countries p ON w.country_id = p.auto_id
+  WHERE w.brewery 
+);
 
 --
 -- Table structure for table beers_avatars

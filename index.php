@@ -27,6 +27,10 @@ if($_GET["op"] === 'logout') {
 
 cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
 
+if( isset($_GET['error_login']) ) {
+  show_error($idioma['err_login']);
+}
+
 laterales();
 
 echo '<div id="container_cuerpo">'."\n";

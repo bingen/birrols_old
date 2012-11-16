@@ -52,17 +52,17 @@ function beers($query_cond='') {
 			$url_row = $globals['base_url'].'beer.php?id='.$row->auto_id;
 			echo '<li onclick="window.location=\''. $url_row .'\'">' . "\n";
 			if($current_user->admin)
-			    echo '<div class="col-auto_id"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->auto_id.'</a></v>' . "\n";
+			    echo '<div class="col-auto_id"><a href="'. $url_row .'" title="'. $row->auto_id .'">'.$row->auto_id.'</a></v>' . "\n";
 			show_avatar( 'beers', $row->auto_id, $row->avatar, $row->name, 40 );
-			echo '<h3 class="col-name"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->name.'</a></h3>' . "\n";
-			echo '<div class="col-country"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->country.'</a></div>' . "\n";
-			echo '<td class="col-brewery"><a href="'.get_business_uri($row->brewery_id).'" title="'. $idioma['put_url_jugador'] .'">'.$row->brewery.'</a></td>' . "\n";
-			echo '<td class="col-category"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->category.'</a></td>' . "\n";
-			echo '<td class="col-type"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->type.'</a></td>' . "\n";
-			echo '<td class="col-abv"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->abv.'</a></td>' . "\n";
-			echo '<td class="col-ibu"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->ibu.'</a></td>' . "\n";
-			echo '<td class="col-desc"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->description.'</a></td>' . "\n";
-			echo '<td class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></td>' . "\n";
+			echo '<h3 class="col-name"><a href="'. $url_row .'" title="'. $row->name .'">'.$row->name.'</a></h3>' . "\n";
+			echo '<div class="col-country">'.$row->country.'</div>' . "\n";
+			echo '<div class="col-brewery"><a href="'.get_business_uri($row->brewery_id).'" title="'. $idioma['brewery'] .'">'.$row->brewery.'</a></div>' . "\n";
+			echo '<div class="col-category">'.$row->category.'</div>' . "\n";
+			echo '<div class="col-type">'.$row->type.'</div>' . "\n";
+			echo '<div class="col-abv">'. $idioma['beer_abv'] . ": ". $row->abv.'</div>' . "\n";
+			echo '<div class="col-ibu">'. $idioma['beer_ibu'] . ": ". $row->ibu.'</div>' . "\n";
+			echo '<div class="col-desc">'.$row->description.'</div>' . "\n";
+			echo '<div class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></div>' . "\n";
 		if( $current_user->authenticated ) // TODO:
 			echo '<div class="col-fav"><img src="'. $TODO . '" alt="'. $TODO . '"/></div>' . "\n";
 			echo '</li>';
