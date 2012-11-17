@@ -370,6 +370,19 @@ function input_checkbox( $field, $label, $value=1, $checked=false ){
   echo "<dd><input type='checkbox' name='$field' id='$field' value='$value' ". ( $checked ? "checked='checked'": "" )." />\n";
   echo "</dd>\n";
 }
+function input_country() {
+  global $mysql_link, $idioma, $country_id;
+  
+  echo "<select name='country_id' id='country_id' class='turn-to-ac' >\n";
+  echo "<option value='' ". ( $country_id=='' ? "selected='selected'" : "" ) .">". $idioma['bsns_sel_country'] ."</option> \n";
+  // TODO: language_id
+  $query = "SELECT auto_id, name, alternative_spellings, relevancy FROM countries WHERE language_id = 3";
+  $res = mysqli_query( $mysql_link, $query );
+  while( $country = mysqli_fetch_object( $res ) )
+    echo "<option value='". $country->auto_id ."' ". ( $country_id == $country->auto_id ? "selected='selected'" : "" ) ." data-alternative-spellings='". $country->alternative_spellings ."' data-relevancy-booster='". $country->relevancy . "'>". $country->name ."</option> \n";
+  echo "</select>\n";
+
+}
 function input_avatar($object) {
   global $globals, $idioma;
   

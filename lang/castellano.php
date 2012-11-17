@@ -239,11 +239,14 @@ $idioma['bsns_lat'] = 'Latitud';
 $idioma['bsns_lon'] = 'Longitud';
 $idioma['bsns_avatar_1'] = 'Logo';
 $idioma['bsns_avatar_2'] = 'El logo debe ser una imagen cuadrada en jpeg, gif o png de no más de '. substr($globals['avatars_max_size'], 0, -3) .' KB, sin transparencias';
-$idioma['bsns_homebrew_store'] = 'Productos para homebrewers';
+$idioma['bsns_homebrew'] = 'Productos homebrew';
 $idioma['bsns_food'] = 'Comida';
 $idioma['bsns_wifi'] = 'WiFi';
 $idioma['bsns_taps'] = 'Tiradores';
 $idioma['bsns_tap'] = 'Tirador';
+$idioma['bsns_search'] = 'Buscar';
+$idioma['bsns_search_clue'] = 'Busca...';
+$idioma['bsns_facilities'] = 'Felicidades';
 //$idioma['bsns_'] = '';
 
 $idioma['about_what_1'] = 'Bírrols, el portal de birra de buen';

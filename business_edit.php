@@ -131,21 +131,15 @@ function bsns_form(){
   input_checkbox('brewery',$idioma['brewery'],1, $brewery);
   input_checkbox('pub',$idioma['pub'],1, $pub);
   input_checkbox('store',$idioma['store'],1, $store);
-  input_checkbox( 'homebrew_store', $idioma['bsns_homebrew_store'], 1, $homebrew_store );
+  input_checkbox( 'homebrew_store', $idioma['bsns_homebrew'], 1, $homebrew_store );
   input_checkbox( 'food', $idioma['bsns_food'], 1, $food );
   input_checkbox( 'wifi', $idioma['bsns_wifi'], 1, $wifi );
 
   input_number( 'taps', $idioma['bsns_taps'], 0, 999, $taps );
 
   echo "<dt><label for='country_id'>" . $idioma['bsns_country'] . ":</label></dt>\n";
-  echo "<dd><select name='country_id' id='country_id' class='turn-to-ac' >\n";
-  echo "<option value='' ". ( $country_id=='' ? "selected='selected'" : "" ) .">". $idioma['bsns_sel_country'] ."</option> \n";
-  // TODO: language_id
-  $query = "SELECT auto_id, name, alternative_spellings, relevancy FROM countries WHERE language_id = 3";
-  $res = mysqli_query( $mysql_link, $query );
-  while( $country = mysqli_fetch_object( $res ) )
-    echo "<option value='". $country->auto_id ."' ". ( $country_id == $country->auto_id ? "selected='selected'" : "" ) ." data-alternative-spellings='". $country->alternative_spellings ."' data-relevancy-booster='". $country->relevancy . "'>". $country->name ."</option> \n";
-  echo "</select>\n";
+  echo "<dd>\n";
+  input_country();
   echo "</dd>\n";
   input_textfield( 'state', $idioma['bsns_state'], $state );
   input_textfield( 'city', $idioma['bsns_city'], $city );

@@ -35,7 +35,9 @@ $url = $globals['base_url'].'table_'. $tabla .'.php';
 $div = 'results';
 
 echo "<script type='text/javascript'> var table_url='$url';</script>\n";
-echo "<script src='".$globals['js_url']. "businesses.js' type='text/javascript' charset='utf-8'></script>\n";
+echo "<script src='".$globals['js_url']. "jquery-ui.min.js'></script>\n";
+echo "<script src='".$globals['js_url']. "jquery.select-to-autocomplete.min.js'></script>\n";
+echo "<script src='".$globals['js_url']. "businesses.js'></script>\n";
 
 echo '<div id="container_cuerpo">'."\n";
 echo '<div id="cuerpo">'. "\n";
@@ -47,50 +49,24 @@ echo "            <input type='hidden' id='search_type' value=''/> \n";
 echo "            <button class='button-left' id='search-button-list' onClick='getElementById(\"search_type\").value=\"list\"; reload_div(get_reload_url(), \"$div\")'>". $idioma['bsns_list'] ."</button>\n";
 echo "            <button class='button-right' id='search-button-map'>". $idioma['bsns_map'] ."</button>\n";
 echo "         </div> \n"; // search-type-buttons
+echo "         <div id='search-word'> \n";
+echo "            <input type='search' name='search-input' id='search-input' results=5 placeholder='". $idioma['bsns_search_clue'] ."'></input> \n"; 
+echo "            <button id='search-button-word' onClick='reload_div(get_reload_url(), \"$div\");'>". $idioma['bsns_search'] ."</button> \n"; 
+echo "         </div> \n"; // search-word
 echo "      </div> \n"; // search bar
 
-// jQuery call to load map on amp button click
+// jQuery call to load map on map button click
 // TODO: leaflet
     echo '<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />'."\n";
     echo ' <!--[if lte IE 8]>'."\n";
     echo '     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />'."\n";
     echo ' <![endif]-->'."\n";
     echo ' <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>'."\n";
-    print("
-    <script type='text/javascript'>
-    $('#search-button-map').on({
-	click: function () {
-	    document.getElementById(\"search_type\").value=\"map\";
-	    $('#$div').load(get_reload_url(), function() {
-		var map = L.map('map').setView([51.505, -0.09], 13);
-		L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
-			maxZoom: 18,
-			attribution: 'Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"http://cloudmade.com\">CloudMade</a>'
-		}).addTo(map);
-
-
-		L.marker([51.5, -0.09]).addTo(map)
-			.bindPopup(\"<b>Flint!</b><br />Aquí hay bírrols!!.\").openPopup();
-
-		var popup = L.popup();
-
-		function onMapClick(e) {
-			popup
-				.setLatLng(e.latlng)
-				.setContent(\"You clicked the map at \" + e.latlng.toString())
-				.openOn(map);
-		}
-
-		map.on('click', onMapClick);
-	    });
-	}
-    });
-    </script>
-    ");
-
+    
 echo "      <div id='search-container'> \n";
 echo "         <div id='filters'> \n";
-echo "         <ul id='filter-list'> \n";
+// echo "         <ul id='filter-list'> \n";
+// type ////////////////
 echo "           <ul id='type-list' class='filter-ul'> \n";
 echo "             <h4 class='filter-header'>\n";
 echo "             ". $idioma['bsns_type'] ."\n";
@@ -115,7 +91,40 @@ echo "               <span>". $idioma['stores'] ."</span> \n";
 echo "               </label> \n";
 echo "             </li> \n"; // store-filter
 echo "           </ul> \n"; // type-list
-echo "         </ul> \n"; // filter-list
+// country ////////////////
+echo "           <div id='country-div' class='filter-div'> \n";
+echo "             <h4 class='filter-header'>\n";
+echo "             ". $idioma['bsns_country'] ."\n";
+echo "             <span class='filter-toggle'></span>\n";
+echo "             </h4>\n";
+input_country();
+echo "           </div> \n"; // country
+// facilities ////////////////
+echo "           <ul id='type-list' class='filter-ul'> \n";
+echo "             <h4 class='filter-header'>\n";
+echo "             ". $idioma['bsns_facilities'] ."\n";
+echo "             <span class='filter-toggle'></span>\n";
+echo "             </h4>\n";
+echo "             <li id='food-filter' class='filter-li'> \n";
+echo "               <label class='filter-label'> \n";
+echo "               <input type='checkbox' id='food-check' value='food' onChange='reload_div(get_reload_url(), \"$div\")'/> \n";
+echo "               <span>". $idioma['bsns_food'] ."</span> \n";
+echo "               </label> \n";
+echo "             </li> \n"; // food-filter
+echo "             <li id='wifi-filter' class='filter-li'> \n";
+echo "               <label class='filter-label'> \n";
+echo "               <input type='checkbox' id='wifi-check' value='wifi' onChange='reload_div(get_reload_url(), \"$div\")'/> \n";
+echo "               <span>". $idioma['bsns_wifi'] ."</span> \n";
+echo "               </label> \n";
+echo "             </li> \n"; // wifi-filter
+echo "             <li id='homebrew-filter' class='filter-li'> \n";
+echo "               <label class='filter-label'> \n";
+echo "               <input type='checkbox' id='homebrew-check' value='homebrew' onChange='reload_div(get_reload_url(), \"$div\")' /> \n";
+echo "               <span>". $idioma['bsns_homebrew'] ."</span> \n";
+echo "               </label> \n";
+echo "             </li> \n"; // homebrew-filter
+echo "           </ul> \n"; // facilities-list
+// echo "         </ul> \n"; // filter-list
 echo "         </div> \n"; // filters
 echo "         <div id='results' class='results'> \n";
 include('table_'. $tabla .'.php');

@@ -22,15 +22,36 @@ include_once('config.php');
 
 	$tabla = 'business_view';
 	$query_cond = '';
-	
+
+	// type //////////////////////
 	if( !empty($_REQUEST['brewery']) && $_REQUEST['brewery'] == 'true' )
-	    $query_cond .= " OR brewery ";
+	    $query_type .= " OR brewery ";
 	if( !empty( $_REQUEST['pub']) && $_REQUEST['pub'] == 'true' )
-	    $query_cond .= " OR pub ";
+	    $query_type .= " OR pub ";
 	if( !empty($_REQUEST['store']) && $_REQUEST['store'] == 'true' )
-	    $query_cond .= " OR store ";
-	if( !empty($query_cond) )
-	    $query_cond = 'AND (0 ' . $query_cond . ')';
+	    $query_type .= " OR store ";
+	if( !empty($query_type) )
+	    $query_cond = 'AND (0 ' . $query_type . ')';
+
+	// country //////////////////////
+	if( !empty( $_REQUEST['country']) ) {
+	  $query_cond .= " AND country_id = " .$_REQUEST['country'];
+	}
+
+	// facilities //////////////////////
+	if( !empty($_REQUEST['food']) && $_REQUEST['food'] == 'true' )
+	    $query_fac .= " OR food ";
+	if( !empty( $_REQUEST['wifi']) && $_REQUEST['wifi'] == 'true' )
+	    $query_fac .= " OR wifi ";
+	if( !empty($_REQUEST['homebrew']) && $_REQUEST['homebrew'] == 'true' )
+	    $query_fac .= " OR homebrew_store ";
+	if( !empty($query_fac) )
+	    $query_cond = 'AND (0 ' . $query_fac . ')';
+
+	if( !empty( $_REQUEST['search']) ) {
+	  $search = $_REQUEST['search'];
+	  $query_cond .= " AND (name LIKE '%$search%' OR description LIKE '%$search%' OR address_1 LIKE '%$search%' OR address_2 LIKE '%$search%' OR city LIKE '%$search%' OR state LIKE '%$search%' )";
+	}
 
 	if( !empty($_REQUEST['search_type']) && $_REQUEST['search_type'] == 'map' ) {
 	    businesses_map($query_cond );
@@ -47,7 +68,7 @@ function businesses_list($query_cond='') {
 	$truefalse_img_array = array($globals['img_url']. 'common/cross.png', $globals['img_url']. 'common/tick.png');
 	
 	$query = "SELECT * FROM $tabla $query_table $query_cond";
-// 	echo '<p> Query: '. $query. '</p>';
+	echo '<p> Query: '. $query. '</p>';
 	$table_list = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
 	echo '	   <ul class="principal-list" id="'. $tabla .'-list">' . "\n";
 	for( $i = 0; $i < mysqli_num_rows($table_list); $i++)
