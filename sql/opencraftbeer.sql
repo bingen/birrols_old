@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS beers (
 
 DROP VIEW IF EXISTS beers_view;
 CREATE VIEW beers_view AS (
-  SELECT b.*, w.name brewery, w.user_admin_id, c.category, t.type, p.name country
+  SELECT b.*, w.name brewery, w.user_admin_id, c.category, t.type, p.name country, p.auto_id country_id
   FROM beers b 
   INNER JOIN business w ON b.brewery_id = w.auto_id
   LEFT JOIN beer_categories c ON b.category_id = c.auto_id

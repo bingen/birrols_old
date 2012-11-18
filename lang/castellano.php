@@ -221,6 +221,7 @@ $idioma['beer_hops'] = 'Lúpulos';
 $idioma['beer_desc'] = 'Descripción';
 $idioma['beer_score'] = 'Puntuación';
 $idioma['beer_new'] = 'Nueva cerveza';
+$idioma['beer_sel_type'] = 'Selecciona el tipo';
 //$idioma['beer_'] = '';
 
 $idioma['bsns_type'] = 'Tipo de empresa';

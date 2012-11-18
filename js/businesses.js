@@ -7,7 +7,7 @@ function get_reload_url()  {
 	}
 	// country
 	if( document.getElementById('country_id').value != '' ) {
-	  url = url + "&country=" + document.getElementById('country_id').value;
+	  url = url + "&country_id=" + document.getElementById('country_id').value;
 	}
 	// facilities
 	if( document.getElementById('food-check').checked || document.getElementById('wifi-check').checked || document.getElementById('homebrew-check').checked ) {

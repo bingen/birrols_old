@@ -378,8 +378,8 @@ function input_country() {
   // TODO: language_id
   $query = "SELECT auto_id, name, alternative_spellings, relevancy FROM countries WHERE language_id = 3";
   $res = mysqli_query( $mysql_link, $query );
-  while( $country = mysqli_fetch_object( $res ) )
-    echo "<option value='". $country->auto_id ."' ". ( $country_id == $country->auto_id ? "selected='selected'" : "" ) ." data-alternative-spellings='". $country->alternative_spellings ."' data-relevancy-booster='". $country->relevancy . "'>". $country->name ."</option> \n";
+  while( $row = mysqli_fetch_object( $res ) )
+    echo "<option value='". $row->auto_id ."' ". ( $country_id == $row->auto_id ? "selected='selected'" : "" ) ." data-alternative-spellings='". $row->alternative_spellings ."' data-relevancy-booster='". $row->relevancy . "'>". $row->name ."</option> \n";
   echo "</select>\n";
 
 }

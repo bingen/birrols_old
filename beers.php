@@ -31,7 +31,9 @@ $tabla = 'beers_view';
 $url = $globals['base_url'].'table_'. $tabla .'.php';
 $div = 'results';
 echo "<script type='text/javascript'> var table_url='$url';</script>\n";
-echo "<script src='".$globals['js_url']. "beers.js' type='text/javascript' charset='utf-8'></script>\n";
+echo "<script src='".$globals['js_url']. "jquery-ui.min.js'></script>\n";
+echo "<script src='".$globals['js_url']. "jquery.select-to-autocomplete.min.js'></script>\n";
+echo "<script src='".$globals['js_url']. "beers.js'></script>\n";
 
 echo '<div id="container_cuerpo">'."\n";
 echo '<div id="cuerpo">'. "\n";
@@ -48,7 +50,7 @@ for( $i = 0; $i < mysqli_num_rows($beer_categories); $i++)
 
 echo "      <div id='search-container'> \n";
 echo "         <div id='filters'> \n";
-echo "         <ul id='filter-list'> \n";
+// echo "         <ul id='filter-list'> \n";
 echo "           <ul id='type-list' class='filter-ul'> \n";
 echo "             <h4 class='filter-header'>\n";
 echo "             ". $idioma['bsns_type'] ."\n";
@@ -73,7 +75,30 @@ echo "               <span>". $row[2]->category ."</span> \n";
 echo "               </label> \n";
 echo "             </li> \n"; // lambic-filter
 echo "           </ul> \n"; // type-list
-echo "         </ul> \n"; // filter-list
+// type ////////////////
+echo "           <div id='type-div' class='filter-div'> \n";
+echo "             <h4 class='filter-header'>\n";
+echo "             ". $idioma['beer_type'] ."\n";
+echo "             <span class='filter-toggle'></span>\n";
+echo "             </h4>\n";
+  echo "<select name='type_id' id='type_id' class='turn-to-ac' >\n";
+  echo "<option value='' ". ( $country_id=='' ? "selected='selected'" : "" ) .">". $idioma['beer_sel_type'] ."</option> \n";
+  // TODO: relevancy-booster
+  $query = "SELECT auto_id, type FROM beer_types";
+  $res = mysqli_query( $mysql_link, $query );
+  while( $row = mysqli_fetch_object( $res ) )
+    echo "<option value='". $row->auto_id ."' ". ( $type_id == $row->auto_id ? "selected='selected'" : "" ) .">". $row->type ."</option> \n";
+  echo "</select>\n";
+echo "           </div> \n"; // type
+// country ////////////////
+echo "           <div id='country-div' class='filter-div'> \n";
+echo "             <h4 class='filter-header'>\n";
+echo "             ". $idioma['bsns_country'] ."\n";
+echo "             <span class='filter-toggle'></span>\n";
+echo "             </h4>\n";
+input_country();
+echo "           </div> \n"; // country
+// echo "         </ul> \n"; // filter-list
 echo "         </div> \n"; // filters
 
 echo '        <div id="results" class="results">' . "\n";

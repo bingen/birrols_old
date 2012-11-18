@@ -24,13 +24,23 @@ include_once('config.php');
 	$tabla = 'beers_view';
 
 	if( !empty($_REQUEST['ale']) && $_REQUEST['ale'] == 'true' )
-	    $query_cond .= " OR category_id = 1 ";
+	    $query_cat .= " OR category_id = 1 ";
 	if( !empty( $_REQUEST['lager']) && $_REQUEST['lager'] == 'true' )
-	    $query_cond .= " OR category_id = 2 ";
+	    $query_cat .= " OR category_id = 2 ";
 	if( !empty($_REQUEST['lambic']) && $_REQUEST['lambic'] == 'true' )
-	    $query_cond .= " OR category_id = 3 ";
-	if( !empty($query_cond) )
-	    $query_cond = 'AND (0 ' . $query_cond . ')';
+	    $query_cat .= " OR category_id = 3 ";
+	if( !empty($query_cat) )
+	    $query_cond = 'AND (0 ' . $query_cat . ')';
+
+	// type //////////////////////
+	if( !empty( $_REQUEST['type_id']) ) {
+	  $query_cond .= " AND type_id = " .$_REQUEST['type_id'];
+	}
+
+	// country //////////////////////
+	if( !empty( $_REQUEST['country_id']) ) {
+	  $query_cond .= " AND country_id = " .$_REQUEST['country_id'];
+	}
 
 	$query_cond = list_head( $tabla, $query_cond );
 	beers( $query_cond );

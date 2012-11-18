@@ -34,8 +34,8 @@ include_once('config.php');
 	    $query_cond = 'AND (0 ' . $query_type . ')';
 
 	// country //////////////////////
-	if( !empty( $_REQUEST['country']) ) {
-	  $query_cond .= " AND country_id = " .$_REQUEST['country'];
+	if( !empty( $_REQUEST['country_id']) ) {
+	  $query_cond .= " AND country_id = " .$_REQUEST['country_id'];
 	}
 
 	// facilities //////////////////////
@@ -68,7 +68,7 @@ function businesses_list($query_cond='') {
 	$truefalse_img_array = array($globals['img_url']. 'common/cross.png', $globals['img_url']. 'common/tick.png');
 	
 	$query = "SELECT * FROM $tabla $query_table $query_cond";
-	echo '<p> Query: '. $query. '</p>';
+// 	echo '<p> Query: '. $query. '</p>';
 	$table_list = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
 	echo '	   <ul class="principal-list" id="'. $tabla .'-list">' . "\n";
 	for( $i = 0; $i < mysqli_num_rows($table_list); $i++)
