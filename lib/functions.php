@@ -755,6 +755,11 @@ function paginacion( $url, $num_registros, $num_filas, $fila_0, $div='' ) {
 	//$url_aux = $_SERVER['PHP_SELF'];
 	//echo '<p> server name: '. $_SERVER['SERVER_NAME'] . ' php self: ' . $_SERVER['PHP_SELF'] . ' SCRIPT name: '.$_SERVER['SCRIPT_NAME'].' base_url: '.$globals['base_url']. ' url_aux: '. $url_aux .'</p>';
 
+  echo "         <div id='search-word'> \n";
+  echo "            <input type='search' name='search-input' id='search-input' results=5 placeholder='". $idioma['bsns_search_clue'] ."'></input> \n"; 
+  echo "            <button id='search-word-button' onClick='reload_div(get_reload_url(), \"$div\");'>". $idioma['bsns_search'] ."</button> \n"; 
+  echo "         </div> \n"; // search-word
+  
 	echo '	  <div id="num_filas">'. "\n";
 	if( $num_filas != 10 )
 		echo '		<a href="#" onclick="reload_div(\''.$url['base'].'fila_0=' .$fila_0 . '&num_filas='. 10 . $url['orden'] . $url['filtros'] . $url['extra'] . '\', \''. $div .'\')" title="'.$idioma['cc_10'].'"> 10 </a>'. "\n";

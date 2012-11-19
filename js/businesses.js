@@ -56,4 +56,9 @@ $('country_id').on({
 
 jQuery(function(){
   jQuery('select.turn-to-ac').selectToAutocomplete();
+  $("#search-input").keyup(function(event){
+    if(event.keyCode == 13){
+        $("#search-word-button").click();
+    }
+  });
 });

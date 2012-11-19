@@ -50,7 +50,15 @@ include_once('config.php');
 
 	if( !empty( $_REQUEST['search']) ) {
 	  $search = $_REQUEST['search'];
-	  $query_cond .= " AND (name LIKE '%$search%' OR description LIKE '%$search%' OR address_1 LIKE '%$search%' OR address_2 LIKE '%$search%' OR city LIKE '%$search%' OR state LIKE '%$search%' )";
+	  $search_array = preg_split( '/ /', $search );
+	  // all the words in the exact order
+	  $query_search_1 = " (name LIKE '%$search%' OR description LIKE '%$search%' OR address_1 LIKE '%$search%' OR address_2 LIKE '%$search%' OR city LIKE '%$search%' OR state LIKE '%$search%' )";
+	  // any of the words
+	  $query_search_2 = '';
+	  foreach( $search_array as $search_term ) {
+	    $query_search_2 .= " OR (name LIKE '%$search_term%' OR description LIKE '%$search_term%' OR address_1 LIKE '%$search_term%' OR address_2 LIKE '%$search_term%' OR city LIKE '%$search_term%' OR state LIKE '%$search_term%' )";
+	  }
+	  $query_cond .= "AND ($query_search_1 $query_search_2)";
 	}
 
 	if( !empty($_REQUEST['search_type']) && $_REQUEST['search_type'] == 'map' ) {

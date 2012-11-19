@@ -49,10 +49,6 @@ echo "            <input type='hidden' id='search_type' value=''/> \n";
 echo "            <button class='button-left' id='search-button-list' onClick='getElementById(\"search_type\").value=\"list\"; reload_div(get_reload_url(), \"$div\")'>". $idioma['bsns_list'] ."</button>\n";
 echo "            <button class='button-right' id='search-button-map'>". $idioma['bsns_map'] ."</button>\n";
 echo "         </div> \n"; // search-type-buttons
-echo "         <div id='search-word'> \n";
-echo "            <input type='search' name='search-input' id='search-input' results=5 placeholder='". $idioma['bsns_search_clue'] ."'></input> \n"; 
-echo "            <button id='search-button-word' onClick='reload_div(get_reload_url(), \"$div\");'>". $idioma['bsns_search'] ."</button> \n"; 
-echo "         </div> \n"; // search-word
 echo "      </div> \n"; // search bar
 
 // jQuery call to load map on map button click

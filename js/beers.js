@@ -25,6 +25,11 @@ function get_reload_url()  {
 	  url = url + "&abv_max=" + document.getElementById('abv-max').value;
 	}
 
+	// search
+	if( document.getElementById('search-input').value != '' ) {
+	  url = url + "&search=" + document.getElementById('search-input').value;
+	}
+	
 	return url;
 } // get_reload_url
 
@@ -36,6 +41,11 @@ $('country_id').on({
 
 jQuery(function(){
   jQuery('select.turn-to-ac').selectToAutocomplete();
+  $("#search-input").keyup(function(event){
+    if(event.keyCode == 13){
+        $("#search-word-button").click();
+    }
+  });
 });
 
 $(function() {

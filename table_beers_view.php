@@ -22,6 +22,7 @@ include_once('config.php');
 
 
 	$tabla = 'beers_view';
+// 	print_r( $_REQUEST );
 	
 	if( !empty($_REQUEST['pattern']) ) {
 	  $pattern = $_REQUEST['pattern'];
@@ -60,6 +61,19 @@ include_once('config.php');
 	  $query_cond .= " AND abv <= " .$_REQUEST['abv_max'];
 	}
 	
+	if( !empty( $_REQUEST['search']) ) {
+	  $search = $_REQUEST['search'];
+	  $search_array = preg_split( '/ /', $search );
+	  // all the words in the exact order
+	  $query_search_1 = " (name LIKE '%$search%' OR description LIKE '%$search%')";
+	  // any of the words
+	  $query_search_2 = '';
+	  foreach( $search_array as $search_term ) {
+	    $query_search_2 .= " OR (name LIKE '%$search_term%' OR description )";
+	  }
+	  $query_cond .= "AND ($query_search_1 $query_search_2)";
+	}
+
 	$query_cond = list_head( $tabla, $query_cond, '&'. http_build_query( $_REQUEST ) );
 	beers( $query_cond );
 
