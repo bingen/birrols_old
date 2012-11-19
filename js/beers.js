@@ -1,3 +1,6 @@
+var abv_min = 2;
+var abv_max = 15;
+
 function get_reload_url()  {
 	url = table_url + '?';
 
@@ -14,6 +17,14 @@ function get_reload_url()  {
 	  url = url + "&country_id=" + document.getElementById('country_id').value;
 	}
 
+	// abv
+	if( document.getElementById('abv-min').value != '' && document.getElementById('abv-min').value > abv_min ) {
+	  url = url + "&abv_min=" + document.getElementById('abv-min').value;
+	}
+	if( document.getElementById('abv-max').value != '' && document.getElementById('abv-max').value < abv_max ) {
+	  url = url + "&abv_max=" + document.getElementById('abv-max').value;
+	}
+
 	return url;
 } // get_reload_url
 
@@ -25,4 +36,20 @@ $('country_id').on({
 
 jQuery(function(){
   jQuery('select.turn-to-ac').selectToAutocomplete();
-})
+});
+
+$(function() {
+    $( "#slider-abv" ).slider({
+        range: true,
+        min: abv_min,
+        max: abv_max,
+        values: [ 3, 8 ],
+        slide: function( event, ui ) {
+             $( "#abv" ).val( ui.values[ 0 ] + "% - " + ui.values[ 1 ] + "%" );
+	     $( "#abv-min" ).val( ui.values[ 0 ]);
+	     $( "#abv-max" ).val( ui.values[ 1 ]);
+	     reload_div(get_reload_url(), 'results');
+        }
+    });
+    $( "#abv" ).val( $( "#slider-abv" ).slider( "values", 0 ) + "% - " + $( "#slider-abv" ).slider( "values", 1 ) + "%" );
+});

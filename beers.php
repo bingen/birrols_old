@@ -98,6 +98,16 @@ echo "             <span class='filter-toggle'></span>\n";
 echo "             </h4>\n";
 input_country();
 echo "           </div> \n"; // country
+echo "           <div id='abv-div'> \n";
+echo "             <h4 class='filter-header'>\n";
+echo "             ". $idioma['beer_abv'] ."\n";
+echo "             <span class='filter-toggle'></span>\n";
+echo "             </h4>\n";
+echo "               <input type='text' id='abv' /> \n";
+echo "               <input type='hidden' id='abv-min' /> \n";
+echo "               <input type='hidden' id='abv-max' /> \n";
+echo "           <div id='slider-abv'></div> \n";
+echo "           </div> \n"; // abv-div
 // echo "         </ul> \n"; // filter-list
 echo "         </div> \n"; // filters
 

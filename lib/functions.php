@@ -95,7 +95,7 @@ function cabecera($title='',$script='', $no_cache=false) {
 		$estilo = $aux[0];
 //		echo '<p>'.$estilo.'</p>'."\n";
 	}
-	echo '  <link href="'.$globals['css_url']. 'ocb.css" rel="stylesheet" type="text/css" />'."\n";
+	echo '  <link href="'.$globals['css_url']. 'birrols.css" rel="stylesheet" type="text/css" />'."\n";
 	echo '  <link href="'.$globals['css_url']. $estilo.'.css" rel="stylesheet" type="text/css" />'."\n";
 	echo '  <link rel="icon" href="'.$globals['img_url'] .'favicon.ico" type="image/x-icon">'."\n";
 	echo '  <link rel="shortcut icon" href="'.$globals['img_url'] .'favicon.ico" type="image/x-icon">'."\n";
@@ -146,6 +146,8 @@ function cabecera($title='',$script='', $no_cache=false) {
 	echo '	<div id="aux_1">'."\n";
 	echo '	<div id="titulo">'."\n";
 	echo '	  <h1><a href="'.$globals['base_url'].'index.php" title=""><img src="'. $globals['logo'] .'" alt="'. $globals['app_name'] .'"/></a></h1>'."\n";
+	echo "<h2> <span id='subtitle_1'>". $idioma['subtitle_1'] ." </span>\n";
+	echo "<span id='subtitle_2'>". $idioma['subtitle_2'] ." </span></h2>\n";
 	echo '	</div> <!-- titulo -->'."\n"; // titulo
 
 	echo '	<div id="aux_2">'."\n";
@@ -1047,7 +1049,7 @@ function list_head( $tabla, $where='', $url_extra='', $filtros=1, $campo_ini=nul
 
 	paginacion( $url, $num_registros, $num_filas, $fila_0, $div );
 	if( !empty($titulo) ) {
-		echo "<div class='principal-table-titulo'>$titulo</div> \n";
+		echo "<div class='list-titulo'>$titulo</div> \n";
 	}
 	echo '	<div id="fake-paginacion-2" style="clear: both;"></div>'. "\n"; 
 

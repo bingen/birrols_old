@@ -22,6 +22,10 @@ include_once('config.php');
 
 
 	$tabla = 'beers_view';
+	
+	if( !empty($_REQUEST['brewery_id']) ) {
+	  $query_cond .= " AND brewery_id = " .$_REQUEST['brewery_id'];
+	}
 
 	if( !empty($_REQUEST['ale']) && $_REQUEST['ale'] == 'true' )
 	    $query_cat .= " OR category_id = 1 ";
@@ -42,6 +46,14 @@ include_once('config.php');
 	  $query_cond .= " AND country_id = " .$_REQUEST['country_id'];
 	}
 
+	// abv //////////////////////
+	if( !empty( $_REQUEST['abv_min']) ) {
+	  $query_cond .= " AND abv >= " .$_REQUEST['abv_min'];
+	}
+	if( !empty( $_REQUEST['abv_max']) ) {
+	  $query_cond .= " AND abv <= " .$_REQUEST['abv_max'];
+	}
+	
 	$query_cond = list_head( $tabla, $query_cond );
 	beers( $query_cond );
 

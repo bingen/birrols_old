@@ -109,6 +109,12 @@ if( $row = mysqli_fetch_object( $res ) ) {
     }
     echo "</fieldset>\n"; // taps_list
   } // fi taps
+  if( $row->brewery ) { 
+    echo '        <div id="results" class="results">' . "\n";
+    $_REQUEST['brewery_id'] = $row->auto_id;
+    include('table_beers_view.php');
+    echo '        </div>' . "\n"; // results
+  } // fi brewery
 } else { // no $row
   show_error( $idioma['err_no_business'] );
 }
