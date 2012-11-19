@@ -112,6 +112,7 @@ if( $row = mysqli_fetch_object( $res ) ) {
   if( $row->brewery ) { 
     echo '        <div id="results" class="results">' . "\n";
     $_REQUEST['brewery_id'] = $row->auto_id;
+    $_REQUEST['pattern'] = 8191 - 8 - 16; // not country nor brewery
     include('table_beers_view.php');
     echo '        </div>' . "\n"; // results
   } // fi brewery

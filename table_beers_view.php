@@ -23,6 +23,12 @@ include_once('config.php');
 
 	$tabla = 'beers_view';
 	
+	if( !empty($_REQUEST['pattern']) ) {
+	  $pattern = $_REQUEST['pattern'];
+	} else { 
+	  $pattern = 8191;
+	}
+
 	if( !empty($_REQUEST['brewery_id']) ) {
 	  $query_cond .= " AND brewery_id = " .$_REQUEST['brewery_id'];
 	}
@@ -58,7 +64,7 @@ include_once('config.php');
 	beers( $query_cond );
 
 function beers($query_cond='') {
-	global $mysql_link, $current_user, $globals, $idioma, $tabla;
+	global $mysql_link, $current_user, $globals, $idioma, $tabla, $pattern;
 
 	$query_beer = " WHERE 1 ";
 
@@ -72,24 +78,44 @@ function beers($query_cond='') {
 	{
 		$row = mysqli_fetch_object($beer_list);
 // 		print_r($row);
-
-//		if( $current_user->authenticated ) {
 			$url_row = $globals['base_url'].'beer.php?id='.$row->auto_id;
 			echo '<li class="row" onclick="window.location=\''. $url_row .'\'">' . "\n";
-// 			if($current_user->admin)
+		$binary_col = 1;
+// 		if( ($pattern & $binary_col) == $binary_col && $current_user->admin )
 // 			    echo '<div class="column col-auto_id"><a href="'. $url_row .'" title="'. $row->auto_id .'">'.$row->auto_id.'</a></div>' . "\n";
+		$binary_col = $binary_col * 2; // 2
+		if( ($pattern & $binary_col) == $binary_col )
 			show_avatar( 'beers', $row->auto_id, $row->avatar, $row->name, 40 );
-			echo "<div class='column col-container'>\n";
+		echo "<div class='column col-container'>\n";
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col )
 			echo '<h3 class="column col-name"><a href="'. $url_row .'" title="'. $row->name .'">'.$row->name.'</a></h3>' . "\n";
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col )
 			echo '<div class="column col-country">'.$row->country.'</div>' . "\n";
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col )
 			echo '<div class="column col-brewery"><a href="'.get_business_uri($row->brewery_id).'" title="'. $idioma['brewery'] .'">'.$row->brewery.'</a></div>' . "\n";
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col )
 			echo '<div class="column col-category">'.$row->category.'</div>' . "\n";
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col )
 			echo '<div class="column col-type">'.$row->type.'</div>' . "\n";
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col )
 			echo '<div class="column col-abv">'. $idioma['beer_abv'] . ": ". (empty($row->abv) ? $idioma['NA'] : $row->abv).'</div>' . "\n";
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col )
 			echo '<div class="column col-ibu">'. $idioma['beer_ibu'] . ": ". (empty($row->ibu) ? $idioma['NA'] : $row->ibu).'</div>' . "\n";
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col )
 			echo '<div class="column col-desc">'.$row->description.'</div>' . "\n";
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col )
 			echo '<div class="column col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></div>' . "\n";
-		if( $current_user->authenticated ) // TODO:
+		$binary_col = $binary_col * 2;
+		if( ($pattern & $binary_col) == $binary_col  && $current_user->authenticated ) // TODO:
 			echo '<div class="column col-fav"><img src="'. $TODO . '" alt="'. $TODO . '"/></div>' . "\n";
 			echo "</div>\n"; //class='column col-container'
 			echo '</li>';
