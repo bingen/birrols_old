@@ -56,7 +56,7 @@ include_once('config.php');
 	if( !empty($_REQUEST['search_type']) && $_REQUEST['search_type'] == 'map' ) {
 	    businesses_map($query_cond );
 	} else {
-	    $query_cond = list_head( $tabla, $query_cond );
+	    $query_cond = list_head( $tabla, $query_cond, '&'. http_build_query( $_REQUEST ) );
 	    businesses_list($query_cond );
 	}
 

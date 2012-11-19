@@ -54,7 +54,7 @@ include_once('config.php');
 	  $query_cond .= " AND abv <= " .$_REQUEST['abv_max'];
 	}
 	
-	$query_cond = list_head( $tabla, $query_cond );
+	$query_cond = list_head( $tabla, $query_cond, '&'. http_build_query( $_REQUEST ) );
 	beers( $query_cond );
 
 function beers($query_cond='') {
