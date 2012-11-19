@@ -48,6 +48,8 @@ $(function() {
              $( "#abv" ).val( ui.values[ 0 ] + "% - " + ui.values[ 1 ] + "%" );
 	     $( "#abv-min" ).val( ui.values[ 0 ]);
 	     $( "#abv-max" ).val( ui.values[ 1 ]);
+        },
+        stop: function( event, ui ) {
 	     reload_div(get_reload_url(), 'results');
         }
     });
