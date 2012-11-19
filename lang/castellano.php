@@ -226,6 +226,8 @@ $idioma['beer_new'] = 'Nueva cerveza';
 $idioma['beer_sel_type'] = 'Selecciona el tipo';
 //$idioma['beer_'] = '';
 
+$idioma['NA'] = 'ND'; // Not Available
+
 $idioma['bsns_type'] = 'Tipo de empresa';
 $idioma['bsns_country'] = 'País';
 $idioma['bsns_state'] = 'Provincia';

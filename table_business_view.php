@@ -70,7 +70,9 @@ function businesses_list($query_cond='') {
 	$query = "SELECT * FROM $tabla $query_table $query_cond";
 // 	echo '<p> Query: '. $query. '</p>';
 	$table_list = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
+
 	echo '	   <ul class="principal-list" id="'. $tabla .'-list">' . "\n";
+
 	for( $i = 0; $i < mysqli_num_rows($table_list); $i++)
 	{
 		$row = mysqli_fetch_object($table_list);
@@ -78,21 +80,23 @@ function businesses_list($query_cond='') {
 
 //		if( $current_user->authenticated ) {
 			$url_row = $globals['base_url'].'business.php?id='.$row->auto_id;
-			echo '<li onclick="window.location=\''. $url_row .'\'">' . "\n";
+			echo '<li class="row" onclick="window.location=\''. $url_row .'\'">' . "\n";
 			
-			if($current_user->admin)
-			    echo '<div class="col-auto_id"><a href="'. $url_row .'" title="'. $idioma['beer'] .'">'.$row->auto_id.'</a></div>' . "\n";
+// 			if($current_user->admin)
+// 			    echo '<div class="col-auto_id"><a href="'. $url_row .'" title="'. $idioma['beer'] .'">'.$row->auto_id.'</a></div>' . "\n";
 			show_avatar( 'business', $row->auto_id, $row->avatar, $row->name, 40 );
-			echo '<h3 class="col-name"><a href="'. $url_row .'" title="'. $idioma['id_nombre'] .'">'.$row->name.'</a></h3>' . "\n";
-			echo '<div class="col-type"><a href="'. $url_row .'" title="'. $idioma['brewery'] .'"><img src="'.$truefalse_img_array[$row->brewery].'" /></a>' . "\n";
-			echo '<a href="'. $url_row .'" title="'. $idioma['pub'] .'"><img src="'.$truefalse_img_array[$row->pub].'" /></a></td>' . "\n";
-			echo '<a href="'. $url_row .'" title="'. $idioma['store'] .'"><img src="'.$truefalse_img_array[$row->store].'" /></a></td>' . "\n";
-// 			echo '<td class="col-city"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->city.'</a></td>' . "\n";
-// 			echo '<td class="col-state"><a href="'. $url_row .'" title="'. $idioma['put_url_partido'] .'">'.$row->state.'</a></td>' . "\n";
-			echo '<div class="col-country"><a href="'. $url_row .'" title="'. $idioma['bsns_country'] .'">'.$row->country.'</a></div>' . "\n";
-			echo '<div class="col-url"><a href="'. $row->url .'" title="'. $row->name .'">'.$row->url.'</a></div>' . "\n";
-			echo '<div class="col-desc">'.substr($row->description, 0, 50).'</div>' . "\n";
-			echo '<div class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></div>' . "\n";
+			echo "<div class='column col-container'>\n";
+			echo '<h3 class="column col-name"><a href="'. $url_row .'" title="'. $idioma['id_nombre'] .'">'.$row->name.'</a></h3>' . "\n";
+			echo '<div class="column col-type">' . "\n";
+			echo '<a href="'. $url_row .'" title="'. $idioma['brewery'] .'"><img src="'.$truefalse_img_array[$row->brewery].'" /></a>' . "\n";
+			echo '<a href="'. $url_row .'" title="'. $idioma['pub'] .'"><img src="'.$truefalse_img_array[$row->pub].'" /></a>' . "\n";
+			echo '<a href="'. $url_row .'" title="'. $idioma['store'] .'"><img src="'.$truefalse_img_array[$row->store].'" /></a>' . "\n";
+			echo '</div>' . "\n"; // class="column col-type"
+			echo '<div class="column col-country"><a href="'. $url_row .'" title="'. $idioma['bsns_country'] .'">'.$row->country.'</a></div>' . "\n";
+			echo '<div class="column col-url"><a href="'. $row->url .'" title="'. $row->name .'">'.$row->url.'</a></div>' . "\n";
+			echo '<div class="column col-desc">'.substr($row->description, 0, 50).'</div>' . "\n";
+			echo '<div class="column col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></div>' . "\n";
+			echo "</div>\n"; //class='column col-container'
 			echo '</li>';
 //		} // end if authenticated
 	} // end for matches

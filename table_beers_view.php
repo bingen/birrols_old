@@ -65,6 +65,9 @@ function beers($query_cond='') {
 	$query = "SELECT * FROM $tabla $query_beer $query_cond";
 // 	echo '<p> Query: '. $query. '</p>';
 	$beer_list = mysqli_query( $mysql_link, $query ) or die ('ERROR:'.mysqli_error($mysql_link));
+
+	echo '	   <ul class="principal-list" id="'. $tabla .'-list">' . "\n";
+
 	for( $i = 0; $i < mysqli_num_rows($beer_list); $i++)
 	{
 		$row = mysqli_fetch_object($beer_list);
@@ -72,27 +75,28 @@ function beers($query_cond='') {
 
 //		if( $current_user->authenticated ) {
 			$url_row = $globals['base_url'].'beer.php?id='.$row->auto_id;
-			echo '<li onclick="window.location=\''. $url_row .'\'">' . "\n";
-			if($current_user->admin)
-			    echo '<div class="col-auto_id"><a href="'. $url_row .'" title="'. $row->auto_id .'">'.$row->auto_id.'</a></v>' . "\n";
+			echo '<li class="row" onclick="window.location=\''. $url_row .'\'">' . "\n";
+// 			if($current_user->admin)
+// 			    echo '<div class="column col-auto_id"><a href="'. $url_row .'" title="'. $row->auto_id .'">'.$row->auto_id.'</a></div>' . "\n";
 			show_avatar( 'beers', $row->auto_id, $row->avatar, $row->name, 40 );
-			echo '<h3 class="col-name"><a href="'. $url_row .'" title="'. $row->name .'">'.$row->name.'</a></h3>' . "\n";
-			echo '<div class="col-country">'.$row->country.'</div>' . "\n";
-			echo '<div class="col-brewery"><a href="'.get_business_uri($row->brewery_id).'" title="'. $idioma['brewery'] .'">'.$row->brewery.'</a></div>' . "\n";
-			echo '<div class="col-category">'.$row->category.'</div>' . "\n";
-			echo '<div class="col-type">'.$row->type.'</div>' . "\n";
-			echo '<div class="col-abv">'. $idioma['beer_abv'] . ": ". $row->abv.'</div>' . "\n";
-			echo '<div class="col-ibu">'. $idioma['beer_ibu'] . ": ". $row->ibu.'</div>' . "\n";
-			echo '<div class="col-desc">'.$row->description.'</div>' . "\n";
-			echo '<div class="col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></div>' . "\n";
+			echo "<div class='column col-container'>\n";
+			echo '<h3 class="column col-name"><a href="'. $url_row .'" title="'. $row->name .'">'.$row->name.'</a></h3>' . "\n";
+			echo '<div class="column col-country">'.$row->country.'</div>' . "\n";
+			echo '<div class="column col-brewery"><a href="'.get_business_uri($row->brewery_id).'" title="'. $idioma['brewery'] .'">'.$row->brewery.'</a></div>' . "\n";
+			echo '<div class="column col-category">'.$row->category.'</div>' . "\n";
+			echo '<div class="column col-type">'.$row->type.'</div>' . "\n";
+			echo '<div class="column col-abv">'. $idioma['beer_abv'] . ": ". (empty($row->abv) ? $idioma['NA'] : $row->abv).'</div>' . "\n";
+			echo '<div class="column col-ibu">'. $idioma['beer_ibu'] . ": ". (empty($row->ibu) ? $idioma['NA'] : $row->ibu).'</div>' . "\n";
+			echo '<div class="column col-desc">'.$row->description.'</div>' . "\n";
+			echo '<div class="column col-score"><img src="'. get_stars($row->score). '" alt="'. $row->score . '"/></div>' . "\n";
 		if( $current_user->authenticated ) // TODO:
-			echo '<div class="col-fav"><img src="'. $TODO . '" alt="'. $TODO . '"/></div>' . "\n";
+			echo '<div class="column col-fav"><img src="'. $TODO . '" alt="'. $TODO . '"/></div>' . "\n";
+			echo "</div>\n"; //class='column col-container'
 			echo '</li>';
 //		} // end if authenticated
 	} // end for matches
 	echo "\n<!-- Credits: using some famfamfam silk free icons -->\n";
-	echo '    </tbody>' . "\n";
-	echo '	</table>' . "\n";
+	echo '	</ul>' . "\n";
 	//echo '    </div>' . "\n"; // partidos
 
 }

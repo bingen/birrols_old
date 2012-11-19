@@ -27,10 +27,10 @@ if( empty( $id ) ) {
 
 cabecera($globals['app_name'], $_SERVER['PHP_SELF']);
 
-laterales();
-
 echo '<div id="container_cuerpo">'."\n";
 echo '<div id="cuerpo">'. "\n";
+
+laterales();
 
 $query = "SELECT * FROM business_view WHERE auto_id = $id";
 $res = mysqli_query( $mysql_link, $query ) OR die( mysqli_error( $mysql_link ) );

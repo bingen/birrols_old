@@ -37,6 +37,28 @@ fieldset dd {
   float: left;
 }
 
+/* beer list //// */
+.principal-list {
+  text-align: left;
+}
+
+.principal-list li {
+  list-style-type: none;
+  clear: both;
+}
+
+.principal-list li a {
+  float: left;
+}
+
+.column {
+  float: left;
+}
+.col-category {
+  clear: both;
+}
+
+
 
     .ui-autocomplete {
       padding: 0;
