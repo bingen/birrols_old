@@ -74,7 +74,7 @@ include_once('config.php');
 	  $query_cond .= " AND ($query_search_1 $query_search_2)";
 	}
 
-	echo '<p> Query_cond: '. $query_cond. '</p>'/*;*/
+// 	echo '<p> Query_cond: '. $query_cond. '</p>';
 	$query_cond = list_head( $tabla, $query_cond, '&'. http_build_query( $_REQUEST ) );
 	beers( $query_cond );
 
