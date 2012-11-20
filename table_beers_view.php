@@ -71,9 +71,10 @@ include_once('config.php');
 	  foreach( $search_array as $search_term ) {
 	    $query_search_2 .= " OR (name LIKE '%$search_term%' OR description )";
 	  }
-	  $query_cond .= "AND ($query_search_1 $query_search_2)";
+	  $query_cond .= " AND ($query_search_1 $query_search_2)";
 	}
 
+	echo '<p> Query_cond: '. $query_cond. '</p>'/*;*/
 	$query_cond = list_head( $tabla, $query_cond, '&'. http_build_query( $_REQUEST ) );
 	beers( $query_cond );
 
