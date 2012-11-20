@@ -20,12 +20,11 @@
 
 include('config.php');
 
-if( !$globals['open'] && !$current_user->authenticated ) {
-  header("Location:". 'index.php?error_login=');
-  exit();
-}
-
 cabecera('', $_SERVER['PHP_SELF']);
+
+if( !$globals['open'] ) {
+  check_login();
+} 
 
 if( $current_user->authenticated )
   echo "<a class='button' href='business_edit.php' title='". $idioma['bsns_new'] ."'>". $idioma['bsns_new'] ." </a> \n";

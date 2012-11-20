@@ -20,6 +20,13 @@
 
 include_once('config.php');
 
+function query_add( $field ) {
+  global $query_cond;
+  
+  if( !empty( $_REQUEST[$field]) ) {
+    $query_cond .= " AND $field = " .$_REQUEST[$field];
+  }
+} // // query_add
 
 	$tabla = 'beers_view';
 // 	print_r( $_REQUEST );
@@ -44,13 +51,19 @@ include_once('config.php');
 	    $query_cond = 'AND (0 ' . $query_cat . ')';
 
 	// type //////////////////////
-	if( !empty( $_REQUEST['type_id']) ) {
-	  $query_cond .= " AND type_id = " .$_REQUEST['type_id'];
-	}
-
+	query_add ( 'type_id' );
 	// country //////////////////////
-	if( !empty( $_REQUEST['country_id']) ) {
-	  $query_cond .= " AND country_id = " .$_REQUEST['country_id'];
+	query_add ( 'country_id' );
+	// brewery
+	query_add ( 'brewery_id' );
+	if( empty($_REQUEST['brewery_id']) AND !empty($_REQUEST['brewery']) ) {
+	  $search_array = preg_split( '/ /', $_REQUEST['brewery'] );
+	  $query_brewery = ' AND (0 ';
+	  foreach( $search_array as $search_term ) {
+	    $query_brewery .= " OR brewery LIKE '%$search_term%' ";
+	  }
+	  $query_cond .= $query_brewery . ") ";
+// 	  $query_cond .= " AND brewery LIKE '%" .$_REQUEST['brewery'] . "%' ";
 	}
 
 	// abv //////////////////////
@@ -77,7 +90,7 @@ include_once('config.php');
 	  // any of the words
 	  $query_search_2 = '';
 	  foreach( $search_array as $search_term ) {
-	    $query_search_2 .= " OR (name LIKE '%$search_term%' OR description )";
+	    $query_search_2 .= " OR (name LIKE '%$search_term%' OR description LIKE '%$search_term%')";
 	  }
 	  $query_cond .= " AND ($query_search_1 $query_search_2)";
 	}

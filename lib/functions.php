@@ -40,17 +40,15 @@ function mysqli_result($res, $row, $field=0) {
 } 
 
 function check_login(){
-  global $current_user;
+  global $current_user, $idioma;
   
-  if( !$current_user->authenticated && empty($_POST['usuario']) && $_REQUEST['error'] != 'login' && !isset($_GET['error_acceso']) ) {
-	$url = $_SERVER['PHP_SELF'];
-	$_REQUEST['error'] = 'login';
-	$query_string = http_build_query( $_REQUEST );
-	$url = $_SERVER['PHP_SELF'] . (empty($query_string) ? '' : '?'. http_build_query( $_REQUEST ));
-	header("Location:". $url);
-	exit();
+  if( !$current_user->authenticated ) {
+    show_error($idioma['err_login']);
+    pie();
+    exit();
   }
-}
+} // check_login
+
 function cabecera($title='',$script='', $no_cache=false) {
 	global $idioma, $current_user, $globals, $url, $error_acceso;
 	
@@ -769,7 +767,7 @@ function paginacion( $url, $num_registros, $num_filas, $fila_0, $div='' ) {
 	//echo '<p> server name: '. $_SERVER['SERVER_NAME'] . ' php self: ' . $_SERVER['PHP_SELF'] . ' SCRIPT name: '.$_SERVER['SCRIPT_NAME'].' base_url: '.$globals['base_url']. ' url_aux: '. $url_aux .'</p>';
 
   echo "         <div id='search-word'> \n";
-  echo "            <input type='search' name='search-input' id='search-input' results=5 placeholder='". $idioma['bsns_search_clue'] ."'></input> \n"; 
+  echo "            <input type='search' name='search' id='search' results=5 placeholder='". $idioma['bsns_search_clue'] ."'></input> \n"; 
   echo "            <button id='search-word-button' onClick='reload_div(get_reload_url(), \"$div\");'>". $idioma['bsns_search'] ."</button> \n"; 
   echo "         </div> \n"; // search-word
   

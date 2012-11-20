@@ -21,11 +21,8 @@
 include('config.php');
 include(libpath.'log.php');
 
+cabecera('', $_SERVER['PHP_SELF']);
 check_login();
-if( !$current_user->authenticated ) {
-  cabecera('', $_SERVER['PHP_SELF']);
-  show_error($idioma['err_login']);
-} else { // current_user authenticated
 
   if( !empty( $_REQUEST['id'] ) ) {
     $id = $_REQUEST['id'];
@@ -37,9 +34,6 @@ if( !$current_user->authenticated ) {
   } else {
     beer_form();
   }
-} // if authenticated
-
-
 
 function beer_form(){
   global $mysql_link, $idioma, $globals, $current_user, $id;

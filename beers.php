@@ -25,14 +25,11 @@ include('config.php');
 //   exit();
 // }
 
-if( !$globals['open'] )
-  check_login();
-if( !$globals['open'] && !$current_user->authenticated ) {
-  cabecera('', $_SERVER['PHP_SELF']);
-  show_error($idioma['err_login']);
-} else { // current_user authenticated
-
 cabecera('', $_SERVER['PHP_SELF']);
+
+if( !$globals['open'] ) {
+  check_login();
+} 
 
 $tabla = 'beers_view';
 $url = $globals['base_url'].'table_'. $tabla .'.php';
@@ -97,6 +94,15 @@ echo "             </h4>\n";
     echo "<option value='". $row->auto_id ."' ". ( $type_id == $row->auto_id ? "selected='selected'" : "" ) .">". $row->type ."</option> \n";
   echo "</select>\n";
 echo "           </div> \n"; // type
+// brewery ////////////////
+echo "           <div id='brewery-div' class='filter-div'> \n";
+echo "             <h4 class='filter-header'>\n";
+echo "             ". $idioma['brewery'] ."\n";
+echo "             <span class='filter-toggle'></span>\n";
+echo "             </h4>\n";
+echo "		   <input type='search' name='brewery' id='brewery' results=5 placeholder='". $idioma['beer_search_brewery'] ."' />\n";
+echo "		   <input type='hidden' name='brewery_id' id='brewery_id'/>\n";
+echo "           </div> \n"; // brewery
 // country ////////////////
 echo "           <div id='country-div' class='filter-div'> \n";
 echo "             <h4 class='filter-header'>\n";
@@ -129,7 +135,6 @@ echo '	  </div> <!-- cuerpo -->'. "\n";
 //echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 echo '	  </div> <!-- container_cuerpo -->'. "\n";
 
-} // current_user authenticated
 pie();
 
 ?>

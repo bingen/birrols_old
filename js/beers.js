@@ -18,6 +18,11 @@ function url_range( field, val_min, val_max ) {
 	}
 } // url_range
 
+function url_add( field ) {
+  if( document.getElementById(field).value != '' ) {
+    url = url + "&" + field + "=" + document.getElementById(field).value;
+  }
+}
 function get_reload_url()  {
 	url = table_url + '?';
 
@@ -26,21 +31,19 @@ function get_reload_url()  {
 	    url = url + '&ale=' + document.getElementById('ale-check').checked + '&lager=' + document.getElementById('lager-check').checked + '&lambic=' + document.getElementById('lambic-check').checked;
 	 }
 	// type
-	if( document.getElementById('type_id').value != '' ) {
-	  url = url + "&type_id=" + document.getElementById('type_id').value;
-	}
+	url_add( 'type_id' );
+	// brewery
+	url_add( 'brewery_id' );
+	if( document.getElementById('brewery_id').value == '' )
+	  url_add( 'brewery' );
 	// country
-	if( document.getElementById('country_id').value != '' ) {
-	  url = url + "&country_id=" + document.getElementById('country_id').value;
-	}
+	url_add( 'country_id' );
 	
 	url_range( "abv", abv_min, abv_max );
 	url_range( "ibu", ibu_min, ibu_max );
 
 	// search
-	if( document.getElementById('search-input').value != '' ) {
-	  url = url + "&search=" + document.getElementById('search-input').value;
-	}
+	url_add( 'search' );
 	
 	return url;
 } // get_reload_url
@@ -52,15 +55,33 @@ $('country_id').on({
 });
 
 jQuery(function(){
+  
   jQuery('select.turn-to-ac').selectToAutocomplete();
+  
   $("#search-input").keyup(function(event){
     if(event.keyCode == 13){
         $("#search-word-button").click();
     }
   });
-});
 
-$(function() {
+  // autocomplete brewery
+  jQuery(function(){
+    jQuery('#brewery').autocomplete({
+      source: lib_url + 'search_brewery.php?birrolpath=' + birrolpath,
+      select: function(event, ui) {
+	    $(this).val(ui.item.label);
+	    $('#brewery_id').val(ui.item.id);
+      },
+      change: function(event, ui) {
+	if( !ui.item ) {
+	  $('#brewery_id').val('');
+	  reload_div(get_reload_url(), 'results');
+	}
+      }
+    });
+  });
+
+  // sliders
   function slide_set_text( field, val_inf, val_sup, val_min, val_max, unit ) {
     if( val_inf == val_min && val_sup == val_max )
       $( "#"+field ).val( " - " );
@@ -93,20 +114,4 @@ $(function() {
   slider( "abv", abv_inf, abv_sup, abv_min, abv_max, "%" );
   slider( "ibu", ibu_inf, ibu_sup, ibu_min, ibu_max, "" );
   
-//     $( "#slider-ibu" ).slider({
-//         range: true,
-//         min: ibu_min,
-//         max: ibu_max,
-//         values: [ 40, 70 ],
-//         slide: function( event, ui ) {
-// //              $( "#ibu" ).val( ui.values[ 0 ] + "% - " + ui.values[ 1 ] + "%" );
-// 	    slide_set_text( "ibu", ui.values[0], ui.values[1]);
-// 	     $( "#ibu-min" ).val( ui.values[ 0 ]);
-// 	     $( "#ibu-max" ).val( ui.values[ 1 ]);
-//         },
-//         stop: function( event, ui ) {
-// 	     reload_div(get_reload_url(), 'results');
-//         }
-//     });
-//     slide_set_text( "ibu", $("#slider-ibu").slider( "values", 0 ), $("#slider-ibu").slider( "values", 1 ) );
-});
+}); // end jQuery

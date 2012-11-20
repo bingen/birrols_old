@@ -38,7 +38,7 @@ $res = mysqli_query( $mysql_link, $query ) OR die( mysqli_error( $mysql_link ) )
 if( $row = mysqli_fetch_object( $res ) ) {
 
   echo '<fieldset id="business"><legend>'. $row->name;
-  if($row->register_id === $current_user->id || $current_user->admin ) {
+  if($row->register_id === $current_user->id || $current_user->admin || ($current_user->authenticated && empty($row->register_id) ) ) {
     echo ' [<a href="'. $globals['base_url'] .'beer_edit.php?id='.$id.'">'. $idioma['usr_modificar'] .'</a>]'."\n";
   }
   echo '</legend>'."\n";
