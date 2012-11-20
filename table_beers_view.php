@@ -61,6 +61,14 @@ include_once('config.php');
 	  $query_cond .= " AND abv <= " .$_REQUEST['abv_max'];
 	}
 	
+	// ibu //////////////////////
+	if( !empty( $_REQUEST['ibu_min']) ) {
+	  $query_cond .= " AND ibu >= " .$_REQUEST['ibu_min'];
+	}
+	if( !empty( $_REQUEST['ibu_max']) ) {
+	  $query_cond .= " AND ibu <= " .$_REQUEST['ibu_max'];
+	}
+	
 	if( !empty( $_REQUEST['search']) ) {
 	  $search = $_REQUEST['search'];
 	  $search_array = preg_split( '/ /', $search );

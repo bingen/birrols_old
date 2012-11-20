@@ -20,10 +20,17 @@
 
 include('config.php');
 
+// if( !$globals['open'] && !$current_user->authenticated ) {
+//   header("Location:". 'index.php?error_login=');
+//   exit();
+// }
+
+if( !$globals['open'] )
+  check_login();
 if( !$globals['open'] && !$current_user->authenticated ) {
-  header("Location:". 'index.php?error_login=');
-  exit();
-}
+  cabecera('', $_SERVER['PHP_SELF']);
+  show_error($idioma['err_login']);
+} else { // current_user authenticated
 
 cabecera('', $_SERVER['PHP_SELF']);
 
@@ -122,6 +129,7 @@ echo '	  </div> <!-- cuerpo -->'. "\n";
 //echo '	  <div id="fake-container_cuerpo" style="clear: both;"></div>'. "\n";	// para evitar computed height = 0
 echo '	  </div> <!-- container_cuerpo -->'. "\n";
 
+} // current_user authenticated
 pie();
 
 ?>

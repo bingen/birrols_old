@@ -8,6 +8,16 @@ var ibu_max = 120;
 var ibu_inf = 40;
 var ibu_sup = 70;
 
+function url_range( field, val_min, val_max ) {
+  
+	if( document.getElementById(field+'-min').value != '' && document.getElementById(field+'-min').value > val_min ) {
+	  url = url + "&"+field+"_min=" + document.getElementById(field+'-min').value;
+	}
+	if( document.getElementById(field+'-max').value != '' && document.getElementById(field+'-max').value < val_max ) {
+	  url = url + "&"+field+"_max=" + document.getElementById(field+'-max').value;
+	}
+} // url_range
+
 function get_reload_url()  {
 	url = table_url + '?';
 
@@ -23,14 +33,9 @@ function get_reload_url()  {
 	if( document.getElementById('country_id').value != '' ) {
 	  url = url + "&country_id=" + document.getElementById('country_id').value;
 	}
-
-	// abv
-	if( document.getElementById('abv-min').value != '' && document.getElementById('abv-min').value > abv_min ) {
-	  url = url + "&abv_min=" + document.getElementById('abv-min').value;
-	}
-	if( document.getElementById('abv-max').value != '' && document.getElementById('abv-max').value < abv_max ) {
-	  url = url + "&abv_max=" + document.getElementById('abv-max').value;
-	}
+	
+	url_range( "abv", abv_min, abv_max );
+	url_range( "ibu", ibu_min, ibu_max );
 
 	// search
 	if( document.getElementById('search-input').value != '' ) {
