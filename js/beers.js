@@ -1,5 +1,12 @@
 var abv_min = 2;
 var abv_max = 15;
+var abv_inf = 4;
+var abv_sup = 8;
+
+var ibu_min = 20;
+var ibu_max = 120;
+var ibu_inf = 40;
+var ibu_sup = 70;
 
 function get_reload_url()  {
 	url = table_url + '?';
@@ -49,19 +56,52 @@ jQuery(function(){
 });
 
 $(function() {
-    $( "#slider-abv" ).slider({
+  function slide_set_text( field, val_inf, val_sup, val_min, val_max, unit ) {
+    if( val_inf == val_min && val_sup == val_max )
+      $( "#"+field ).val( " - " );
+    else if( val_inf == val_min )
+      $( "#"+field ).val( "< " + val_sup + unit );
+    else if( val_sup == val_max )
+      $( "#"+field ).val( val_inf + unit + " <"  );
+    else
+      $( "#"+field ).val( val_inf + unit + " - " + val_sup + unit );
+  } // slide_set_text
+  
+  function slider( field, val_inf, val_sup, val_min, val_max, unit ) {
+    $( "#slider-"+field ).slider({
         range: true,
-        min: abv_min,
-        max: abv_max,
-        values: [ 3, 8 ],
+        min: val_min,
+        max: val_max,
+        values: [ val_inf, val_sup ],
         slide: function( event, ui ) {
-             $( "#abv" ).val( ui.values[ 0 ] + "% - " + ui.values[ 1 ] + "%" );
-	     $( "#abv-min" ).val( ui.values[ 0 ]);
-	     $( "#abv-max" ).val( ui.values[ 1 ]);
+	    slide_set_text( field, ui.values[0], ui.values[1], val_min, val_max, unit );
+	    $( "#"+field+"-min" ).val( ui.values[ 0 ]);
+	    $( "#"+field+"-max" ).val( ui.values[ 1 ]);
         },
         stop: function( event, ui ) {
 	     reload_div(get_reload_url(), 'results');
         }
     });
-    $( "#abv" ).val( $( "#slider-abv" ).slider( "values", 0 ) + "% - " + $( "#slider-abv" ).slider( "values", 1 ) + "%" );
+    slide_set_text( field, $("#slider-"+field).slider( "values", 0 ), $("#slider-"+field).slider( "values", 1 ), val_min, val_max, unit );
+  } // slider
+  
+  slider( "abv", abv_inf, abv_sup, abv_min, abv_max, "%" );
+  slider( "ibu", ibu_inf, ibu_sup, ibu_min, ibu_max, "" );
+  
+//     $( "#slider-ibu" ).slider({
+//         range: true,
+//         min: ibu_min,
+//         max: ibu_max,
+//         values: [ 40, 70 ],
+//         slide: function( event, ui ) {
+// //              $( "#ibu" ).val( ui.values[ 0 ] + "% - " + ui.values[ 1 ] + "%" );
+// 	    slide_set_text( "ibu", ui.values[0], ui.values[1]);
+// 	     $( "#ibu-min" ).val( ui.values[ 0 ]);
+// 	     $( "#ibu-max" ).val( ui.values[ 1 ]);
+//         },
+//         stop: function( event, ui ) {
+// 	     reload_div(get_reload_url(), 'results');
+//         }
+//     });
+//     slide_set_text( "ibu", $("#slider-ibu").slider( "values", 0 ), $("#slider-ibu").slider( "values", 1 ) );
 });

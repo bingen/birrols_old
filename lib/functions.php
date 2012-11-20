@@ -421,6 +421,19 @@ function manage_avatars_upload( $object, $id ){
   return TRUE;
 } // manage avatars upload
 
+function slider_filter( $field, $header ) {
+  echo "           <div id='$field-div'> \n";
+  echo "             <h4 class='filter-header'>\n";
+  echo "             ". $header ."\n";
+  echo "             <span class='filter-toggle'></span>\n";
+  echo "             </h4>\n";
+  echo "               <input type='text' id='$field' class='slider-text'/> \n";
+  echo "               <input type='hidden' id='$field-min' /> \n";
+  echo "               <input type='hidden' id='$field-max' /> \n";
+  echo "           <div id='slider-$field'></div> \n";
+  echo "           </div> \n"; // $field-div
+} // slider-filter
+
 function clean_input_string($string) {
 	return preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', stripslashes($string));
 }

@@ -98,16 +98,17 @@ echo "             <span class='filter-toggle'></span>\n";
 echo "             </h4>\n";
 input_country();
 echo "           </div> \n"; // country
-echo "           <div id='abv-div'> \n";
+slider_filter( "abv", $idioma['beer_abv'] );
+echo "           <div id='ibu-div'> \n";
 echo "             <h4 class='filter-header'>\n";
-echo "             ". $idioma['beer_abv'] ."\n";
+echo "             ". $idioma['beer_ibu'] ."\n";
 echo "             <span class='filter-toggle'></span>\n";
 echo "             </h4>\n";
-echo "               <input type='text' id='abv' /> \n";
-echo "               <input type='hidden' id='abv-min' /> \n";
-echo "               <input type='hidden' id='abv-max' /> \n";
-echo "           <div id='slider-abv'></div> \n";
-echo "           </div> \n"; // abv-div
+echo "               <input type='text' id='ibu' class='slider-text'/> \n";
+echo "               <input type='hidden' id='ibu-min' /> \n";
+echo "               <input type='hidden' id='ibu-max' /> \n";
+echo "           <div id='slider-ibu'></div> \n";
+echo "           </div> \n"; // ibu-div
 // echo "         </ul> \n"; // filter-list
 echo "         </div> \n"; // filters
 

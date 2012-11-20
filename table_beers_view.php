@@ -92,8 +92,8 @@ function beers($query_cond='') {
 	{
 		$row = mysqli_fetch_object($beer_list);
 // 		print_r($row);
-			$url_row = $globals['base_url'].'beer.php?id='.$row->auto_id;
-			echo '<li class="row" onclick="window.location=\''. $url_row .'\'">' . "\n";
+		$url_row = $globals['base_url'].'beer.php?id='.$row->auto_id;
+		echo '<li class="row" onclick="window.location=\''. $url_row .'\'">' . "\n";
 		$binary_col = 1;
 // 		if( ($pattern & $binary_col) == $binary_col && $current_user->admin )
 // 			    echo '<div class="column col-auto_id"><a href="'. $url_row .'" title="'. $row->auto_id .'">'.$row->auto_id.'</a></div>' . "\n";
@@ -131,9 +131,8 @@ function beers($query_cond='') {
 		$binary_col = $binary_col * 2;
 		if( ($pattern & $binary_col) == $binary_col  && $current_user->authenticated ) // TODO:
 			echo '<div class="column col-fav"><img src="'. $TODO . '" alt="'. $TODO . '"/></div>' . "\n";
-			echo "</div>\n"; //class='column col-container'
-			echo '</li>';
-//		} // end if authenticated
+		echo "</div>\n"; //class='column col-container'
+		echo '</li>';
 	} // end for matches
 	echo "\n<!-- Credits: using some famfamfam silk free icons -->\n";
 	echo '	</ul>' . "\n";
