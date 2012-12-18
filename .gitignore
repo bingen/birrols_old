@@ -4,3 +4,4 @@
 /cache
 # Ignore config, since there are google keys
 config.php
+/nbproject/private/
